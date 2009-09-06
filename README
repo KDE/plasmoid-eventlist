@@ -1,0 +1,8 @@
+
+To install:
+
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=`kde-config --prefix` ../
+make 
+sudo make install
+

@@ -1,0 +1,30 @@
+0.2.2
+- double click on event open it in korganizer if possible
+- add menu entry for adding a new event in korganizer
+
+0.2.1
+- fix bug with vanishing colors for birthdays
+
+0.2
+- check if the Akonadi server is running
+- options to colorize items
+
+0.1:
+- remove the time and title columns
+- show all in one column with a user changeable format
+- tune the appearance a bit
+
+0.0.3:
+- support for recurring events (like birthdays)
+- reset model at midnight
+- option to set date format
+- connect to addItem and removeItem signals
+
+0.0.2:
+- make headers work
+- try not to crash plasma with an empty eventlist
+- use KLocale to format date/time
+- update todo ;-)
+
+0.0.1:
+- initial release

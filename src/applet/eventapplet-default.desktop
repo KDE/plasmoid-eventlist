@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Eventlist
+Name[de]=Ereignisliste
+Comment=Shows a list with the events from Akonadi resources
+Comment[de]=Zeigt eine Liste mit den Ereignissen etc. von Akonadi Ressourcen
+Icon=view-pim-tasks
+Type=Service
+ServiceTypes=Plasma/Applet
+
+X-KDE-Library=eventapplet
+
+X-KDE-PluginInfo-Author=Gerd Fleischer
+X-KDE-PluginInfo-Email=
+X-KDE-PluginInfo-Name=eventapplet
+X-KDE-PluginInfo-Version=0.2.2
+X-KDE-PluginInfo-Category=Misc
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
