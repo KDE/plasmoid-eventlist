@@ -159,7 +159,7 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			data.insert(SummaryPos, values["summary"]);
 			data.insert(DescriptionPos, values["description"]);
 			data.insert(LocationPos, values["location"]);
-			int n = QDate::currentDate().year() - values["startDate"].toDate().year();
+			int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
 			data.insert(YearsSincePos, QVariant(QString::number(n)));
 			data.insert(BirthdayOrAnniversayPos, QVariant(values["isBirthday"].toBool() || values["isAnniversary"].toBool()));
 
