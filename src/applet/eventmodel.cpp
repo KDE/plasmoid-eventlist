@@ -66,7 +66,6 @@ void EventModel::initModel()
         todayItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
         todayItem->setData(QVariant(QString()), EventModel::UIDRole);
         todayItem->setFont(bold);
-		parentItem->appendRow(todayItem);
 	}
 
 	if (!tomorrowItem) {
@@ -76,7 +75,6 @@ void EventModel::initModel()
         tomorrowItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
         tomorrowItem->setData(QVariant(QString()), EventModel::UIDRole);
         tomorrowItem->setFont(bold);
-		parentItem->appendRow(tomorrowItem);
 	}
 
 	if (!weekItem) {
@@ -86,7 +84,6 @@ void EventModel::initModel()
         weekItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
         weekItem->setData(QVariant(QString()), EventModel::UIDRole);
         weekItem->setFont(bold);
-		parentItem->appendRow(weekItem);
 	}
 
 	if (!monthItem) {
@@ -106,7 +103,6 @@ void EventModel::initModel()
         laterItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
         laterItem->setData(QVariant(QString()), EventModel::UIDRole);
         laterItem->setFont(bold);
-		parentItem->appendRow(laterItem);
 	}
 }
 
@@ -207,15 +203,51 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 
 void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
 {
-	if (eventDate == QDate::currentDate()) {
-		todayItem->appendRow(item);
-	} else if (eventDate > QDate::currentDate() && eventDate <= QDate::currentDate().addDays(1)) {
-		tomorrowItem->appendRow(item);
-	} else if (eventDate > QDate::currentDate().addDays(1) && eventDate <= QDate::currentDate().addDays(7)) {
-		weekItem->appendRow(item);
-	} else if (eventDate > QDate::currentDate().addDays(7) && eventDate <= QDate::currentDate().addDays(28)) {
-		monthItem->appendRow(item);
-	} else if (eventDate > QDate::currentDate().addDays(28) && eventDate <= QDate::currentDate().addDays(365)) {
-		laterItem->appendRow(item);
-	}
+    if (eventDate == QDate::currentDate()) {
+        todayItem->appendRow(item);
+        if (todayItem->row() == -1) parentItem->insertRow(figureRow(todayItem), todayItem);
+    } else if (eventDate > QDate::currentDate() && eventDate <= QDate::currentDate().addDays(1)) {
+        tomorrowItem->appendRow(item);
+        if (!tomorrowItem->parent()) parentItem->insertRow(figureRow(tomorrowItem), tomorrowItem);
+    } else if (eventDate > QDate::currentDate().addDays(1) && eventDate <= QDate::currentDate().addDays(7)) {
+        weekItem->appendRow(item);
+        if (weekItem->row() == -1) parentItem->insertRow(figureRow(weekItem), weekItem);
+    } else if (eventDate > QDate::currentDate().addDays(7) && eventDate <= QDate::currentDate().addDays(28)) {
+        monthItem->appendRow(item);
+        if (monthItem->row() == -1) parentItem->insertRow(figureRow(monthItem), monthItem);
+    } else if (eventDate > QDate::currentDate().addDays(28) && eventDate <= QDate::currentDate().addDays(365)) {
+        laterItem->appendRow(item);
+        if (laterItem->row() == -1) parentItem->appendRow(laterItem);
+    }
 }
+
+int EventModel::figureRow(QStandardItem *headerItem)
+{
+    if (headerItem == todayItem) {
+        return 0;
+    } else if (headerItem == tomorrowItem) {
+        if (todayItem->row() > -1)
+            return 1;
+        else
+            return 0;
+    } else if (headerItem == weekItem) {
+        if (todayItem->row() > -1 && tomorrowItem->row() > -1)
+            return 2;
+        else if (todayItem->row() > -1 || tomorrowItem->row() > -1)
+            return 1;
+        else
+            return 0;
+    } else if (headerItem == monthItem) {
+        if (todayItem->row() > -1 && tomorrowItem->row() > -1 && weekItem->row() > -1)
+            return 3;
+        else if (weekItem->row() > -1)
+            return weekItem->row() + 1;
+        else if (todayItem->row() > -1 || tomorrowItem->row() > -1)
+            return 1;
+        else
+            return 0;
+    }
+
+    return -1;
+}
+

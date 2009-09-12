@@ -79,6 +79,7 @@ public slots:
 
 private:
 	void addItemRow(QDate eventDate, QStandardItem *items);
+    int figureRow(QStandardItem *headerItem);
 
 private:
 	QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
