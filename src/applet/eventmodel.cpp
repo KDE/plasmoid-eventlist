@@ -32,22 +32,17 @@
 
 #include <KDebug>
 
-EventModel::EventModel(QObject *parent, bool colors, int urgencyTime, QColor urgentClr, QColor passedClr, QColor birthdayClr, QColor anniversariesClr) : QStandardItemModel(parent),
-	parentItem(0),
-	todayItem(0),
-	tomorrowItem(0),
-	weekItem(0),
-	monthItem(0),
-	laterItem(0),
-    useColors(colors),
-    urgency(urgencyTime),
-    urgentBg(urgentClr),
-    passedFg(passedClr),
-    birthdayBg(birthdayClr),
-    anniversariesBg(anniversariesClr)
+EventModel::EventModel(QObject *parent, bool colors, int urgencyTime, QList<QColor> colorList) : QStandardItemModel(parent),
+    parentItem(0),
+    todayItem(0),
+    tomorrowItem(0),
+    weekItem(0),
+    monthItem(0),
+    laterItem(0)
 {
-	parentItem = invisibleRootItem();
-	initModel();
+    parentItem = invisibleRootItem();
+    settingsChanged(colors, urgencyTime, colorList);
+    initModel();
 }
 
 EventModel::~EventModel()
@@ -56,54 +51,41 @@ EventModel::~EventModel()
 
 void EventModel::initModel()
 {
-    QFont bold = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    bold.setBold(true);
+    if (!todayItem) {
+        todayItem = new QStandardItem();
+        initHeaderItem(todayItem, i18n("Today"), 0);
+    }
 
-	if (!todayItem) {
-		todayItem = new QStandardItem();
-		todayItem->setData(QVariant(i18n("Today")), Qt::DisplayRole);
-		todayItem->setData(QVariant(QDateTime(QDate::currentDate())), EventModel::SortRole);
-        todayItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
-        todayItem->setData(QVariant(QString()), EventModel::UIDRole);
-        todayItem->setFont(bold);
-	}
+    if (!tomorrowItem) {
+        tomorrowItem = new QStandardItem();
+        initHeaderItem(tomorrowItem, i18n("Tomorrow"), 1);
+    }
 
-	if (!tomorrowItem) {
-		tomorrowItem = new QStandardItem();
-		tomorrowItem->setData(QVariant(i18n("Tomorrow")), Qt::DisplayRole);
-		tomorrowItem->setData(QVariant(QDateTime(QDate::currentDate().addDays(1))), EventModel::SortRole);
-        tomorrowItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
-        tomorrowItem->setData(QVariant(QString()), EventModel::UIDRole);
-        tomorrowItem->setFont(bold);
-	}
+    if (!weekItem) {
+        weekItem = new QStandardItem();
+        initHeaderItem(weekItem, i18n("Week"), 2);
+    }
 
-	if (!weekItem) {
-		weekItem = new QStandardItem();
-		weekItem->setData(QVariant(i18n("Week")), Qt::DisplayRole);
-		weekItem->setData(QVariant(QDateTime(QDate::currentDate().addDays(2))), EventModel::SortRole);
-        weekItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
-        weekItem->setData(QVariant(QString()), EventModel::UIDRole);
-        weekItem->setFont(bold);
-	}
+    if (!monthItem) {
+        monthItem = new QStandardItem();
+        initHeaderItem(monthItem, i18n("Next 4 weeks"), 8);
+    }
 
-	if (!monthItem) {
-		monthItem = new QStandardItem();
-		monthItem->setData(QVariant(i18n("Next 4 weeks")), Qt::DisplayRole);
-		monthItem->setData(QVariant(QDateTime(QDate::currentDate().addDays(8))), EventModel::SortRole);
-        monthItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
-        monthItem->setData(QVariant(QString()), EventModel::UIDRole);
-        monthItem->setFont(bold);
-		parentItem->appendRow(monthItem);
-	}
+    if (!laterItem) {
+        laterItem = new QStandardItem();
+        initHeaderItem(laterItem, i18n("Later"), 29);
+    }
+}
 
-	if (!laterItem) {
-		laterItem = new QStandardItem();
-		laterItem->setData(QVariant(i18n("Later")), Qt::DisplayRole);
-		laterItem->setData(QVariant(QDateTime(QDate::currentDate().addDays(29))), EventModel::SortRole);
-        laterItem->setData(QVariant(HeaderItem), EventModel::ItemRole);
-        laterItem->setData(QVariant(QString()), EventModel::UIDRole);
-        laterItem->setFont(bold);
-	}
+void EventModel::initHeaderItem(QStandardItem *item, QString title, int days)
+{
+        item->setData(QVariant(title), Qt::DisplayRole);
+        item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), EventModel::SortRole);
+        item->setData(QVariant(HeaderItem), EventModel::ItemRole);
+        item->setData(QVariant(QString()), EventModel::UIDRole);
+        QFont bold = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+        bold.setBold(true);
+        item->setFont(bold);
 }
 
 void EventModel::resetModel(bool isRunning)
@@ -125,22 +107,15 @@ void EventModel::resetModel(bool isRunning)
     }
 }
 
-void EventModel::settingsChanged(bool colors, int urgencyTime, QColor urgentColor, QColor passedColor, QColor birthdayColor, QColor anniversariesColor)
+void EventModel::settingsChanged(bool colors, int urgencyTime, QList<QColor> itemColors)
 {
     useColors = colors;
     urgency = urgencyTime;
-    urgentBg = urgentColor;
-    passedFg = passedColor;
-    birthdayBg = birthdayColor;
-    anniversariesBg = anniversariesColor;
+    urgentBg = itemColors.at(urgentColorPos);
+    passedFg = itemColors.at(passedColorPos);
+    birthdayBg = itemColors.at(birthdayColorPos);
+    anniversariesBg = itemColors.at(anniversariesColorPos);
 }
-
-// QList<int> EventModel::headerRows()
-// {
-// 	QList<int> rows;
-// 	rows << todayItem->row() << tomorrowItem->row() << weekItem->row() << monthItem->row() << laterItem->row();
-// 	return rows;
-// }
 
 void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 {

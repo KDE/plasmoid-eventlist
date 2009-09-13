@@ -84,20 +84,24 @@ void EventApplet::init()
     m_checkInterval = cg.readEntry("CheckInterval", 5);
     m_urgency = cg.readEntry("UrgencyTime", 15);
 
+    QList<QColor> colors;
     QColor urgentColor = QColor(cg.readEntry("UrgentColor", QString("#FF0000")));
     urgentColor.setAlphaF(cg.readEntry("UrgentOpacity", 10)/100.0);
-
+    colors.insert(urgentColorPos, urgentColor);
     QColor passedColor = QColor(cg.readEntry("PassedColor", QString("#C3C3C3")));
+    colors.insert(passedColorPos, passedColor);
     
     QColor birthdayColor = QColor(cg.readEntry("BirthdayColor", QString("#C0FFC0")));
     birthdayColor.setAlphaF(cg.readEntry("BirthdayOpacity", 10)/100.0);
+    colors.insert(birthdayColorPos, birthdayColor);
     QColor anniversariesColor = QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA")));
     anniversariesColor.setAlphaF(cg.readEntry("AnniversariesOpacity", 10)/100.0);
+    colors.insert(anniversariesColorPos, anniversariesColor);
 
     m_urgentBg = urgentColor;
     m_passedFg = passedColor;
 
-    m_model = new EventModel(this, m_useColors, m_urgency, urgentColor, passedColor, birthdayColor, anniversariesColor);
+    m_model = new EventModel(this, m_useColors, m_urgency, colors);
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, dtFormat, dtString);
 
     graphicsWidget();
@@ -358,26 +362,32 @@ void EventApplet::configAccepted()
     m_checkInterval = m_colorConfigUi.checkIntervalBox->value();
     cg.writeEntry("CheckInterval", m_checkInterval);
     
+    QList<QColor> colors;
+
     m_urgentBg = m_colorConfigUi.urgentColorButton->color();
     int urgentOpacity = m_colorConfigUi.urgentOpacity->value();
     cg.writeEntry("UrgentColor", m_urgentBg.name());
     cg.writeEntry("UrgentOpacity", urgentOpacity);
     m_urgentBg.setAlphaF(urgentOpacity/100.0);
+    colors.insert(urgentColorPos, m_urgentBg);
 
     m_passedFg = m_colorConfigUi.startedColorButton->color();
     cg.writeEntry("PassedColor", m_passedFg.name());
-
+    colors.insert(passedColorPos, m_passedFg);
+    
     QColor birthdayColor = m_colorConfigUi.birthdayColorButton->color();
     int birthdayOpacity = m_colorConfigUi.birthdayOpacity->value();
     cg.writeEntry("BirthdayColor", birthdayColor.name());
     cg.writeEntry("BirthdayOpacity", birthdayOpacity);
     birthdayColor.setAlphaF(birthdayOpacity/100.0);
+    colors.insert(birthdayColorPos, birthdayColor);
 
     QColor anniversariesColor = m_colorConfigUi.anniversariesColorButton->color();
     int anniversariesOpacity = m_colorConfigUi.anniversariesOpacity->value();
     cg.writeEntry("AnniversariesColor", anniversariesColor.name());
     cg.writeEntry("AnniversariesOpacity", anniversariesOpacity);
     anniversariesColor.setAlphaF(anniversariesOpacity/100.0);
+    colors.insert(anniversariesColorPos, anniversariesColor);
 
     if (m_useColors) {
         m_passedTimer->start(m_checkInterval * 60 * 1000);
@@ -385,7 +395,7 @@ void EventApplet::configAccepted()
         m_passedTimer->stop();
     }
 
-    m_model->settingsChanged(m_useColors, m_urgency, m_urgentBg, m_passedFg, birthdayColor, anniversariesColor);
+    m_model->settingsChanged(m_useColors, m_urgency, colors);
     colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
     colorizeUrgentAndPassed();
 

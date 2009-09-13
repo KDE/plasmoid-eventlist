@@ -45,6 +45,11 @@ static const int NormalItem = 1;
 static const int BirthdayItem = 2;
 static const int AnniversaryItem = 3;
 
+static const int urgentColorPos = 0;
+static const int passedColorPos = 1;
+static const int birthdayColorPos = 2;
+static const int anniversariesColorPos = 3;
+
 /**
 * Model of the view
 * Categorizes the events using the startDate property
@@ -64,21 +69,21 @@ public:
         ByDueDate = 1
     };
 
-    EventModel(QObject *parent = 0, bool colors = TRUE, int urgencyTime = 15, QColor urgentClr = QColor(), QColor passedClr = QColor(), QColor birthdayClr = QColor(), QColor anniversariesClr = QColor());
+    EventModel(QObject *parent = 0, bool colors = TRUE, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>());
     ~EventModel();
 
 public:
-	void setDateFormat(int format, QString string);
-	void initModel();
-	void resetModel(bool isRunning);
-    void settingsChanged(bool colors, int urgencyTime, QColor urgentColor, QColor passedColor, QColor birthdayColor, QColor anniversariesColor);
-//	QList<int> headerRows();
+    void setDateFormat(int format, QString string);
+    void initModel();
+    void resetModel(bool isRunning);
+    void settingsChanged(bool colors, int urgencyTime, QList<QColor> itemColors);
 
 public slots:
     void addEventItem(const QMap <QString, QVariant> &values);
 
 private:
-	void addItemRow(QDate eventDate, QStandardItem *items);
+    void initHeaderItem(QStandardItem *item, QString title, int days);
+    void addItemRow(QDate eventDate, QStandardItem *items);
     int figureRow(QStandardItem *headerItem);
 
 private:
