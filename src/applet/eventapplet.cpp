@@ -79,6 +79,7 @@ void EventApplet::init()
     QString recurringEventFormat = cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}"));
     int dtFormat = cg.readEntry("DateFormat", ShortDateFormat);
     QString dtString = cg.readEntry("CustomDateFormat", QString("dd.MM."));
+    int period = cg.readEntry("Period", 365);
 
     m_useColors = cg.readEntry("UseColors", TRUE);
     m_checkInterval = cg.readEntry("CheckInterval", 5);
@@ -101,7 +102,7 @@ void EventApplet::init()
     m_urgentBg = urgentColor;
     m_passedFg = passedColor;
 
-    m_model = new EventModel(this, m_useColors, m_urgency, colors);
+    m_model = new EventModel(this, m_useColors, m_urgency, colors, period);
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, dtFormat, dtString);
 
     graphicsWidget();
@@ -325,6 +326,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 	m_formatConfigUi.recurringEventsEdit->setText(cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}")));
 	m_formatConfigUi.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
 	m_formatConfigUi.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
+    m_formatConfigUi.periodBox->setValue(cg.readEntry("Period", 365));
 
     m_colorConfigUi.useColorsCheckBox->setChecked(cg.readEntry("UseColors", TRUE));
     m_colorConfigUi.urgencyBox->setValue(cg.readEntry("UrgencyTime", 15));
@@ -354,6 +356,10 @@ void EventApplet::configAccepted()
 	cg.writeEntry("CustomDateFormat", customString);
 
 	m_delegate->settingsChanged(normalEventFormat, recurringEventsFormat, dateFormat, customString);
+
+    int oldPeriod = cg.readEntry("Period", 365);
+    int period = m_formatConfigUi.periodBox->value();
+    cg.writeEntry("Period", period);
 
     m_useColors = m_colorConfigUi.useColorsCheckBox->isChecked();
     cg.writeEntry("UseColors", m_useColors);
@@ -395,9 +401,15 @@ void EventApplet::configAccepted()
         m_passedTimer->stop();
     }
 
-    m_model->settingsChanged(m_useColors, m_urgency, colors);
-    colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
-    colorizeUrgentAndPassed();
+    m_model->settingsChanged(m_useColors, m_urgency, colors, period);
+
+    if (oldPeriod != period) { //just rebuild model if period changed
+        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
+        updateEventList(data["events"].toList());
+    } else {
+        colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
+        colorizeUrgentAndPassed();
+    }
 
     m_view->setModel(m_model);
 

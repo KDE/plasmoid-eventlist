@@ -32,7 +32,7 @@
 
 #include <KDebug>
 
-EventModel::EventModel(QObject *parent, bool colors, int urgencyTime, QList<QColor> colorList) : QStandardItemModel(parent),
+EventModel::EventModel(QObject *parent, bool colors, int urgencyTime, QList<QColor> colorList, int days) : QStandardItemModel(parent),
     parentItem(0),
     todayItem(0),
     tomorrowItem(0),
@@ -41,7 +41,7 @@ EventModel::EventModel(QObject *parent, bool colors, int urgencyTime, QList<QCol
     laterItem(0)
 {
     parentItem = invisibleRootItem();
-    settingsChanged(colors, urgencyTime, colorList);
+    settingsChanged(colors, urgencyTime, colorList, days);
     initModel();
 }
 
@@ -107,7 +107,7 @@ void EventModel::resetModel(bool isRunning)
     }
 }
 
-void EventModel::settingsChanged(bool colors, int urgencyTime, QList<QColor> itemColors)
+void EventModel::settingsChanged(bool colors, int urgencyTime, QList<QColor> itemColors, int period)
 {
     useColors = colors;
     urgency = urgencyTime;
@@ -115,6 +115,7 @@ void EventModel::settingsChanged(bool colors, int urgencyTime, QList<QColor> ite
     passedFg = itemColors.at(passedColorPos);
     birthdayBg = itemColors.at(birthdayColorPos);
     anniversariesBg = itemColors.at(anniversariesColorPos);
+    m_period = period;
 }
 
 void EventModel::addEventItem(const QMap <QString, QVariant> &values)
@@ -123,6 +124,8 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 	if (values["recurs"].toBool()) {
 		QList<QVariant> dtTimes = values["recurDates"].toList();
 		foreach (QVariant eventDtTime, dtTimes) {
+            if (eventDtTime.toDate() > QDate::currentDate().addDays(m_period))
+                return;
 			QStandardItem *eventItem;
 			eventItem = new QStandardItem();
 			data.insert(StartDtTimePos, eventDtTime);
@@ -150,6 +153,8 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			addItemRow(eventDtTime.toDate(), eventItem);
 		}
 	} else {
+            if (values["startDate"].toDate() > QDate::currentDate().addDays(m_period))
+                return;
 			QStandardItem *eventItem;
 			eventItem = new QStandardItem();
 			data.insert(StartDtTimePos, values["startDate"]);
