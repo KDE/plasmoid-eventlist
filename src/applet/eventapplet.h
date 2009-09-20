@@ -67,8 +67,8 @@ protected:
     void createConfigurationInterface(KConfigDialog *parent);
 
 private:
-    void updateCategories(const QStringList &categories);
-    void updateColors(const QMap <QString, QVariant> &colors);
+//     void updateCategories(const QStringList &categories);
+//     void updateColors(const QMap <QString, QVariant> &colors);
     void updateEventList(const QList <QVariant> &events);
     void updateAkonadiState(bool isRunning);
     void setupActions();

@@ -124,18 +124,16 @@ void EventApplet::init()
 
 void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
 {
-    if (QString::compare(name, CATEGORY_SOURCE) == 0) {
-        updateCategories(data["categories"].toStringList());
-    }
-    else if (QString::compare(name, COLOR_SOURCE) == 0) {
-        updateColors(data["colors"].toMap());
-    }
-    else if (QString::compare(name, EVENT_SOURCE) == 0) {
+    if (QString::compare(name, EVENT_SOURCE) == 0) {
         updateEventList(data["events"].toList());
-    }
-    else if (QString::compare(name, SERVERSTATE_SOURCE) == 0) {
+    } else if (QString::compare(name, SERVERSTATE_SOURCE) == 0) {
         updateAkonadiState(data["serverrunning"].toBool());
     }
+//     else if (QString::compare(name, CATEGORY_SOURCE) == 0) {
+//         updateCategories(data["categories"].toStringList());
+//     } else if (QString::compare(name, COLOR_SOURCE) == 0) {
+//         updateColors(data["colors"].toMap());
+//     }
 }
 
 QGraphicsWidget *EventApplet::graphicsWidget()
@@ -210,17 +208,17 @@ QGraphicsWidget *EventApplet::graphicsWidget()
     return m_graphicsWidget;
 }
 
-void EventApplet::updateCategories(const QStringList &categories)
-{
+// void EventApplet::updateCategories(const QStringList &categories)
+// {
 //     m_types->addItem(QString());
 // 
 //     foreach(const QString &category, categories) {
 //         m_types->addItem(category);
 //     }
-}
+// }
 
-void EventApplet::updateColors(const QMap <QString, QVariant> &colors)
-{
+// void EventApplet::updateColors(const QMap <QString, QVariant> &colors)
+// {
 //     foreach(const QString &category, colors.keys()) {
 //         if (colors[category].value<QColor>().value() > 0) {
 //             m_types->setItemData(m_types->findText(category),
@@ -234,7 +232,7 @@ void EventApplet::updateColors(const QMap <QString, QVariant> &colors)
 //             }
 //         }
 //     }
-}
+// }
 
 void EventApplet::updateEventList(const QList <QVariant> &events)
 {
