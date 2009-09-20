@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2009-09-02 20:54+0200\n"
+"POT-Creation-Date: 2009-09-20 12:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,47 +16,47 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: eventapplet.cpp:191
+#: eventapplet.cpp:197
 msgid "Events from Akonadi resources"
 msgstr ""
 
-#: eventapplet.cpp:288
+#: eventapplet.cpp:294
 msgid "Open current event"
 msgstr ""
 
-#: eventapplet.cpp:293
+#: eventapplet.cpp:299
 msgid "Add new event"
 msgstr ""
 
-#: eventapplet.cpp:315
+#: eventapplet.cpp:321
 msgid "Text Format"
 msgstr ""
 
-#: eventapplet.cpp:316
+#: eventapplet.cpp:322
 msgid "Colors"
 msgstr ""
 
-#: eventmodel.cpp:64
+#: eventmodel.cpp:56
 msgid "Today"
 msgstr ""
 
-#: eventmodel.cpp:74
+#: eventmodel.cpp:61
 msgid "Tomorrow"
 msgstr ""
 
-#: eventmodel.cpp:84
+#: eventmodel.cpp:66
 msgid "Week"
 msgstr ""
 
-#: eventmodel.cpp:94
+#: eventmodel.cpp:71
 msgid "Next 4 weeks"
 msgstr ""
 
-#: eventmodel.cpp:104
+#: eventmodel.cpp:76
 msgid "Later"
 msgstr ""
 
-#: eventmodel.cpp:125
+#: eventmodel.cpp:103
 msgid "The Akonadi server is not running!"
 msgstr ""
 
@@ -274,12 +274,24 @@ msgstr ""
 msgid "A string describing the custom format. It is using the QDate syntax."
 msgstr ""
 
-#: rc.cpp:126
+#. i18n: file: eventappletformatconfig.ui:115
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: rc.cpp:128
+msgid "Miscellenous options"
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:121
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: rc.cpp:131
+msgid "Period to show events (in days):"
+msgstr ""
+
+#: rc.cpp:132
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 
-#: rc.cpp:127
+#: rc.cpp:133
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
