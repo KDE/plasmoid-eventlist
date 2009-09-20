@@ -59,6 +59,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_colorConfigUi(),
     m_passedTimer(0)
 {
+    KGlobal::locale()->insertCatalog("libkcal");
     KGlobal::locale()->insertCatalog("eventapplet");
     setBackgroundHints(DefaultBackground);
     setAspectRatioMode(Plasma::IgnoreAspectRatio);
