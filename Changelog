@@ -1,3 +1,8 @@
+0.2.3
+- some code cleanups (e.g. use a QList for colors)
+- dont show empty header items
+- option to set shown period for events
+
 0.2.2
 - double click on event open it in korganizer if possible
 - add menu entry for adding a new event in korganizer
