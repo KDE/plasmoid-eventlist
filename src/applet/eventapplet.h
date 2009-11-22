@@ -92,6 +92,7 @@ private:
     QTimer *m_passedTimer;
     QList<QAction *> actions;
     Akonadi::AgentManager *m_manager;
+    QStringList disabledResources;
 };
 
 #endif

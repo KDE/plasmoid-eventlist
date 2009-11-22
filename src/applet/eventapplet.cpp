@@ -33,7 +33,6 @@
 #include <QTimer>
 #include <QAction>
 #include <QCheckBox>
-#include <QtDebug>
 
 // kde headers
 #include <KColorScheme>
@@ -251,7 +250,8 @@ void EventApplet::updateEventList(const QList <QVariant> &events)
     if (isRunning) {
         foreach (const QVariant &event, events) {
             QMap <QString, QVariant> values = event.toMap();
-            m_model->addEventItem(values);
+            if (!disabledResources.contains(values["resource"].toString()))
+                m_model->addEventItem(values);
         }
 
         QTreeView *treeView = (QTreeView *)m_view->widget();
@@ -321,18 +321,27 @@ void EventApplet::setShownResources()
     QWidget *widget = new QWidget(dialog);
     QVBoxLayout *layout = new QVBoxLayout();
     
-    Akonadi::AgentInstance::List inst = m_manager->instances();
-    foreach (const Akonadi::AgentInstance &in, inst) {
-        qDebug() << "Type:" << in.name() << in.identifier();
-        QCheckBox *res = new QCheckBox(in.name());
-        res->setChecked(TRUE);
-        layout->addWidget(res);
+    Akonadi::AgentInstance::List instList = m_manager->instances();
+    foreach (const Akonadi::AgentInstance &inst, instList) {
+        QCheckBox *resBox = new QCheckBox(inst.name());
+        resBox->setChecked(!disabledResources.contains(inst.identifier()));
+        resBox->setProperty("identifier", inst.identifier());
+        layout->addWidget(resBox);
     }
 
     widget->setLayout(layout);
     dialog->setMainWidget(widget);
 
     if (dialog->exec() == QDialog::Accepted) {
+        disabledResources.clear();
+        QList<QCheckBox *> resList = widget->findChildren<QCheckBox *>();
+        foreach (QCheckBox *box, resList) {
+            if (box->isChecked() == FALSE) {
+                disabledResources.append(box->property("identifier").toString());
+            }
+        }
+        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
+        updateEventList(data["events"].toList());
     }
 }
 

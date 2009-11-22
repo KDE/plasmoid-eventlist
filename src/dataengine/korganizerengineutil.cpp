@@ -102,7 +102,7 @@ QList <QVariant> KOrganizerEngineUtil::events() const
         Akonadi::Collection::List collections = job->collections();
         QString resourceName;
         foreach(const Akonadi::Collection &collection, collections) {
-            resourceName = collection.name();
+            resourceName = collection.resource();
             Akonadi::ItemFetchJob *ijob = new Akonadi::ItemFetchJob(collection);
             ijob->fetchScope().fetchFullPayload();
 
