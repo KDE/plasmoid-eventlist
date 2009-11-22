@@ -32,6 +32,8 @@
 #include <QModelIndex>
 #include <QTimer>
 #include <QAction>
+#include <QCheckBox>
+#include <QtDebug>
 
 // kde headers
 #include <KColorScheme>
@@ -41,6 +43,8 @@
 
 // plasma headers
 #include <Plasma/Theme>
+
+#include <akonadi/agentinstance.h>
 
 K_EXPORT_PLASMA_APPLET(eventapplet, EventApplet)
 
@@ -57,7 +61,8 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_delegate(0),
     m_formatConfigUi(),
     m_colorConfigUi(),
-    m_passedTimer(0)
+    m_passedTimer(0),
+    m_manager(0)
 {
     KGlobal::locale()->insertCatalog("libkcal");
     KGlobal::locale()->insertCatalog("eventapplet");
@@ -106,6 +111,8 @@ void EventApplet::init()
     m_model = new EventModel(this, m_useColors, m_urgency, colors, period);
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, dtFormat, dtString);
 
+    m_manager = Akonadi::AgentManager::self();
+
     graphicsWidget();
 
     m_engine = dataEngine("events");
@@ -120,7 +127,6 @@ void EventApplet::init()
 
     m_passedTimer = new QTimer();
     connect(m_passedTimer, SIGNAL(timeout()), this, SLOT(passedTimerExpired()));
-
 }
 
 void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
@@ -299,6 +305,35 @@ void EventApplet::setupActions()
     newEvent->setIcon(KIcon("appointment-new"));
     connect(newEvent, SIGNAL(triggered()), this, SLOT(slotAddEvent()));
     actions.append(newEvent);
+
+    QAction *selectResources = new QAction(i18n("Select shown resources"), this);
+    selectResources->setIcon(KIcon("view-calendar-tasks"));
+    connect(selectResources, SIGNAL(triggered()), this, SLOT(setShownResources()));
+    actions.append(selectResources);
+}
+
+void EventApplet::setShownResources()
+{
+    KDialog *dialog = new KDialog();
+    dialog->setCaption(i18n("Select Resources"));
+    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+
+    QWidget *widget = new QWidget(dialog);
+    QVBoxLayout *layout = new QVBoxLayout();
+    
+    Akonadi::AgentInstance::List inst = m_manager->instances();
+    foreach (const Akonadi::AgentInstance &in, inst) {
+        qDebug() << "Type:" << in.name() << in.identifier();
+        QCheckBox *res = new QCheckBox(in.name());
+        res->setChecked(TRUE);
+        layout->addWidget(res);
+    }
+
+    widget->setLayout(layout);
+    dialog->setMainWidget(widget);
+
+    if (dialog->exec() == QDialog::Accepted) {
+    }
 }
 
 QList<QAction *> EventApplet::contextualActions()

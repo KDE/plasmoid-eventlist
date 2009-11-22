@@ -32,6 +32,8 @@
 #include <Plasma/TreeView>
 #include <Plasma/Label>
 
+#include <akonadi/agentmanager.h>
+
 class QTimer;
 class QModelIndex;
 class QAction;
@@ -59,6 +61,7 @@ private slots:
     void openEventFromMenu();
     void slotAddEvent();
     void passedTimerExpired();
+    void setShownResources();
 
 protected slots:
     void configAccepted();
@@ -88,6 +91,7 @@ private:
     QColor m_urgentBg, m_passedFg;
     QTimer *m_passedTimer;
     QList<QAction *> actions;
+    Akonadi::AgentManager *m_manager;
 };
 
 #endif
