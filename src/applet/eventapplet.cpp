@@ -54,7 +54,7 @@ static const char *EVENT_SOURCE    = "Events";
 static const char *SERVERSTATE_SOURCE = "ServerState";
 
 EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
-    Plasma::Applet(parent, args),
+    Plasma::PopupApplet(parent, args),
     m_engine(0),
     m_graphicsWidget(0),
     m_view(0),
@@ -70,7 +70,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     setAspectRatioMode(Plasma::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
 
-//     setPopupIcon("view-pim-tasks");
+    setPopupIcon("view-pim-tasks");
 }
 
 EventApplet::~EventApplet()
@@ -186,7 +186,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 		treeView->setAnimated( true );
 		treeView->setSortingEnabled( false );
 		treeView->setHeaderHidden(true);
-		treeView->setUniformRowHeights( true );
+		treeView->setWordWrap( true );
 		treeView->setFrameShape( QFrame::StyledPanel );
 		treeView->setEditTriggers( QAbstractItemView::NoEditTriggers );
 		treeView->setSelectionMode( QAbstractItemView::NoSelection );
