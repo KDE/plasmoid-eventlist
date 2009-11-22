@@ -27,7 +27,7 @@
 #include <QMap>
 
 // Plasma includes
-#include <Plasma/PopupApplet>
+#include <Plasma/Applet>
 #include <Plasma/DataEngine>
 #include <Plasma/TreeView>
 #include <Plasma/Label>
@@ -39,7 +39,7 @@ class KConfigDialog;
 class EventModel;
 class EventItemDelegate;
 
-class EventApplet : public Plasma::PopupApplet
+class EventApplet : public Plasma::Applet
 {
     Q_OBJECT
 
