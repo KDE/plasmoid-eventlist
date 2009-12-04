@@ -100,20 +100,21 @@ QList <QVariant> KOrganizerEngineUtil::events() const
                                                                        Akonadi::CollectionFetchJob::Recursive);
     if (job->exec()) {
         Akonadi::Collection::List collections = job->collections();
-        QString resourceName;
-        foreach(const Akonadi::Collection &collection, collections) {
-            resourceName = collection.resource();
+        QString resource;
+        foreach (const Akonadi::Collection &collection, collections) {
+            resource = collection.resource();
             Akonadi::ItemFetchJob *ijob = new Akonadi::ItemFetchJob(collection);
             ijob->fetchScope().fetchFullPayload();
 
             if (ijob->exec()) {
                 Akonadi::Item::List items = ijob->items();
-                foreach(const Akonadi::Item &item, items) {
+                foreach (const Akonadi::Item &item, items) {
                     if (item.hasPayload <KCal::Event::Ptr>()) {
                         KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
                         if (event) {
                             QMap <QString, QVariant> values;
-                            values ["resource"] = resourceName;
+                            values ["resource"] = resource;
+                            values ["resourceName"] = collection.name();
                             values ["summary"] = event->summary();
                             values ["categories"] = event->categories();
                             values ["status"] = event->status();

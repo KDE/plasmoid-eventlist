@@ -61,6 +61,7 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
 	dataHash.insert("description", data.at(DescriptionPos).toString());
 	dataHash.insert("location", data.at(LocationPos).toString());
 	dataHash.insert("yearsSince", data.at(YearsSincePos).toString());
+    dataHash.insert("resourceName", data.at(resourceNamePos).toString());
 	dataHash.insert("tab", "\t");
 
 	QString myText;

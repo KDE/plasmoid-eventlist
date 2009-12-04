@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>393</width>
-    <height>517</height>
+    <width>459</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,6 +30,7 @@ Substitutions are:
 %{summary} - summary, %{description} - description,
 %{location} - location, %{duration} - duration in hours,
 %{yearsSince} - years since the first time (useful for birthdays),
+%{resourceName} - the i18n name of the Akonadi resource,
 %{tab} - a tabulator</string>
         </property>
        </widget>

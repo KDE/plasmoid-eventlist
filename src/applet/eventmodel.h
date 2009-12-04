@@ -38,7 +38,8 @@ static const int DescriptionPos = 3;
 static const int LocationPos = 4;
 static const int YearsSincePos = 5;
 static const int BirthdayOrAnniversayPos = 6;
-static const int UIDPos = 7;
+static const int resourceNamePos = 7;
+//static const int UIDPos = 8;
 
 static const int HeaderItem = 0;
 static const int NormalItem = 1;
