@@ -323,10 +323,13 @@ void EventApplet::setShownResources()
     
     Akonadi::AgentInstance::List instList = m_manager->instances();
     foreach (const Akonadi::AgentInstance &inst, instList) {
-        QCheckBox *resBox = new QCheckBox(inst.name());
-        resBox->setChecked(!disabledResources.contains(inst.identifier()));
-        resBox->setProperty("identifier", inst.identifier());
-        layout->addWidget(resBox);
+        QStringList agentMimeTypes = inst.type().mimeTypes();
+        if (agentMimeTypes.contains("application/x-vnd.akonadi.calendar.event")) {
+            QCheckBox *resBox = new QCheckBox(inst.name());
+            resBox->setChecked(!disabledResources.contains(inst.identifier()));
+            resBox->setProperty("identifier", inst.identifier());
+            layout->addWidget(resBox);
+        }
     }
 
     widget->setLayout(layout);
