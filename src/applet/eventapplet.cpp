@@ -198,7 +198,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
                 SLOT(slotOpenEvent(const QModelIndex &)));
 
         Plasma::Label *title = new Plasma::Label();
-        title->setText(i18n("Events from Akonadi resources"));
+        title->setText(i18n("Upcoming Events (Akonadi)"));
         QFont bold = font();
         bold.setBold(true);
         title->setFont(bold);
