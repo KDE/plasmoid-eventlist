@@ -70,14 +70,14 @@ public:
         ByDueDate = 1
     };
 
-    EventModel(QObject *parent = 0, bool colors = TRUE, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>(), int days = 365);
+    EventModel(QObject *parent = 0, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>(), int days = 365);
     ~EventModel();
 
 public:
     void setDateFormat(int format, QString string);
     void initModel();
     void resetModel(bool isRunning);
-    void settingsChanged(bool colors, int urgencyTime, QList<QColor> itemColors, int period);
+    void settingsChanged(int urgencyTime, QList<QColor> itemColors, int period);
 
 public slots:
     void addEventItem(const QMap <QString, QVariant> &values);
@@ -88,8 +88,7 @@ private:
     int figureRow(QStandardItem *headerItem);
 
 private:
-	QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
-    bool useColors;
+    QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
     int urgency, m_period;
     QColor urgentBg, passedFg, birthdayBg, anniversariesBg;
 };

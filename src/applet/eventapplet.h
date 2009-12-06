@@ -86,7 +86,6 @@ private:
     EventItemDelegate *m_delegate;
     Ui::EventAppletFormatConfig m_formatConfigUi;
     Ui::EventAppletColorConfig m_colorConfigUi;
-    bool m_useColors;
     int m_urgency, m_checkInterval;
     QColor m_urgentBg, m_passedFg;
     QTimer *m_passedTimer;

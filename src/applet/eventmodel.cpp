@@ -32,7 +32,7 @@
 
 #include <KDebug>
 
-EventModel::EventModel(QObject *parent, bool colors, int urgencyTime, QList<QColor> colorList, int days) : QStandardItemModel(parent),
+EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList, int days) : QStandardItemModel(parent),
     parentItem(0),
     todayItem(0),
     tomorrowItem(0),
@@ -41,7 +41,7 @@ EventModel::EventModel(QObject *parent, bool colors, int urgencyTime, QList<QCol
     laterItem(0)
 {
     parentItem = invisibleRootItem();
-    settingsChanged(colors, urgencyTime, colorList, days);
+    settingsChanged(urgencyTime, colorList, days);
     initModel();
 }
 
@@ -107,9 +107,8 @@ void EventModel::resetModel(bool isRunning)
     }
 }
 
-void EventModel::settingsChanged(bool colors, int urgencyTime, QList<QColor> itemColors, int period)
+void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors, int period)
 {
-    useColors = colors;
     urgency = urgencyTime;
     urgentBg = itemColors.at(urgentColorPos);
     passedFg = itemColors.at(passedColorPos);
@@ -139,10 +138,10 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			data.insert(BirthdayOrAnniversayPos, QVariant(values["isBirthday"].toBool() || values["isAnniversary"].toBool()));
 
             if (values["isBirthday"].toBool()) {
-                if (useColors) eventItem->setBackground(QBrush(birthdayBg));
+                eventItem->setBackground(QBrush(birthdayBg));
                 eventItem->setData(QVariant(BirthdayItem), EventModel::ItemRole);
             } else if (values["isAnniversary"].toBool()) {
-                if (useColors) eventItem->setBackground(QBrush(anniversariesBg));
+                eventItem->setBackground(QBrush(anniversariesBg));
                 eventItem->setData(QVariant(AnniversaryItem), EventModel::ItemRole);
             }
 
@@ -173,9 +172,9 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
             eventItem->setData(values["uid"], EventModel::UIDRole);
 			eventItem->setToolTip(values ["tooltip"].toString());
             QDateTime itemDtTime = values["startDate"].toDateTime();
-            if (useColors && itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
+            if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
                 eventItem->setBackground(QBrush(urgentBg));
-            } else if (useColors && QDateTime::currentDateTime() > itemDtTime) {
+            } else if (QDateTime::currentDateTime() > itemDtTime) {
                 eventItem->setForeground(QBrush(passedFg));
             }
 

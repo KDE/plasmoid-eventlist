@@ -86,8 +86,6 @@ void EventApplet::init()
     QString dtString = cg.readEntry("CustomDateFormat", QString("dd.MM."));
     int period = cg.readEntry("Period", 365);
 
-    m_useColors = cg.readEntry("UseColors", TRUE);
-    m_checkInterval = cg.readEntry("CheckInterval", 5);
     m_urgency = cg.readEntry("UrgencyTime", 15);
 
     QList<QColor> colors;
@@ -107,7 +105,7 @@ void EventApplet::init()
     m_urgentBg = urgentColor;
     m_passedFg = passedColor;
 
-    m_model = new EventModel(this, m_useColors, m_urgency, colors, period);
+    m_model = new EventModel(this, m_urgency, colors, period);
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, dtFormat, dtString);
 
     m_manager = Akonadi::AgentManager::self();
@@ -258,7 +256,7 @@ void EventApplet::updateEventList(const QList <QVariant> &events)
         m_model->setSortRole(EventModel::SortRole);
         m_model->sort(0, Qt::AscendingOrder);
         treeView->expandAll();
-        if (m_useColors) m_passedTimer->start(m_checkInterval * 60 * 1000);
+        m_passedTimer->start(2 * 60 * 1000);
     }
 }
 
@@ -289,7 +287,7 @@ void EventApplet::slotAddEvent()
 void EventApplet::passedTimerExpired()
 {
     colorizeUrgentAndPassed();
-    if (m_useColors) m_passedTimer->start(m_checkInterval * 60 * 1000);
+    m_passedTimer->start(2 * 60 * 1000);
 }
 
 void EventApplet::setupActions()
@@ -375,9 +373,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 	m_formatConfigUi.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
     m_formatConfigUi.periodBox->setValue(cg.readEntry("Period", 365));
 
-    m_colorConfigUi.useColorsCheckBox->setChecked(cg.readEntry("UseColors", TRUE));
     m_colorConfigUi.urgencyBox->setValue(cg.readEntry("UrgencyTime", 15));
-    m_colorConfigUi.checkIntervalBox->setValue(cg.readEntry("CheckInterval", 5));
 
     m_colorConfigUi.startedColorButton->setColor(QColor(cg.readEntry("PassedColor", QString("#C3C3C3"))));
     m_colorConfigUi.urgentColorButton->setColor(QColor(cg.readEntry("UrgentColor", QString("#FF0000"))));
@@ -408,12 +404,8 @@ void EventApplet::configAccepted()
     int period = m_formatConfigUi.periodBox->value();
     cg.writeEntry("Period", period);
 
-    m_useColors = m_colorConfigUi.useColorsCheckBox->isChecked();
-    cg.writeEntry("UseColors", m_useColors);
     m_urgency = m_colorConfigUi.urgencyBox->value();
     cg.writeEntry("UrgencyTime", m_urgency);
-    m_checkInterval = m_colorConfigUi.checkIntervalBox->value();
-    cg.writeEntry("CheckInterval", m_checkInterval);
     
     QList<QColor> colors;
 
@@ -442,13 +434,7 @@ void EventApplet::configAccepted()
     anniversariesColor.setAlphaF(anniversariesOpacity/100.0);
     colors.insert(anniversariesColorPos, anniversariesColor);
 
-    if (m_useColors) {
-        m_passedTimer->start(m_checkInterval * 60 * 1000);
-    } else {
-        m_passedTimer->stop();
-    }
-
-    m_model->settingsChanged(m_useColors, m_urgency, colors, period);
+    m_model->settingsChanged(m_urgency, colors, period);
 
     if (oldPeriod != period) { //just rebuild model if period changed
         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
@@ -472,11 +458,11 @@ void EventApplet::colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor 
         for (int c = 0; c < childRows; ++c) {
             QModelIndex index = m_model->index(c, 0, headerIndex);
             int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
-            if (m_useColors && itemRole == BirthdayItem) {
+            if (itemRole == BirthdayItem) {
                 m_model->setData(index, QVariant(QBrush(birthdayColor)), Qt::BackgroundRole);
-            } else if (m_useColors && itemRole == AnniversaryItem) {
+            } else if (itemRole == AnniversaryItem) {
                 m_model->setData(index, QVariant(QBrush(anniversariesColor)), Qt::BackgroundRole);
-            } else if (!m_useColors && (itemRole == BirthdayItem || itemRole == AnniversaryItem)) {
+            } else if (itemRole == BirthdayItem || itemRole == AnniversaryItem) {
                 m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
             }
         }
@@ -494,9 +480,9 @@ void EventApplet::colorizeUrgentAndPassed()
         int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
         QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
         if (itemRole == NormalItem) {
-            if (m_useColors && itemDtTime > now && now.secsTo(itemDtTime) < m_urgency * 60) {
+            if (itemDtTime > now && now.secsTo(itemDtTime) < m_urgency * 60) {
                 m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
-            } else if (m_useColors && now > itemDtTime) {
+            } else if (now > itemDtTime) {
                 m_model->setData(index, QVariant(QBrush(m_passedFg)), Qt::ForegroundRole);
                 m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
             } else {
@@ -514,7 +500,7 @@ void EventApplet::colorizeUrgentAndPassed()
         int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
         QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
         if (itemRole == NormalItem) {
-            if (m_useColors && now.secsTo(itemDtTime) < m_urgency * 60) {
+            if (now.secsTo(itemDtTime) < m_urgency * 60) {
                 m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
             } else {
                 m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
