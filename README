@@ -6,3 +6,27 @@ cmake -DCMAKE_INSTALL_PREFIX=`kde-config --prefix` ../
 make 
 sudo make install
 
+How to setup Akonadi:
+Of course you have to install the akonadiserver (openSUSE the akonadi-runtime package),
+the resources are in the kdepim-runtime package where are also the config modules and utilities.
+From 4.4 akonadi settings aren't anymore in systemsettings, you must use the akonaditray utility.
+Create a file $HOME/.local/share/akonadi/mysql-local.conf
+with the content
+user=username
+where username is you your username.
+
+If you get errors in the server test like
+[Warning] Can't open and lock time zone table: Table 'mysql.time_zone_leap_second' doesn't exist trying to live without them
+[ERROR] Can't open and lock privilege tables: Table 'mysql.servers' doesn't exist
+[ERROR] Cannot open mysql.db
+[ERROR] Cannot open mysql.user
+[ERROR] Cannot open mysql.event
+
+Execute from a terminal with the running akonadiserver:
+mysql_install_db --datadir=$HOME/.local/share/akonadi/db_data/
+mysql_upgrade --socket=$HOME/.local/share/akonadi/db_misc/mysql.socket
+Then stop and restart the server.
+
+Then you can add resources.
+For 4.3 I suggest setting all resources to read only and keep the standard resources for e.g. korganizer.
+Who is using 4.4 should know what he is doing. ;-)
