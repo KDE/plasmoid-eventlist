@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QAction>
 #include <QCheckBox>
+#include <QDateTime>
 
 // kde headers
 #include <KColorScheme>
@@ -60,7 +61,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_delegate(0),
     m_formatConfigUi(),
     m_colorConfigUi(),
-    m_passedTimer(0),
+    m_timer(0),
     m_manager(0)
 {
     KGlobal::locale()->insertCatalog("libkcal");
@@ -122,8 +123,9 @@ void EventApplet::init()
 
     setupActions();
 
-    m_passedTimer = new QTimer();
-    connect(m_passedTimer, SIGNAL(timeout()), this, SLOT(passedTimerExpired()));
+    lastCheckTime = QDateTime::currentDateTime();
+    m_timer = new QTimer();
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
 }
 
 void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
@@ -256,7 +258,7 @@ void EventApplet::updateEventList(const QList <QVariant> &events)
         m_model->setSortRole(EventModel::SortRole);
         m_model->sort(0, Qt::AscendingOrder);
         treeView->expandAll();
-        m_passedTimer->start(2 * 60 * 1000);
+        m_timer->start(2 * 60 * 1000);
     }
 }
 
@@ -284,10 +286,17 @@ void EventApplet::slotAddEvent()
     KOrganizerAppletUtil::showAddEvent();
 }
 
-void EventApplet::passedTimerExpired()
+void EventApplet::timerExpired()
 {
     colorizeUrgentAndPassed();
-    m_passedTimer->start(2 * 60 * 1000);
+
+    if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
+        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
+        updateEventList(data["events"].toList());
+    }
+
+    lastCheckTime = QDateTime::currentDateTime();
+    m_timer->start(2 * 60 * 1000);
 }
 
 void EventApplet::setupActions()

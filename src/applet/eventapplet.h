@@ -34,6 +34,7 @@
 
 #include <akonadi/agentmanager.h>
 
+class QDateTime;
 class QTimer;
 class QModelIndex;
 class QAction;
@@ -60,7 +61,7 @@ private slots:
     void slotOpenEvent(const QModelIndex &index);
     void openEventFromMenu();
     void slotAddEvent();
-    void passedTimerExpired();
+    void timerExpired();
     void setShownResources();
 
 protected slots:
@@ -88,10 +89,11 @@ private:
     Ui::EventAppletColorConfig m_colorConfigUi;
     int m_urgency, m_checkInterval;
     QColor m_urgentBg, m_passedFg;
-    QTimer *m_passedTimer;
+    QTimer *m_timer;
     QList<QAction *> actions;
     Akonadi::AgentManager *m_manager;
     QStringList disabledResources;
+    QDateTime lastCheckTime;
 };
 
 #endif
