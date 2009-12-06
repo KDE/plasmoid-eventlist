@@ -22,7 +22,6 @@
 // plasma headers
 #include <plasma/dataengine.h>
 
-class QTimer;
 class KOrganizerEngineUtil;
 
 class EventEngine : public Plasma::DataEngine
@@ -42,11 +41,9 @@ protected:
 private slots:
     void slotCalendarChanged();
     void slotServerStateChanged();
-    void midnightTimerExp();
 
 private:
     KOrganizerEngineUtil *m_util;
-    QTimer *m_midnightTimer;
 };
 
 K_EXPORT_PLASMA_DATAENGINE(events, EventEngine)

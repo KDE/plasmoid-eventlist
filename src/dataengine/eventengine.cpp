@@ -19,33 +19,19 @@
 #include "eventengine.h"
 #include "korganizerengineutil.h"
 
-// kde headers
-#include <KDebug>
-
-#include <QTimer>
-#include <QDateTime>
-
 static const char *CATEGORY_SOURCE = "Categories";
 static const char *COLOR_SOURCE    = "Colors";
 static const char *EVENT_SOURCE    = "Events";
 static const char *SERVERSTATE_SOURCE = "ServerState";
 
 EventEngine::EventEngine(QObject* parent, const QVariantList& args)
-    : Plasma::DataEngine(parent),
-	m_midnightTimer(0)
+    : Plasma::DataEngine(parent)
 {
     Q_UNUSED(args);
 
-	m_util = new KOrganizerEngineUtil(this);
+    m_util = new KOrganizerEngineUtil(this);
     connect(m_util, SIGNAL(calendarChanged()),this, SLOT(slotCalendarChanged()));
     connect(m_util, SIGNAL(serverStateChanged()),this, SLOT(slotServerStateChanged()));
-
-	m_midnightTimer = new QTimer(this);
-	QDateTime nextMidnight = QDateTime(QDate::currentDate().addDays(1));
-	int secsUntilMidnight = QDateTime::currentDateTime().secsTo(nextMidnight);
-	m_midnightTimer->setInterval(1000 * secsUntilMidnight + 5000); // 5 secs over to ensure we're not under
-	connect(m_midnightTimer, SIGNAL(timeout()), this, SLOT(midnightTimerExp()));
-	m_midnightTimer->start();
 }
 
 EventEngine::~EventEngine()
@@ -84,16 +70,6 @@ bool EventEngine::updateSourceEvent(const QString &name)
         setData(I18N_NOOP(name), I18N_NOOP("serverrunning"), m_util->serverstate());
     }
     return true;
-}
-
-void EventEngine::midnightTimerExp()
-{
-	slotCalendarChanged();
-
-	QDateTime nextMidnight = QDateTime(QDate::currentDate().addDays(1));
-	int secsUntilMidnight = QDateTime::currentDateTime().secsTo(nextMidnight);
-	m_midnightTimer->setInterval(1000 * secsUntilMidnight + 5000); // 5 secs over to ensure we're not under
-	m_midnightTimer->start();
 }
 
 void EventEngine::slotCalendarChanged()
