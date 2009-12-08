@@ -148,7 +148,7 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			eventItem->setData(data, Qt::DisplayRole);
 			eventItem->setData(eventDtTime, EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
-			eventItem->setToolTip(values ["tooltip"].toString());
+// 			eventItem->setToolTip(values ["tooltip"].toString());
 
 			addItemRow(eventDtTime.toDate(), eventItem);
 		}
@@ -170,7 +170,7 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			eventItem->setData(data, Qt::DisplayRole);
 			eventItem->setData(values["startDate"].toDateTime(), EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
-			eventItem->setToolTip(values ["tooltip"].toString());
+// 			eventItem->setToolTip(values ["tooltip"].toString());
             QDateTime itemDtTime = values["startDate"].toDateTime();
             if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
                 eventItem->setBackground(QBrush(urgentBg));
