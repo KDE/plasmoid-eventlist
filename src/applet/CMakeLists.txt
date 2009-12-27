@@ -12,9 +12,9 @@ qt4_add_dbus_interface(eventapplet_SRCS org.kde.Korganizer.Calendar.xml calendar
 
 kde4_add_ui_files(eventapplet_SRCS eventappletformatconfig.ui eventappletcolorconfig.ui)
 
-kde4_add_plugin(eventapplet ${eventapplet_SRCS})
-target_link_libraries(eventapplet ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_AKONADI_LIBS})
+kde4_add_plugin(plasma_applet_events ${eventapplet_SRCS})
+target_link_libraries(plasma_applet_events ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_AKONADI_LIBS})
 
-install(TARGETS eventapplet DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS plasma_applet_events DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES eventapplet-default.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES plasma-applet-events.desktop DESTINATION ${SERVICES_INSTALL_DIR})

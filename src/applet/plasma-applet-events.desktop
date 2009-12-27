@@ -8,11 +8,11 @@ Icon=view-pim-tasks
 Type=Service
 ServiceTypes=Plasma/Applet
 
-X-KDE-Library=eventapplet
+X-KDE-Library=plasma_applet_events
 
 X-KDE-PluginInfo-Author=Gerd Fleischer
 X-KDE-PluginInfo-Email=
-X-KDE-PluginInfo-Name=eventapplet
+X-KDE-PluginInfo-Name=plasma_applet_events
 X-KDE-PluginInfo-Version=0.2.3
 X-KDE-PluginInfo-Category=Misc
 X-KDE-PluginInfo-Depends=

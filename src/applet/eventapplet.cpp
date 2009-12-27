@@ -47,7 +47,7 @@
 
 #include <akonadi/agentinstance.h>
 
-K_EXPORT_PLASMA_APPLET(eventapplet, EventApplet)
+K_EXPORT_PLASMA_APPLET(events, EventApplet)
 
 static const char *CATEGORY_SOURCE = "Categories";
 static const char *COLOR_SOURCE    = "Colors";
@@ -367,7 +367,6 @@ void EventApplet::toolTipAboutToShow()
 {
     Plasma::ToolTipContent data(i18n("Upcoming Events"), "", KIcon("view-pim-tasks"));
     data.setMainText("Upcoming events from Akonadi resources");
-    data.setSubText("Test");
     Plasma::ToolTipManager::self()->setContent(this, data);
 }
 
