@@ -46,6 +46,7 @@
 #include <Plasma/ToolTipManager>
 
 #include <akonadi/agentinstance.h>
+#include <akonadi/servermanager.h>
 
 K_EXPORT_PLASMA_APPLET(events, EventApplet)
 
@@ -81,6 +82,8 @@ EventApplet::~EventApplet()
 
 void EventApplet::init()
 {
+    Akonadi::ServerManager::start();
+
     KConfigGroup cg = config();
     QString normalEventFormat = cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}"));
     QString recurringEventFormat = cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}"));
