@@ -45,6 +45,7 @@
 #include <Plasma/Theme>
 #include <Plasma/ToolTipManager>
 
+#include <akonadi/control.h>
 #include <akonadi/agentinstance.h>
 #include <akonadi/servermanager.h>
 
@@ -54,6 +55,7 @@ static const char *CATEGORY_SOURCE = "Categories";
 static const char *COLOR_SOURCE    = "Colors";
 static const char *EVENT_SOURCE    = "Events";
 static const char *SERVERSTATE_SOURCE = "ServerState";
+static const int MAX_RETRIES = 12;
 
 EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     Plasma::PopupApplet(parent, args),
@@ -73,6 +75,8 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     setHasConfigurationInterface(true);
 
     setPopupIcon("view-pim-tasks");
+
+    Akonadi::ServerManager::start();
 }
 
 EventApplet::~EventApplet()
@@ -82,8 +86,6 @@ EventApplet::~EventApplet()
 
 void EventApplet::init()
 {
-    Akonadi::ServerManager::start();
-
     KConfigGroup cg = config();
     QString normalEventFormat = cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}"));
     QString recurringEventFormat = cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}"));
@@ -113,25 +115,47 @@ void EventApplet::init()
     m_model = new EventModel(this, m_urgency, colors, period);
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, dtFormat, dtString);
 
-    m_manager = Akonadi::AgentManager::self();
-
     graphicsWidget();
-
-    m_engine = dataEngine("events");
-    if (m_engine) {
-        m_engine->connectSource(EVENT_SOURCE, this);
-        m_engine->connectSource(CATEGORY_SOURCE, this);
-        m_engine->connectSource(COLOR_SOURCE, this);
-        m_engine->connectSource(SERVERSTATE_SOURCE, this);
-    }
-
-    setupActions();
 
     Plasma::ToolTipManager::self()->registerWidget(this);
 
     lastCheckTime = QDateTime::currentDateTime();
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
+    m_try = 0;
+    QTimer::singleShot(100, this, SLOT(setupDataEngine()));
+}
+
+void EventApplet::setupDataEngine()
+{
+    Akonadi::Control::start();
+
+    if (Akonadi::ServerManager::isRunning()) {
+        m_manager = Akonadi::AgentManager::self();
+        m_engine = dataEngine("events");
+        if (m_engine) {
+            m_engine->connectSource(EVENT_SOURCE, this);
+            m_engine->connectSource(CATEGORY_SOURCE, this);
+            m_engine->connectSource(COLOR_SOURCE, this);
+            m_engine->connectSource(SERVERSTATE_SOURCE, this);
+        }
+
+        m_view->setModel(m_model);
+        layout->removeItem(busy);
+        busy->hide();
+        layout->addItem(m_view);
+
+        setupActions();
+    } else {
+        busy->setLabel(i18n("%1 retries to start/connect to the Akonadi server", m_try + 1));
+        ++m_try;
+        if (m_try < MAX_RETRIES) {
+            QTimer::singleShot(5000, this, SLOT(setupDataEngine()));
+        } else {
+            busy->setLabel(i18n("Could not connect to the Akonadi server"));
+            busy->setRunning(FALSE);
+        }
+    }
 }
 
 void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
@@ -209,9 +233,10 @@ QGraphicsWidget *EventApplet::graphicsWidget()
         bold.setBold(true);
         title->setFont(bold);
 
-        QGraphicsLinearLayout *layout = new QGraphicsLinearLayout(Qt::Vertical);
+        layout = new QGraphicsLinearLayout(Qt::Vertical);
         layout->addItem(title);
-        layout->addItem(m_view);
+        busy = new Plasma::BusyWidget();
+        layout->addItem(busy);
 
         m_graphicsWidget->setLayout(layout);
         registerAsDragHandle(m_graphicsWidget);

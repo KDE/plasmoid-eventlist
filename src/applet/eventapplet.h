@@ -31,6 +31,7 @@
 #include <Plasma/DataEngine>
 #include <Plasma/TreeView>
 #include <Plasma/Label>
+#include <Plasma/BusyWidget>
 
 #include <akonadi/agentmanager.h>
 
@@ -41,6 +42,7 @@ class QAction;
 class KConfigDialog;
 class EventModel;
 class EventItemDelegate;
+class QGraphicsLinearLayout;
 
 class EventApplet : public Plasma::PopupApplet
 {
@@ -63,6 +65,7 @@ private slots:
     void slotAddEvent();
     void timerExpired();
     void setShownResources();
+    void setupDataEngine();
 
 protected slots:
     void configAccepted();
@@ -83,12 +86,14 @@ private:
 private:
     Plasma::DataEngine *m_engine;
     QGraphicsWidget *m_graphicsWidget;
+    QGraphicsLinearLayout *layout;
     EventModel *m_model;
     Plasma::TreeView *m_view;
+    Plasma::BusyWidget *busy;
     EventItemDelegate *m_delegate;
     Ui::EventAppletFormatConfig m_formatConfigUi;
     Ui::EventAppletColorConfig m_colorConfigUi;
-    int m_urgency, m_checkInterval;
+    int m_urgency, m_checkInterval, m_try;
     QColor m_urgentBg, m_passedFg;
     QTimer *m_timer;
     QList<QAction *> actions;
