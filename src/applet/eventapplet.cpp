@@ -43,7 +43,7 @@
 
 // plasma headers
 #include <Plasma/Theme>
-#include <Plasma/ToolTipManager>
+// #include <Plasma/ToolTipManager>
 
 #include <akonadi/control.h>
 #include <akonadi/agentinstance.h>
@@ -117,7 +117,7 @@ void EventApplet::init()
 
     graphicsWidget();
 
-    Plasma::ToolTipManager::self()->registerWidget(this);
+//     Plasma::ToolTipManager::self()->registerWidget(this);
 
     lastCheckTime = QDateTime::currentDateTime();
     m_timer = new QTimer();
@@ -391,12 +391,12 @@ QList<QAction *> EventApplet::contextualActions()
     return actions;
 }
 
-void EventApplet::toolTipAboutToShow()
-{
-    Plasma::ToolTipContent data(i18n("Upcoming Events"), "", KIcon("view-pim-tasks"));
-    data.setMainText("Upcoming events from Akonadi resources");
-    Plasma::ToolTipManager::self()->setContent(this, data);
-}
+// void EventApplet::toolTipAboutToShow()
+// {
+//     Plasma::ToolTipContent data(i18n("Upcoming Events"), "", KIcon("view-pim-tasks"));
+//     data.setMainText("Upcoming events from Akonadi resources");
+//     Plasma::ToolTipManager::self()->setContent(this, data);
+// }
 
 void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 {

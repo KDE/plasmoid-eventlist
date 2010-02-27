@@ -69,7 +69,7 @@ private slots:
 
 protected slots:
     void configAccepted();
-    void toolTipAboutToShow();
+//     void toolTipAboutToShow();
 
 protected:
     void createConfigurationInterface(KConfigDialog *parent);
