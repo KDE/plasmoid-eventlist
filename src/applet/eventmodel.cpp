@@ -73,7 +73,7 @@ void EventModel::initModel()
 
     if (!laterItem) {
         laterItem = new QStandardItem();
-        initHeaderItem(laterItem, i18n("Later"), i18n("Events after the next month"), 29);
+        initHeaderItem(laterItem, i18n("Later"), i18n("Events later than 4 weeks"), 29);
     }
 }
 
