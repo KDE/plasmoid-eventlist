@@ -20,10 +20,12 @@
 #include "eventmodel.h"
 #include "eventitemdelegate.h"
 #include "korganizerappletutil.h"
+#include "eventtreeview.h"
 
 // qt headers
 #include <QComboBox>
 #include <QGraphicsLinearLayout>
+#include <QGraphicsProxyWidget>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QToolButton>
@@ -34,6 +36,8 @@
 #include <QAction>
 #include <QCheckBox>
 #include <QDateTime>
+#include <QPoint>
+#include <QCursor>
 
 // kde headers
 #include <KColorScheme>
@@ -43,7 +47,6 @@
 
 // plasma headers
 #include <Plasma/Theme>
-// #include <Plasma/ToolTipManager>
 
 #include <akonadi/control.h>
 #include <akonadi/agentinstance.h>
@@ -117,7 +120,8 @@ void EventApplet::init()
 
     graphicsWidget();
 
-//     Plasma::ToolTipManager::self()->registerWidget(this);
+    Plasma::ToolTipManager::self()->registerWidget(this);
+    createToolTip();
 
     lastCheckTime = QDateTime::currentDateTime();
     m_timer = new QTimer();
@@ -143,7 +147,7 @@ void EventApplet::setupDataEngine()
         m_view->setModel(m_model);
         layout->removeItem(busy);
         busy->hide();
-        layout->addItem(m_view);
+        layout->addItem(proxyWidget);
 
         setupActions();
     } else {
@@ -174,61 +178,45 @@ void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Dat
 
 QGraphicsWidget *EventApplet::graphicsWidget()
 {
-	if (!m_graphicsWidget) {
-		m_graphicsWidget = new QGraphicsWidget(this);
-		m_graphicsWidget->setMinimumSize(200, 125);
-		m_graphicsWidget->setPreferredSize(350, 200);
+    if (!m_graphicsWidget) {
+        m_graphicsWidget = new QGraphicsWidget(this);
+        m_graphicsWidget->setMinimumSize(200, 125);
+        m_graphicsWidget->setPreferredSize(350, 200);
 
-	// Get colors
-	QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
-	QColor baseColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor);
-	QColor altBaseColor = baseColor.darker(150);
-//	int green = altBaseColor.green() * 1.8;
-//	altBaseColor.setGreen( green > 255 ? 255 : green ); // tint green
-	QColor buttonColor = altBaseColor;
-	baseColor.setAlpha(50);
-	altBaseColor.setAlpha(50);
-	buttonColor.setAlpha(150);
-//	m_colorSubItemLabels = textColor;
-//	m_colorSubItemLabels.setAlpha( 170 );
+        // Get colors
+        QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+        QColor baseColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor);
+        QColor altBaseColor = baseColor.darker(150);
+        QColor buttonColor = altBaseColor;
+        baseColor.setAlpha(50);
+        altBaseColor.setAlpha(50);
+        buttonColor.setAlpha(150);
 
-	// Set colors
-	QPalette p = palette();
-	p.setColor( QPalette::Base, baseColor );
-	p.setColor( QPalette::AlternateBase, altBaseColor );
-	p.setColor( QPalette::Button, buttonColor );
-	p.setColor( QPalette::Foreground, textColor );
-	p.setColor( QPalette::Text, textColor );
+        // Set colors
+        QPalette p = palette();
+        p.setColor( QPalette::Base, baseColor );
+        p.setColor( QPalette::AlternateBase, altBaseColor );
+        p.setColor( QPalette::Button, buttonColor );
+        p.setColor( QPalette::Foreground, textColor );
+        p.setColor( QPalette::Text, textColor );
 
-  m_view = new Plasma::TreeView(); //EventView();
-		m_view->setModel(m_model);
-		m_view->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+        proxyWidget = new QGraphicsProxyWidget();
+        m_view = new EventTreeView();
+        proxyWidget->setWidget(m_view);
+        proxyWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 
-		QTreeView *treeView = (QTreeView *)m_view->widget();
-		treeView->setItemDelegate(m_delegate);
-		treeView->setAlternatingRowColors( true );
-		treeView->setAllColumnsShowFocus( false );
-		treeView->setPalette( p );
-		treeView->viewport()->setAutoFillBackground(false);
-		treeView->viewport()->setPalette( p );
-		treeView->setRootIsDecorated( false );
-		treeView->setAnimated( true );
-		treeView->setSortingEnabled( false );
-		treeView->setHeaderHidden(true);
-		treeView->setWordWrap( true );
-		treeView->setFrameShape( QFrame::StyledPanel );
-		treeView->setEditTriggers( QAbstractItemView::NoEditTriggers );
-		treeView->setSelectionMode( QAbstractItemView::NoSelection );
-		treeView->setSelectionBehavior( QAbstractItemView::SelectRows );
-		treeView->header()->setCascadingSectionResizes( true );
-		treeView->header()->setResizeMode( QHeaderView::Interactive );
-		treeView->header()->setSortIndicator( 2, Qt::AscendingOrder );
-		
-        connect(treeView, SIGNAL(doubleClicked(const QModelIndex &)),
+        m_view->setItemDelegate(m_delegate);
+        m_view->setPalette(p);
+        m_view->viewport()->setAutoFillBackground(false);
+        m_view->viewport()->setPalette( p );
+
+        connect(m_view, SIGNAL(doubleClicked(const QModelIndex &)),
                 SLOT(slotOpenEvent(const QModelIndex &)));
+        connect(m_view, SIGNAL(tooltipUpdated(QString)),
+                SLOT(slotUpdateTooltip(QString)));
 
         Plasma::Label *title = new Plasma::Label();
-        title->setText(i18n("Upcoming Events (Akonadi)"));
+        title->setText(i18n("Upcoming Events"));
         QFont bold = font();
         bold.setBold(true);
         title->setFont(bold);
@@ -285,10 +273,9 @@ void EventApplet::updateEventList(const QList <QVariant> &events)
                 m_model->addEventItem(values);
         }
 
-        QTreeView *treeView = (QTreeView *)m_view->widget();
         m_model->setSortRole(EventModel::SortRole);
         m_model->sort(0, Qt::AscendingOrder);
-        treeView->expandAll();
+        m_view->expandAll();
         m_timer->start(2 * 60 * 1000);
     }
 }
@@ -308,8 +295,7 @@ void EventApplet::slotOpenEvent(const QModelIndex &index)
 
 void EventApplet::openEventFromMenu()
 {
-    QTreeView *treeView = (QTreeView *)m_view->widget();
-    slotOpenEvent(treeView->currentIndex());
+    slotOpenEvent(m_view->currentIndex());
 }
 
 void EventApplet::slotAddEvent()
@@ -391,12 +377,25 @@ QList<QAction *> EventApplet::contextualActions()
     return actions;
 }
 
-// void EventApplet::toolTipAboutToShow()
-// {
-//     Plasma::ToolTipContent data(i18n("Upcoming Events"), "", KIcon("view-pim-tasks"));
-//     data.setMainText("Upcoming events from Akonadi resources");
-//     Plasma::ToolTipManager::self()->setContent(this, data);
-// }
+void EventApplet::slotUpdateTooltip(QString text)
+{
+    tooltip.setSubText(text);
+    Plasma::ToolTipManager::self()->setContent(this, tooltip);
+}
+
+void EventApplet::createToolTip()
+{
+    tooltip = Plasma::ToolTipContent(i18n("Upcoming Events"), "", KIcon("view-pim-tasks"));
+    tooltip.setMainText(i18n("Upcoming events from Akonadi resources"));
+    tooltip.setAutohide(FALSE);
+}
+
+void EventApplet::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event);
+    createToolTip();
+    Plasma::ToolTipManager::self()->setContent(this, tooltip);
+}
 
 void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 {
@@ -555,3 +554,5 @@ void EventApplet::colorizeUrgentAndPassed()
         }
     }
 }
+
+#include "eventapplet.moc"

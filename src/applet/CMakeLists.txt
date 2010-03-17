@@ -3,6 +3,7 @@ project(EVENTAPPLET)
 set(eventapplet_SRCS
     eventapplet.cpp
     eventmodel.cpp
+    eventtreeview.cpp
     eventitemdelegate.cpp
     korganizerappletutil.cpp
 )

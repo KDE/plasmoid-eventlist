@@ -62,7 +62,8 @@ public:
     enum EventRole {
 		SortRole = Qt::UserRole + 1,
         UIDRole,
-        ItemRole
+        ItemRole,
+        TooltipRole
     };
 
     enum EventCategoryType {
@@ -83,7 +84,7 @@ public slots:
     void addEventItem(const QMap <QString, QVariant> &values);
 
 private:
-    void initHeaderItem(QStandardItem *item, QString title, int days);
+    void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
     void addItemRow(QDate eventDate, QStandardItem *items);
     int figureRow(QStandardItem *headerItem);
 

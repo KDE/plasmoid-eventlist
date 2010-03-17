@@ -25,6 +25,8 @@
 
 // Qt headers
 #include <QMap>
+#include <QGraphicsSceneHoverEvent>
+
 
 // Plasma includes
 #include <Plasma/PopupApplet>
@@ -32,6 +34,7 @@
 #include <Plasma/TreeView>
 #include <Plasma/Label>
 #include <Plasma/BusyWidget>
+#include <Plasma/ToolTipManager>
 
 #include <akonadi/agentmanager.h>
 
@@ -43,6 +46,9 @@ class KConfigDialog;
 class EventModel;
 class EventItemDelegate;
 class QGraphicsLinearLayout;
+class QGraphicsProxyWidget;
+class QTreeView;
+class EventTreeView;
 
 class EventApplet : public Plasma::PopupApplet
 {
@@ -61,6 +67,7 @@ public slots:
 
 private slots:
     void slotOpenEvent(const QModelIndex &index);
+    void slotUpdateTooltip(QString);
     void openEventFromMenu();
     void slotAddEvent();
     void timerExpired();
@@ -69,10 +76,10 @@ private slots:
 
 protected slots:
     void configAccepted();
-//     void toolTipAboutToShow();
 
 protected:
     void createConfigurationInterface(KConfigDialog *parent);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
 //     void updateCategories(const QStringList &categories);
@@ -82,13 +89,17 @@ private:
     void setupActions();
     void colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor anniversariesColor);
     void colorizeUrgentAndPassed();
-
+    void createToolTip();
+    
 private:
     Plasma::DataEngine *m_engine;
     QGraphicsWidget *m_graphicsWidget;
     QGraphicsLinearLayout *layout;
     EventModel *m_model;
-    Plasma::TreeView *m_view;
+//    Plasma::TreeView *m_view;
+    QGraphicsProxyWidget *proxyWidget;
+    EventTreeView *m_view;
+    Plasma::ToolTipContent tooltip;
     Plasma::BusyWidget *busy;
     EventItemDelegate *m_delegate;
     Ui::EventAppletFormatConfig m_formatConfigUi;

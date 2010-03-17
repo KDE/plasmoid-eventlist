@@ -29,12 +29,13 @@
 #include <KDebug>
 #include <KStandardDirs>
 #include <KDateTime>
+#include <kdeversion.h>
 
 // kdepim headers
 #include <kcal/incidenceformatter.h>
 #include <kcal/event.h>
 #include <kcal/recurrence.h>
-
+#include <kcal/calendarnull.h>
 // Akonadi
 #include <akonadi/servermanager.h>
 #include <akonadi/control.h>
@@ -137,8 +138,11 @@ QList <QVariant> KOrganizerEngineUtil::events() const
                             values ["recurDates"] = recurDates;
                             event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
                             event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
+#if KDE_IS_VERSION(4,4,60)
+                            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(resource, event);
+#else
                             values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
-
+#endif
                             events << values;
                         } // if event
                     } // if hasPayload

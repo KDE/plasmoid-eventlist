@@ -53,36 +53,37 @@ void EventModel::initModel()
 {
     if (!todayItem) {
         todayItem = new QStandardItem();
-        initHeaderItem(todayItem, i18n("Today"), 0);
+        initHeaderItem(todayItem, i18n("Today"), i18n("Events of today"), 0);
     }
 
     if (!tomorrowItem) {
         tomorrowItem = new QStandardItem();
-        initHeaderItem(tomorrowItem, i18n("Tomorrow"), 1);
+        initHeaderItem(tomorrowItem, i18n("Tomorrow"), i18n("Events for tomrrow"), 1);
     }
 
     if (!weekItem) {
         weekItem = new QStandardItem();
-        initHeaderItem(weekItem, i18n("Week"), 2);
+        initHeaderItem(weekItem, i18n("Week"), i18n("Events of the next week"), 2);
     }
 
     if (!monthItem) {
         monthItem = new QStandardItem();
-        initHeaderItem(monthItem, i18n("Next 4 weeks"), 8);
+        initHeaderItem(monthItem, i18n("Next 4 weeks"), i18n("Events for the next 4 weeks"), 8);
     }
 
     if (!laterItem) {
         laterItem = new QStandardItem();
-        initHeaderItem(laterItem, i18n("Later"), 29);
+        initHeaderItem(laterItem, i18n("Later"), i18n("Events after the next month"), 29);
     }
 }
 
-void EventModel::initHeaderItem(QStandardItem *item, QString title, int days)
+void EventModel::initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days)
 {
         item->setData(QVariant(title), Qt::DisplayRole);
         item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), EventModel::SortRole);
         item->setData(QVariant(HeaderItem), EventModel::ItemRole);
         item->setData(QVariant(QString()), EventModel::UIDRole);
+        item->setData(QVariant("<qt><b>" + toolTip + "</b></qt>"), EventModel::TooltipRole);
         QFont bold = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
         bold.setBold(true);
         item->setFont(bold);
@@ -148,7 +149,8 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			eventItem->setData(data, Qt::DisplayRole);
 			eventItem->setData(eventDtTime, EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
-			eventItem->setToolTip(values ["tooltip"].toString());
+            eventItem->setData(values["tooltip"], EventModel::TooltipRole);
+// 			eventItem->setToolTip(values ["tooltip"].toString());
 
 			addItemRow(eventDtTime.toDate(), eventItem);
 		}
@@ -170,7 +172,8 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			eventItem->setData(data, Qt::DisplayRole);
 			eventItem->setData(values["startDate"].toDateTime(), EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
-			eventItem->setToolTip(values ["tooltip"].toString());
+// 			eventItem->setToolTip(values ["tooltip"].toString());
+            eventItem->setData(values["tooltip"], EventModel::TooltipRole);
             QDateTime itemDtTime = values["startDate"].toDateTime();
             if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
                 eventItem->setBackground(QBrush(urgentBg));
