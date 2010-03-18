@@ -1,5 +1,11 @@
-0.x
+0.2.4
+- show plasma tooltips
 - move engine initialization out of init()
+- improve starting/checking for Akonadi
+- adapt naming of the applet binary to common plasma style
+- rework the midnightTimer stuff (was broken on suspend/resume)
+- option to select shown resources
+- remove colors option, always used now
 
 0.2.3
 - some code cleanups (e.g. use a QList for colors)
