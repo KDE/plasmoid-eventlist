@@ -192,7 +192,7 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
         if (todayItem->row() == -1) parentItem->insertRow(figureRow(todayItem), todayItem);
     } else if (eventDate > QDate::currentDate() && eventDate <= QDate::currentDate().addDays(1)) {
         tomorrowItem->appendRow(item);
-        if (!tomorrowItem->parent()) parentItem->insertRow(figureRow(tomorrowItem), tomorrowItem);
+        if (tomorrowItem->row() == -1) parentItem->insertRow(figureRow(tomorrowItem), tomorrowItem);
     } else if (eventDate > QDate::currentDate().addDays(1) && eventDate <= QDate::currentDate().addDays(7)) {
         weekItem->appendRow(item);
         if (weekItem->row() == -1) parentItem->insertRow(figureRow(weekItem), weekItem);
