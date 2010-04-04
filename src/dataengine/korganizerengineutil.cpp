@@ -35,7 +35,7 @@
 #include <kcal/incidenceformatter.h>
 #include <kcal/event.h>
 #include <kcal/recurrence.h>
-#include <kcal/calendarnull.h>
+
 // Akonadi
 #include <akonadi/servermanager.h>
 #include <akonadi/control.h>
