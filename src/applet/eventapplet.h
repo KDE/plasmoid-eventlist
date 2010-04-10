@@ -111,6 +111,7 @@ private:
     Akonadi::AgentManager *m_manager;
     QStringList disabledResources;
     QDateTime lastCheckTime;
+    bool m_changed;
 };
 
 #endif
