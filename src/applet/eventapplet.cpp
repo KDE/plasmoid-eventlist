@@ -58,7 +58,6 @@ static const char *CATEGORY_SOURCE = "Categories";
 static const char *COLOR_SOURCE    = "Colors";
 static const char *EVENT_SOURCE    = "Events";
 static const char *SERVERSTATE_SOURCE = "ServerState";
-static const char *CHANGED_SOURCE = "CalendarChanged";
 static const int MAX_RETRIES = 12;
 
 EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
@@ -70,8 +69,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_formatConfigUi(),
     m_colorConfigUi(),
     m_timer(0),
-    m_manager(0),
-    m_changed(FALSE)
+    m_manager(0)
 {
     KGlobal::locale()->insertCatalog("libkcal");
     KGlobal::locale()->insertCatalog("eventapplet");
@@ -144,9 +142,6 @@ void EventApplet::setupDataEngine()
             m_engine->connectSource(CATEGORY_SOURCE, this);
             m_engine->connectSource(COLOR_SOURCE, this);
             m_engine->connectSource(SERVERSTATE_SOURCE, this);
-            m_engine->connectSource(CHANGED_SOURCE, this);
-            Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-            updateEventList(data["events"].toList());
         }
 
         m_view->setModel(m_model);
@@ -155,7 +150,6 @@ void EventApplet::setupDataEngine()
         layout->addItem(proxyWidget);
 
         setupActions();
-        m_timer->start(5000);
     } else {
         busy->setLabel(i18n("%1 retries to start/connect to the Akonadi server", m_try + 1));
         ++m_try;
@@ -170,14 +164,11 @@ void EventApplet::setupDataEngine()
 
 void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
 {
-    if (QString::compare(name, CHANGED_SOURCE) == 0) {
-        m_changed = TRUE;
+    if (QString::compare(name, EVENT_SOURCE) == 0) {
+        updateEventList(data["events"].toList());
     } else if (QString::compare(name, SERVERSTATE_SOURCE) == 0) {
         updateAkonadiState(data["serverrunning"].toBool());
-    } else if (QString::compare(name, EVENT_SOURCE) == 0) {
-//        updateEventList(data["events"].toList());
     }
-
 //     else if (QString::compare(name, CATEGORY_SOURCE) == 0) {
 //         updateCategories(data["categories"].toStringList());
 //     } else if (QString::compare(name, COLOR_SOURCE) == 0) {
@@ -285,7 +276,7 @@ void EventApplet::updateEventList(const QList <QVariant> &events)
         m_model->setSortRole(EventModel::SortRole);
         m_model->sort(0, Qt::AscendingOrder);
         m_view->expandAll();
-//         m_timer->start(2 * 60 * 1000);
+        m_timer->start(2 * 60 * 1000);
     }
 }
 
@@ -314,12 +305,11 @@ void EventApplet::slotAddEvent()
 
 void EventApplet::timerExpired()
 {
-    if (m_changed || lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
+    colorizeUrgentAndPassed();
+
+    if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
         updateEventList(data["events"].toList());
-        m_changed = FALSE;
-    } else {
-        colorizeUrgentAndPassed();
     }
 
     lastCheckTime = QDateTime::currentDateTime();

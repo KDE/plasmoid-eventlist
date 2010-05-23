@@ -23,7 +23,6 @@ static const char *CATEGORY_SOURCE = "Categories";
 static const char *COLOR_SOURCE    = "Colors";
 static const char *EVENT_SOURCE    = "Events";
 static const char *SERVERSTATE_SOURCE = "ServerState";
-static const char *CHANGED_SOURCE = "CalendarChanged";
 
 EventEngine::EventEngine(QObject* parent, const QVariantList& args)
     : Plasma::DataEngine(parent)
@@ -47,7 +46,6 @@ QStringList EventEngine::sources() const
     sources << COLOR_SOURCE;
     sources << EVENT_SOURCE;
     sources << SERVERSTATE_SOURCE;
-    sources << CHANGED_SOURCE;
 
     return sources;
 }
@@ -71,10 +69,6 @@ bool EventEngine::updateSourceEvent(const QString &name)
     else if(QString::compare(name, SERVERSTATE_SOURCE) == 0) {
         setData(I18N_NOOP(name), I18N_NOOP("serverrunning"), m_util->serverstate());
     }
-    else if(QString::compare(name, CHANGED_SOURCE) == 0) {
-        setData(I18N_NOOP(name), I18N_NOOP("calendarchanged"), TRUE);
-    }
-
     return true;
 }
 
@@ -82,7 +76,6 @@ void EventEngine::slotCalendarChanged()
 {
     updateSourceEvent(COLOR_SOURCE);
     updateSourceEvent(EVENT_SOURCE);
-    updateSourceEvent(CHANGED_SOURCE);
 }
 
 void EventEngine::slotServerStateChanged()
