@@ -30,3 +30,8 @@ Then stop and restart the server.
 Then you can add resources.
 For 4.3 I suggest setting all resources to read only and keep the standard resources for e.g. korganizer.
 Who is using 4.4 should know what he is doing. ;-)
+
+With 4.4 is a problem with signals from the monitor
+if an item is added we receive a "item added" signal for all already existing item?
+this may lead to strange behavior with 4.4
+(tested on opensuse 11.2 + factory, kubuntu 10.04, mandriva)

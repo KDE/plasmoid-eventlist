@@ -1,3 +1,8 @@
+0.2.5
+- add slovak translation, big thanks to Karol Slanina
+- use correct category (Date and Time)
+- fix duplicate insertions warning
+
 0.2.4
 - show plasma tooltips
 - move engine initialization out of init()
