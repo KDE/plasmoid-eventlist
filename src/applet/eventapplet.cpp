@@ -305,11 +305,11 @@ void EventApplet::slotAddEvent()
 
 void EventApplet::timerExpired()
 {
-    colorizeUrgentAndPassed();
-
     if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
         updateEventList(data["events"].toList());
+    } else {
+        colorizeUrgentAndPassed();
     }
 
     lastCheckTime = QDateTime::currentDateTime();
