@@ -90,6 +90,9 @@ EventApplet::~EventApplet()
 void EventApplet::init()
 {
     KConfigGroup cg = config();
+
+    disabledResources = cg.readEntry("DisabledResources", QStringList());
+
     QString normalEventFormat = cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}"));
     QString recurringEventFormat = cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}"));
     int dtFormat = cg.readEntry("DateFormat", ShortDateFormat);
@@ -367,6 +370,11 @@ void EventApplet::setShownResources()
                 disabledResources.append(box->property("identifier").toString());
             }
         }
+
+        KConfigGroup cg = config();
+        cg.writeEntry("DisabledResources", disabledResources);
+        emit configNeedsSaving();
+
         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
         updateEventList(data["events"].toList());
     }
@@ -492,7 +500,7 @@ void EventApplet::configAccepted()
 
     m_view->setModel(m_model);
 
-	emit configNeedsSaving();
+    emit configNeedsSaving();
 }
 
 void EventApplet::colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor anniversariesColor)
