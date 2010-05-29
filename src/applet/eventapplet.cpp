@@ -130,7 +130,8 @@ void EventApplet::init()
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
     m_try = 0;
-    QTimer::singleShot(100, this, SLOT(setupDataEngine()));
+    QTimer::singleShot(2000, this, SLOT(setupDataEngine()));
+    // Hmm, this could be probably done via Akonadi::started/stopped signals
 }
 
 void EventApplet::setupDataEngine()
