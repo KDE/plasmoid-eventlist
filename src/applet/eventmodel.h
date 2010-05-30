@@ -20,6 +20,9 @@
 #define EVENTMODEL_H
 
 #include <akonadi/monitor.h>
+#include <akonadi/collection.h>
+
+#include <kcal/event.h>
 
 // qt headers
 #include <QStandardItemModel>
@@ -39,7 +42,7 @@ static const int SummaryPos = 2;
 static const int DescriptionPos = 3;
 static const int LocationPos = 4;
 static const int YearsSincePos = 5;
-static const int BirthdayOrAnniversayPos = 6;
+static const int BirthdayOrAnniversaryPos = 6;
 static const int resourceNamePos = 7;
 //static const int UIDPos = 8;
 
@@ -92,6 +95,7 @@ private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
     void addItemRow(QDate eventDate, QStandardItem *items);
     int figureRow(QStandardItem *headerItem);
+    QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *, const Akonadi::Collection &);
 
 private:
     QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;

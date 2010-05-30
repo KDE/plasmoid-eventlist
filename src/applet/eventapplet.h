@@ -30,7 +30,6 @@
 
 // Plasma includes
 #include <Plasma/PopupApplet>
-#include <Plasma/DataEngine>
 #include <Plasma/TreeView>
 #include <Plasma/Label>
 #include <Plasma/BusyWidget>
@@ -62,9 +61,6 @@ public:
     QGraphicsWidget *graphicsWidget();
     virtual QList<QAction *> contextualActions();
 
-public slots:
-    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
-
 private slots:
     void slotOpenEvent(const QModelIndex &index);
     void slotUpdateTooltip(QString);
@@ -72,7 +68,7 @@ private slots:
     void slotAddEvent();
     void timerExpired();
     void setShownResources();
-    void setupDataEngine();
+    void setupModel();
 
 protected slots:
     void configAccepted();
@@ -82,9 +78,6 @@ protected:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
-//     void updateCategories(const QStringList &categories);
-//     void updateColors(const QMap <QString, QVariant> &colors);
-    void updateEventList(const QList <QVariant> &events);
     void updateAkonadiState(bool isRunning);
     void setupActions();
     void colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor anniversariesColor);
@@ -92,7 +85,6 @@ private:
     void createToolTip();
     
 private:
-    Plasma::DataEngine *m_engine;
     QGraphicsWidget *m_graphicsWidget;
     QGraphicsLinearLayout *layout;
     EventModel *m_model;

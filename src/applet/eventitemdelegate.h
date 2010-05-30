@@ -25,16 +25,16 @@ class EventItemDelegate : public QStyledItemDelegate
 	Q_OBJECT
 	
 public:
-	EventItemDelegate(QObject* parent, QString normal, QString birthdayOrAnniversay, int dtFormat, QString dtString);
+	EventItemDelegate(QObject* parent, QString normal, QString birthdayOrAnniversary, int dtFormat, QString dtString);
 	~EventItemDelegate();
 
 	QString displayText(const QVariant &value, const QLocale &locale)  const;
 // 	void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	QString formattedDate(const QVariant &dtTime) const;
-	void settingsChanged(QString normal, QString birthdayOrAnniversay, int format, QString customString);
+	void settingsChanged(QString normal, QString birthdayOrAnniversary, int format, QString customString);
 
 private:
-	QString m_normal, m_birthdayOrAnniversay, m_dateString;
+	QString m_normal, m_birthdayOrAnniversary, m_dateString;
 	int m_dateFormat;
 
 };

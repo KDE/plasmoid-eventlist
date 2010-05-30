@@ -54,15 +54,10 @@
 
 K_EXPORT_PLASMA_APPLET(events, EventApplet)
 
-static const char *CATEGORY_SOURCE = "Categories";
-static const char *COLOR_SOURCE    = "Colors";
-static const char *EVENT_SOURCE    = "Events";
-static const char *SERVERSTATE_SOURCE = "ServerState";
 static const int MAX_RETRIES = 12;
 
 EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     Plasma::PopupApplet(parent, args),
-    m_engine(0),
     m_graphicsWidget(0),
     m_view(0),
     m_delegate(0),
@@ -128,23 +123,13 @@ void EventApplet::init()
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
     m_try = 0;
-    QTimer::singleShot(2000, this, SLOT(setupDataEngine()));
+    QTimer::singleShot(2000, this, SLOT(setupModel()));
     // Hmm, this could be probably done via Akonadi::started/stopped signals
 }
 
-void EventApplet::setupDataEngine()
+void EventApplet::setupModel()
 {
     Akonadi::Control::start();
-
-//     if (Akonadi::ServerManager::isRunning()) {
-//         m_manager = Akonadi::AgentManager::self();
-//         m_engine = dataEngine("events");
-//         if (m_engine) {
-//             m_engine->connectSource(EVENT_SOURCE, this);
-//             m_engine->connectSource(CATEGORY_SOURCE, this);
-//             m_engine->connectSource(COLOR_SOURCE, this);
-//             m_engine->connectSource(SERVERSTATE_SOURCE, this);
-//         }
 
     m_model = new EventModel(this, m_urgency, m_colors, m_period);
         m_view->setModel(m_model);
@@ -166,20 +151,6 @@ void EventApplet::setupDataEngine()
 //             busy->setLabel(i18n("Could not connect to the Akonadi server"));
 //             busy->setRunning(FALSE);
 //         }
-//     }
-}
-
-void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
-{
-//     if (QString::compare(name, EVENT_SOURCE) == 0) {
-//         updateEventList(data["events"].toList());
-//     } else if (QString::compare(name, SERVERSTATE_SOURCE) == 0) {
-//         updateAkonadiState(data["serverrunning"].toBool());
-//     }
-//     else if (QString::compare(name, CATEGORY_SOURCE) == 0) {
-//         updateCategories(data["categories"].toStringList());
-//     } else if (QString::compare(name, COLOR_SOURCE) == 0) {
-//         updateColors(data["colors"].toMap());
 //     }
 }
 
@@ -240,59 +211,6 @@ QGraphicsWidget *EventApplet::graphicsWidget()
     return m_graphicsWidget;
 }
 
-// void EventApplet::updateCategories(const QStringList &categories)
-// {
-//     m_types->addItem(QString());
-// 
-//     foreach(const QString &category, categories) {
-//         m_types->addItem(category);
-//     }
-// }
-
-// void EventApplet::updateColors(const QMap <QString, QVariant> &colors)
-// {
-//     foreach(const QString &category, colors.keys()) {
-//         if (colors[category].value<QColor>().value() > 0) {
-//             m_types->setItemData(m_types->findText(category),
-//                                 colors[category].value<QColor>(),
-//                                 Qt::DecorationRole);
-// 
-//             // search for the categories event's to set the category color
-//             foreach(const QModelIndex &index, m_model->match(m_model->index(0, 0),
-//                                                             Qt::UserRole, category, -1)) {
-//                 m_model->setCategory(index, colors[category].value<QColor>());
-//             }
-//         }
-//     }
-// }
-
-void EventApplet::updateEventList(const QList <QVariant> &events)
-{
-    Plasma::DataEngine::Data data = m_engine->query(SERVERSTATE_SOURCE);
-    bool isRunning = data["serverrunning"].toBool();
-    
-//     m_model->resetModel(isRunning);
-
-    if (isRunning) {
-        foreach (const QVariant &event, events) {
-            QMap <QString, QVariant> values = event.toMap();
-//             if (!disabledResources.contains(values["resource"].toString()))
-//                 m_model->addEventItem(values);
-        }
-
-        m_model->setSortRole(EventModel::SortRole);
-        m_model->sort(0, Qt::AscendingOrder);
-        m_view->expandAll();
-        m_timer->start(2 * 60 * 1000);
-    }
-}
-
-void EventApplet::updateAkonadiState(bool isRunning)
-{
-    if (!isRunning)
-        updateEventList(QList<QVariant>());
-}
-
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
     QString uid = m_model->data(index, EventModel::UIDRole).toString();
@@ -313,8 +231,8 @@ void EventApplet::slotAddEvent()
 void EventApplet::timerExpired()
 {
     if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
-        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-        updateEventList(data["events"].toList());
+//         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
+//         updateEventList(data["events"].toList());
     } else {
         colorizeUrgentAndPassed();
     }
@@ -379,8 +297,8 @@ void EventApplet::setShownResources()
         cg.writeEntry("DisabledResources", disabledResources);
         emit configNeedsSaving();
 
-        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-        updateEventList(data["events"].toList());
+//         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
+//         updateEventList(data["events"].toList());
     }
 }
 
@@ -495,8 +413,8 @@ void EventApplet::configAccepted()
     m_model->settingsChanged(m_urgency, m_colors, m_period);
 
     if (oldPeriod != m_period) { //just rebuild model if period changed
-        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-        updateEventList(data["events"].toList());
+//         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
+//         updateEventList(data["events"].toList());
     } else {
         colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
         colorizeUrgentAndPassed();

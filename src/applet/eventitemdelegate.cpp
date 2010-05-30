@@ -33,7 +33,7 @@
 EventItemDelegate::EventItemDelegate(QObject* parent, QString normal, QString birthdayOrAnniversay, int dtFormat, QString dtString)
 	: QStyledItemDelegate(parent),
 	m_normal(normal),
-	m_birthdayOrAnniversay(birthdayOrAnniversay),
+	m_birthdayOrAnniversary(birthdayOrAnniversay),
 	m_dateString(dtString),
 	m_dateFormat(dtFormat)
 {
@@ -65,8 +65,8 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
 	dataHash.insert("tab", "\t");
 
 	QString myText;
-	if (data.at(BirthdayOrAnniversayPos).toBool() == TRUE) {
-		myText = m_birthdayOrAnniversay;
+	if (data.at(BirthdayOrAnniversaryPos).toBool() == TRUE) {
+		myText = m_birthdayOrAnniversary;
 	} else {
 		myText = m_normal;
 	}
@@ -109,10 +109,10 @@ QString EventItemDelegate::formattedDate(const QVariant &dtTime) const
 	return date;
 }
 
-void EventItemDelegate::settingsChanged(QString normal, QString birthdayOrAnniversay, int format, QString customString)
+void EventItemDelegate::settingsChanged(QString normal, QString birthdayOrAnniversary, int format, QString customString)
 {
 	m_normal = normal;
-	m_birthdayOrAnniversay = birthdayOrAnniversay;
+	m_birthdayOrAnniversary = birthdayOrAnniversary;
 	m_dateFormat = format;
 	m_dateString = customString;
 }

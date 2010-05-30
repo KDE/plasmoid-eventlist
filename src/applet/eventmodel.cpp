@@ -20,10 +20,8 @@
 
 // kdepim headers
 #include <kcal/incidenceformatter.h>
-#include <kcal/event.h>
 #include <kcal/recurrence.h>
 
-#include <akonadi/collection.h>
 #include <akonadi/collectionfetchjob.h>
 #include <akonadi/item.h>
 #include <akonadi/itemfetchjob.h>
@@ -115,10 +113,7 @@ void EventModel::initModel()
                                                                        Akonadi::CollectionFetchJob::Recursive);
     if (job->exec()) {
         Akonadi::Collection::List collections = job->collections();
-        QString resource;
         foreach (const Akonadi::Collection &collection, collections) {
-            resource = collection.resource();
-            kDebug() << resource;
             Akonadi::ItemFetchJob *ijob = new Akonadi::ItemFetchJob(collection);
             ijob->fetchScope().fetchFullPayload();
 
@@ -128,38 +123,7 @@ void EventModel::initModel()
                     if (item.hasPayload <KCal::Event::Ptr>()) {
                         KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
                         if (event) {
-                            QMap <QString, QVariant> values;
-                            values ["resource"] = resource;
-                            values ["resourceName"] = collection.name();
-                            values ["summary"] = event->summary();
-                            values ["categories"] = event->categories();
-                            values ["status"] = event->status();
-                            values ["startDate"] = event->dtStart().dateTime();
-                            values ["endDate"] = event->dtEnd().dateTime();
-                            values ["uid"] = event->uid();
-                            values ["itemid"] = item.remoteId();
-                            values ["description"] = event->description();
-                            values ["location"] = event->location();
-                            bool recurs = event->recurs();
-                            values ["recurs"] = recurs;
-                            QList<QVariant> recurDates;
-                            if (recurs) {
-                                KCal::Recurrence *r = event->recurrence();
-                                KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(366));
-                                dtTimes.sortUnique();
-                                foreach (KDateTime t, dtTimes) {
-                                    recurDates << QVariant(t.dateTime());
-                                }
-                            }
-                            values ["recurDates"] = recurDates;
-                            event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
-                            event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
-#if KDE_IS_VERSION(4,4,60)
-                            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), event);
-#else
-                            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
-#endif
-                            addEventItem(values);
+                            addEventItem(eventDetails(item, event, collection));
                         } // if event
                     } // if hasPayload
                 } // foreach
@@ -182,13 +146,13 @@ void EventModel::initHeaderItem(QStandardItem *item, QString title, QString tool
 
 void EventModel::resetModel(bool isRunning)
 {
-	clear();
-	parentItem = invisibleRootItem();
-	todayItem = 0;
-	tomorrowItem = 0;
-	weekItem = 0;
-	monthItem = 0;
-	laterItem = 0;
+    clear();
+    parentItem = invisibleRootItem();
+    todayItem = 0;
+    tomorrowItem = 0;
+    weekItem = 0;
+    monthItem = 0;
+    laterItem = 0;
     sectionItems.clear();
 
     if (!isRunning) {
@@ -216,38 +180,7 @@ void EventModel::eventAdded(const Akonadi::Item &item, const Akonadi::Collection
     if (item.hasPayload <KCal::Event::Ptr>()) {
         KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
         if (event) {
-            QMap <QString, QVariant> values;
-            values ["resource"] = collection.resource();
-            values ["resourceName"] = collection.name();
-            values ["summary"] = event->summary();
-            values ["categories"] = event->categories();
-            values ["status"] = event->status();
-            values ["startDate"] = event->dtStart().dateTime();
-            values ["endDate"] = event->dtEnd().dateTime();
-            values ["uid"] = event->uid();
-            values ["itemid"] = item.remoteId();
-            values ["description"] = event->description();
-            values ["location"] = event->location();
-            bool recurs = event->recurs();
-            values ["recurs"] = recurs;
-            QList<QVariant> recurDates;
-            if (recurs) {
-                KCal::Recurrence *r = event->recurrence();
-                KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(366));
-                dtTimes.sortUnique();
-                foreach (KDateTime t, dtTimes) {
-                    recurDates << QVariant(t.dateTime());
-                }
-            }
-            values ["recurDates"] = recurDates;
-            event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
-            event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
-#if KDE_IS_VERSION(4,4,60)
-            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(resource, event);
-#else
-            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
-#endif
-            addEventItem(values);
+            addEventItem(eventDetails(item, event, collection));
         } // if event
     }
 }
@@ -273,23 +206,23 @@ void EventModel::eventRemoved(const Akonadi::Item &item)
 
 void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 {
-	QList<QVariant> data;
-	if (values["recurs"].toBool()) {
-		QList<QVariant> dtTimes = values["recurDates"].toList();
-		foreach (QVariant eventDtTime, dtTimes) {
+    QList<QVariant> data;
+    if (values["recurs"].toBool()) {
+        QList<QVariant> dtTimes = values["recurDates"].toList();
+        foreach (QVariant eventDtTime, dtTimes) {
             if (eventDtTime.toDate() > QDate::currentDate().addDays(m_period))
                 return;
-			QStandardItem *eventItem;
-			eventItem = new QStandardItem();
-			data.insert(StartDtTimePos, eventDtTime);
-			data.insert(EndDtTimePos, values["endDate"]);
-			data.insert(SummaryPos, values["summary"]);
-			data.insert(DescriptionPos, values["description"]);
-			data.insert(LocationPos, values["location"]);
-			int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
-			data.insert(YearsSincePos, QVariant(QString::number(n)));
+            QStandardItem *eventItem;
+            eventItem = new QStandardItem();
+            data.insert(StartDtTimePos, eventDtTime);
+            data.insert(EndDtTimePos, values["endDate"]);
+            data.insert(SummaryPos, values["summary"]);
+            data.insert(DescriptionPos, values["description"]);
+            data.insert(LocationPos, values["location"]);
+            int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
+            data.insert(YearsSincePos, QVariant(QString::number(n)));
             data.insert(resourceNamePos, values["resourceName"]);
-			data.insert(BirthdayOrAnniversayPos, QVariant(values["isBirthday"].toBool() || values["isAnniversary"].toBool()));
+            data.insert(BirthdayOrAnniversaryPos, QVariant(values["isBirthday"].toBool() || values["isAnniversary"].toBool()));
 
             if (values["isBirthday"].toBool()) {
                 eventItem->setBackground(QBrush(birthdayBg));
@@ -299,31 +232,31 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
                 eventItem->setData(QVariant(AnniversaryItem), EventModel::ItemRole);
             }
 
-			eventItem->setData(data, Qt::DisplayRole);
-			eventItem->setData(eventDtTime, EventModel::SortRole);
+            eventItem->setData(data, Qt::DisplayRole);
+            eventItem->setData(eventDtTime, EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
             eventItem->setData(values["itemid"], ItemIDRole);
             eventItem->setData(values["tooltip"], EventModel::TooltipRole);
 
-			addItemRow(eventDtTime.toDate(), eventItem);
-		}
-	} else {
+            addItemRow(eventDtTime.toDate(), eventItem);
+        }
+    } else {
             if (values["startDate"].toDate() > QDate::currentDate().addDays(m_period))
                 return;
-			QStandardItem *eventItem;
-			eventItem = new QStandardItem();
-			data.insert(StartDtTimePos, values["startDate"]);
-			data.insert(EndDtTimePos, values["endDate"]);
-			data.insert(SummaryPos, values["summary"]);
-			data.insert(DescriptionPos, values["description"]);
-			data.insert(LocationPos, values["location"]);
-			data.insert(YearsSincePos, QVariant(QString()));
+            QStandardItem *eventItem;
+            eventItem = new QStandardItem();
+            data.insert(StartDtTimePos, values["startDate"]);
+            data.insert(EndDtTimePos, values["endDate"]);
+            data.insert(SummaryPos, values["summary"]);
+            data.insert(DescriptionPos, values["description"]);
+            data.insert(LocationPos, values["location"]);
+            data.insert(YearsSincePos, QVariant(QString()));
             data.insert(resourceNamePos, values["resourceName"]);
-			data.insert(BirthdayOrAnniversayPos, QVariant(FALSE));
+            data.insert(BirthdayOrAnniversaryPos, QVariant(FALSE));
 
             eventItem->setData(QVariant(NormalItem), EventModel::ItemRole);
-			eventItem->setData(data, Qt::DisplayRole);
-			eventItem->setData(values["startDate"].toDateTime(), EventModel::SortRole);
+            eventItem->setData(data, Qt::DisplayRole);
+            eventItem->setData(values["startDate"].toDateTime(), EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
             eventItem->setData(values["itemid"], ItemIDRole);
             eventItem->setData(values["tooltip"], EventModel::TooltipRole);
@@ -334,8 +267,8 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
                 eventItem->setForeground(QBrush(passedFg));
             }
 
-			addItemRow(values["startDate"].toDate(), eventItem);
-	}
+            addItemRow(values["startDate"].toDate(), eventItem);
+    }
 }
 
 void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
@@ -400,3 +333,40 @@ int EventModel::figureRow(QStandardItem *headerItem)
     return -1;
 }
 
+QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal::Event *event, const Akonadi::Collection &collection)
+{
+    QMap <QString, QVariant> values;
+    values["resource"] = collection.resource();
+    values["resourceName"] = collection.name();
+    values["summary"] = event->summary();
+    values["categories"] = event->categories();
+    values["status"] = event->status();
+    values["startDate"] = event->dtStart().dateTime();
+    values["endDate"] = event->dtEnd().dateTime();
+    values["uid"] = event->uid();
+    values["itemid"] = item.remoteId();
+    values["description"] = event->description();
+    values["location"] = event->location();
+    bool recurs = event->recurs();
+    values["recurs"] = recurs;
+    QList<QVariant> recurDates;
+    if (recurs) {
+        KCal::Recurrence *r = event->recurrence();
+        KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(366));
+        dtTimes.sortUnique();
+        foreach (KDateTime t, dtTimes) {
+            recurDates << QVariant(t.dateTime());
+        }
+    }
+    values["recurDates"] = recurDates;
+    event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
+    event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
+#if KDE_IS_VERSION(4,4,60)
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(resource, event);
+#else
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
+#endif
+    return values;
+}
+
+#include "eventmodel.moc"
