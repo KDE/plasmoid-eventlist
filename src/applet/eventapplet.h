@@ -104,8 +104,9 @@ private:
     EventItemDelegate *m_delegate;
     Ui::EventAppletFormatConfig m_formatConfigUi;
     Ui::EventAppletColorConfig m_colorConfigUi;
-    int m_urgency, m_checkInterval, m_try;
+    int m_urgency, m_checkInterval, m_period, m_try;
     QColor m_urgentBg, m_passedFg;
+    QList<QColor> m_colors;
     QTimer *m_timer;
     QList<QAction *> actions;
     Akonadi::AgentManager *m_manager;

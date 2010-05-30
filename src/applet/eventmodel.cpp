@@ -18,6 +18,21 @@
 
 #include "eventmodel.h"
 
+// kdepim headers
+#include <kcal/incidenceformatter.h>
+#include <kcal/event.h>
+#include <kcal/recurrence.h>
+
+#include <akonadi/collection.h>
+#include <akonadi/collectionfetchjob.h>
+#include <akonadi/item.h>
+#include <akonadi/itemfetchjob.h>
+#include <akonadi/itemfetchscope.h>
+#include <akonadi/kcal/incidencemimetypevisitor.h>
+#include <akonadi/itemfetchscope.h>
+#include <akonadi/entitydisplayattribute.h>
+
+
 // qt headers
 #include <QDate>
 #include <QStandardItem>
@@ -38,11 +53,26 @@ EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList
     tomorrowItem(0),
     weekItem(0),
     monthItem(0),
-    laterItem(0)
+    laterItem(0),
+    m_monitor(0)
 {
     parentItem = invisibleRootItem();
     settingsChanged(urgencyTime, colorList, days);
     initModel();
+
+    m_monitor = new Akonadi::Monitor(this);
+    Akonadi::ItemFetchScope scope;
+    scope.fetchFullPayload(true);
+    scope.fetchAllAttributes(true);;
+    m_monitor->fetchCollection(true);
+    m_monitor->setItemFetchScope(scope);
+    m_monitor->setCollectionMonitored(Akonadi::Collection::root());
+    m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
+
+    connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
+                       SLOT(eventAdded(const Akonadi::Item &, const Akonadi::Collection &)));
+    connect(m_monitor, SIGNAL(itemRemoved(const Akonadi::Item &)),
+                       SLOT(eventRemoved(const Akonadi::Item &)));
 }
 
 EventModel::~EventModel()
@@ -75,6 +105,67 @@ void EventModel::initModel()
         laterItem = new QStandardItem();
         initHeaderItem(laterItem, i18n("Later"), i18n("Events later than 4 weeks"), 29);
     }
+
+    sectionItems << todayItem << tomorrowItem << weekItem << monthItem << laterItem;
+
+//     if (!m_akonadiMonitor)
+//         return events;
+
+    Akonadi::CollectionFetchJob *job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(),
+                                                                       Akonadi::CollectionFetchJob::Recursive);
+    if (job->exec()) {
+        Akonadi::Collection::List collections = job->collections();
+        QString resource;
+        foreach (const Akonadi::Collection &collection, collections) {
+            resource = collection.resource();
+            kDebug() << resource;
+            Akonadi::ItemFetchJob *ijob = new Akonadi::ItemFetchJob(collection);
+            ijob->fetchScope().fetchFullPayload();
+
+            if (ijob->exec()) {
+                Akonadi::Item::List items = ijob->items();
+                foreach (const Akonadi::Item &item, items) {
+                    if (item.hasPayload <KCal::Event::Ptr>()) {
+                        KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
+                        if (event) {
+                            QMap <QString, QVariant> values;
+                            values ["resource"] = resource;
+                            values ["resourceName"] = collection.name();
+                            values ["summary"] = event->summary();
+                            values ["categories"] = event->categories();
+                            values ["status"] = event->status();
+                            values ["startDate"] = event->dtStart().dateTime();
+                            values ["endDate"] = event->dtEnd().dateTime();
+                            values ["uid"] = event->uid();
+                            values ["itemid"] = item.remoteId();
+                            values ["description"] = event->description();
+                            values ["location"] = event->location();
+                            bool recurs = event->recurs();
+                            values ["recurs"] = recurs;
+                            QList<QVariant> recurDates;
+                            if (recurs) {
+                                KCal::Recurrence *r = event->recurrence();
+                                KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(366));
+                                dtTimes.sortUnique();
+                                foreach (KDateTime t, dtTimes) {
+                                    recurDates << QVariant(t.dateTime());
+                                }
+                            }
+                            values ["recurDates"] = recurDates;
+                            event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
+                            event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
+#if KDE_IS_VERSION(4,4,60)
+                            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), event);
+#else
+                            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
+#endif
+                            addEventItem(values);
+                        } // if event
+                    } // if hasPayload
+                } // foreach
+            }
+        }
+    }
 }
 
 void EventModel::initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days)
@@ -98,6 +189,7 @@ void EventModel::resetModel(bool isRunning)
 	weekItem = 0;
 	monthItem = 0;
 	laterItem = 0;
+    sectionItems.clear();
 
     if (!isRunning) {
         QStandardItem *errorItem = new QStandardItem();
@@ -116,6 +208,67 @@ void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors, int 
     birthdayBg = itemColors.at(birthdayColorPos);
     anniversariesBg = itemColors.at(anniversariesColorPos);
     m_period = period;
+}
+
+void EventModel::eventAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
+{
+    kDebug() << "item added" << item.remoteId();
+    if (item.hasPayload <KCal::Event::Ptr>()) {
+        KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
+        if (event) {
+            QMap <QString, QVariant> values;
+            values ["resource"] = collection.resource();
+            values ["resourceName"] = collection.name();
+            values ["summary"] = event->summary();
+            values ["categories"] = event->categories();
+            values ["status"] = event->status();
+            values ["startDate"] = event->dtStart().dateTime();
+            values ["endDate"] = event->dtEnd().dateTime();
+            values ["uid"] = event->uid();
+            values ["itemid"] = item.remoteId();
+            values ["description"] = event->description();
+            values ["location"] = event->location();
+            bool recurs = event->recurs();
+            values ["recurs"] = recurs;
+            QList<QVariant> recurDates;
+            if (recurs) {
+                KCal::Recurrence *r = event->recurrence();
+                KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(366));
+                dtTimes.sortUnique();
+                foreach (KDateTime t, dtTimes) {
+                    recurDates << QVariant(t.dateTime());
+                }
+            }
+            values ["recurDates"] = recurDates;
+            event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
+            event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
+#if KDE_IS_VERSION(4,4,60)
+            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(resource, event);
+#else
+            values ["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
+#endif
+            addEventItem(values);
+        } // if event
+    }
+}
+
+void EventModel::eventRemoved(const Akonadi::Item &item)
+{
+    kDebug() << "eventRemoved" << item.remoteId();
+    foreach (QStandardItem *i, sectionItems) {
+        QModelIndexList l;
+        if (i->hasChildren())
+            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.remoteId());
+        kDebug() << l;
+        if (!l.isEmpty())
+            i->removeRow(l[0].row());
+        int r = i->row();
+        if (r != -1 && !i->hasChildren()) {
+            takeItem(r);
+            removeRow(r);
+            emit modelNeedsExpanding();
+        }
+    }
 }
 
 void EventModel::addEventItem(const QMap <QString, QVariant> &values)
@@ -149,8 +302,8 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			eventItem->setData(data, Qt::DisplayRole);
 			eventItem->setData(eventDtTime, EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
+            eventItem->setData(values["itemid"], ItemIDRole);
             eventItem->setData(values["tooltip"], EventModel::TooltipRole);
-// 			eventItem->setToolTip(values ["tooltip"].toString());
 
 			addItemRow(eventDtTime.toDate(), eventItem);
 		}
@@ -172,7 +325,7 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 			eventItem->setData(data, Qt::DisplayRole);
 			eventItem->setData(values["startDate"].toDateTime(), EventModel::SortRole);
             eventItem->setData(values["uid"], EventModel::UIDRole);
-// 			eventItem->setToolTip(values ["tooltip"].toString());
+            eventItem->setData(values["itemid"], ItemIDRole);
             eventItem->setData(values["tooltip"], EventModel::TooltipRole);
             QDateTime itemDtTime = values["startDate"].toDateTime();
             if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
@@ -189,20 +342,32 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
 {
     if (eventDate == QDate::currentDate()) {
         todayItem->appendRow(item);
-        if (todayItem->row() == -1) parentItem->insertRow(figureRow(todayItem), todayItem);
+        todayItem->sortChildren(0, Qt::AscendingOrder);
+        if (todayItem->row() == -1)
+            parentItem->insertRow(figureRow(todayItem), todayItem);
     } else if (eventDate > QDate::currentDate() && eventDate <= QDate::currentDate().addDays(1)) {
         tomorrowItem->appendRow(item);
-        if (tomorrowItem->row() == -1) parentItem->insertRow(figureRow(tomorrowItem), tomorrowItem);
+        tomorrowItem->sortChildren(0, Qt::AscendingOrder);
+        if (tomorrowItem->row() == -1)
+            parentItem->insertRow(figureRow(tomorrowItem), tomorrowItem);
     } else if (eventDate > QDate::currentDate().addDays(1) && eventDate <= QDate::currentDate().addDays(7)) {
         weekItem->appendRow(item);
-        if (weekItem->row() == -1) parentItem->insertRow(figureRow(weekItem), weekItem);
+        weekItem->sortChildren(0, Qt::AscendingOrder);
+        if (weekItem->row() == -1)
+            parentItem->insertRow(figureRow(weekItem), weekItem);
     } else if (eventDate > QDate::currentDate().addDays(7) && eventDate <= QDate::currentDate().addDays(28)) {
         monthItem->appendRow(item);
-        if (monthItem->row() == -1) parentItem->insertRow(figureRow(monthItem), monthItem);
+        monthItem->sortChildren(0, Qt::AscendingOrder);
+        if (monthItem->row() == -1)
+            parentItem->insertRow(figureRow(monthItem), monthItem);
     } else if (eventDate > QDate::currentDate().addDays(28) && eventDate <= QDate::currentDate().addDays(365)) {
         laterItem->appendRow(item);
-        if (laterItem->row() == -1) parentItem->appendRow(laterItem);
+        laterItem->sortChildren(0, Qt::AscendingOrder);
+        if (laterItem->row() == -1)
+            parentItem->appendRow(laterItem);
     }
+
+    emit modelNeedsExpanding();
 }
 
 int EventModel::figureRow(QStandardItem *headerItem)

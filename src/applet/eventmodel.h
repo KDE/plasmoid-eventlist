@@ -19,6 +19,8 @@
 #ifndef EVENTMODEL_H
 #define EVENTMODEL_H
 
+#include <akonadi/monitor.h>
+
 // qt headers
 #include <QStandardItemModel>
 #include <QColor>
@@ -60,10 +62,11 @@ class EventModel : public QStandardItemModel
     Q_OBJECT
 public:
     enum EventRole {
-		SortRole = Qt::UserRole + 1,
+        SortRole = Qt::UserRole + 1,
         UIDRole,
         ItemRole,
-        TooltipRole
+        TooltipRole,
+        ItemIDRole
     };
 
     enum EventCategoryType {
@@ -80,8 +83,10 @@ public:
     void resetModel(bool isRunning);
     void settingsChanged(int urgencyTime, QList<QColor> itemColors, int period);
 
-public slots:
+private slots:
     void addEventItem(const QMap <QString, QVariant> &values);
+    void eventAdded(const Akonadi::Item &, const Akonadi::Collection &);
+    void eventRemoved(const Akonadi::Item &);
 
 private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
@@ -90,8 +95,13 @@ private:
 
 private:
     QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
+    QList<QStandardItem *> sectionItems;
     int urgency, m_period;
     QColor urgentBg, passedFg, birthdayBg, anniversariesBg;
+    Akonadi::Monitor *m_monitor;
+
+signals:
+    void modelNeedsExpanding();
 };
 
 #endif
