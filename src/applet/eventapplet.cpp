@@ -18,6 +18,7 @@
 
 #include "eventapplet.h"
 #include "eventmodel.h"
+#include "eventfiltermodel.h"
 #include "eventitemdelegate.h"
 #include "korganizerappletutil.h"
 #include "eventtreeview.h"
@@ -132,14 +133,23 @@ void EventApplet::setupModel()
     Akonadi::Control::start();
 
     m_model = new EventModel(this, m_urgency, m_colors, m_period);
-        m_view->setModel(m_model);
-        layout->removeItem(busy);
-        busy->hide();
-        layout->addItem(proxyWidget);
-        m_model->setSortRole(EventModel::SortRole);
-        m_model->sort(0, Qt::AscendingOrder);
-        m_view->expandAll();
-        connect(m_model, SIGNAL(modelNeedsExpanding()), m_view, SLOT(expandAll()));
+    m_model->setSortRole(EventModel::SortRole);
+    m_model->sort(0, Qt::AscendingOrder);
+
+    m_filterModel = new EventFilterModel(this);
+    m_filterModel->setPeriod(m_period);
+    m_filterModel->setExcludedResources(disabledResources);
+    m_filterModel->setDynamicSortFilter(TRUE);
+    m_filterModel->setSourceModel(m_model);
+
+    m_view->setModel(m_filterModel);
+
+    
+    layout->removeItem(busy);
+    busy->hide();
+    layout->addItem(proxyWidget);
+    m_view->expandAll();
+    connect(m_model, SIGNAL(modelNeedsExpanding()), m_view, SLOT(expandAll()));
 
         setupActions();
 //     } else {

@@ -171,7 +171,6 @@ void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors, int 
     passedFg = itemColors.at(passedColorPos);
     birthdayBg = itemColors.at(birthdayColorPos);
     anniversariesBg = itemColors.at(anniversariesColorPos);
-    m_period = period;
 }
 
 void EventModel::eventAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
@@ -210,8 +209,6 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
     if (values["recurs"].toBool()) {
         QList<QVariant> dtTimes = values["recurDates"].toList();
         foreach (QVariant eventDtTime, dtTimes) {
-            if (eventDtTime.toDate() > QDate::currentDate().addDays(m_period))
-                return;
             QStandardItem *eventItem;
             eventItem = new QStandardItem();
             data.insert(StartDtTimePos, eventDtTime);
@@ -241,8 +238,6 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
             addItemRow(eventDtTime.toDate(), eventItem);
         }
     } else {
-            if (values["startDate"].toDate() > QDate::currentDate().addDays(m_period))
-                return;
             QStandardItem *eventItem;
             eventItem = new QStandardItem();
             data.insert(StartDtTimePos, values["startDate"]);

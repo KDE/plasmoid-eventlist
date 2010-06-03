@@ -43,6 +43,7 @@ class QModelIndex;
 class QAction;
 class KConfigDialog;
 class EventModel;
+class EventFilterModel;
 class EventItemDelegate;
 class QGraphicsLinearLayout;
 class QGraphicsProxyWidget;
@@ -88,6 +89,7 @@ private:
     QGraphicsWidget *m_graphicsWidget;
     QGraphicsLinearLayout *layout;
     EventModel *m_model;
+    EventFilterModel *m_filterModel;
 //    Plasma::TreeView *m_view;
     QGraphicsProxyWidget *proxyWidget;
     EventTreeView *m_view;

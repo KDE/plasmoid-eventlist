@@ -100,7 +100,7 @@ private:
 private:
     QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
     QList<QStandardItem *> sectionItems;
-    int urgency, m_period;
+    int urgency;
     QColor urgentBg, passedFg, birthdayBg, anniversariesBg;
     Akonadi::Monitor *m_monitor;
 
