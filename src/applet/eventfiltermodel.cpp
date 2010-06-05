@@ -40,25 +40,43 @@ void EventFilterModel::setPeriod(int period)
 void EventFilterModel::setExcludedResources(QStringList resources)
 {
     m_excludedResources = resources;
+    m_excludedResources.sort();
     invalidateFilter();
 }
 
 bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
 {
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
-    const QVariant v = idx.data(EventModel::SortRole);
-    QDate date= v.toDate();
+
+    const QVariant d = idx.data(EventModel::SortRole);
+    QDate date= d.toDate();
 
     if (date.isValid() && date > QDate::currentDate().addDays(m_period)) {
-        kDebug() << date;
         return false;
     }
 
-    const QVariant l = idx.data(Qt::DisplayRole);
-    QList<QVariant> info = l.toList();
-    if (m_excludedResources.contains(info.at(resourceNamePos).toString())) {
+    const QVariant t = idx.data(EventModel::ItemTypeRole);
+    const QVariant r = idx.data(EventModel::ResourceRole);
+    
+    if (t.toInt() == EventModel::HeaderItem) {
+        return !containsAllResources(r.toStringList());
+    } else if (m_excludedResources.contains(r.toString())) {
         return false;
     }
 
     return true;
+}
+
+bool EventFilterModel::containsAllResources(const QStringList &resList) const
+{
+    bool hasAll = true;
+
+    foreach (QString res, resList) {
+        if (!m_excludedResources.contains(res)) {
+            hasAll = false;
+            break;
+        }
+    }
+
+    return hasAll;
 }

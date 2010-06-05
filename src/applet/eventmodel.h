@@ -46,10 +46,10 @@ static const int BirthdayOrAnniversaryPos = 6;
 static const int resourceNamePos = 7;
 //static const int UIDPos = 8;
 
-static const int HeaderItem = 0;
-static const int NormalItem = 1;
-static const int BirthdayItem = 2;
-static const int AnniversaryItem = 3;
+// static const int HeaderItem = 0;
+// static const int NormalItem = 1;
+// static const int BirthdayItem = 2;
+// static const int AnniversaryItem = 3;
 
 static const int urgentColorPos = 0;
 static const int passedColorPos = 1;
@@ -67,14 +67,17 @@ public:
     enum EventRole {
         SortRole = Qt::UserRole + 1,
         UIDRole,
-        ItemRole,
+        ItemTypeRole,
         TooltipRole,
-        ItemIDRole
+        ItemIDRole,
+        ResourceRole
     };
 
-    enum EventCategoryType {
-        ByStartDate = 0,
-        ByDueDate = 1
+    enum ItemType {
+        HeaderItem = 0,
+        NormalItem,
+        BirthdayItem,
+        AnniversaryItem
     };
 
     EventModel(QObject *parent = 0, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>(), int days = 365);

@@ -132,6 +132,8 @@ void EventApplet::setupModel()
 {
     Akonadi::Control::start();
 
+    m_manager = Akonadi::AgentManager::self();
+
     m_model = new EventModel(this, m_urgency, m_colors, m_period);
     m_model->setSortRole(EventModel::SortRole);
     m_model->sort(0, Qt::AscendingOrder);
@@ -151,7 +153,8 @@ void EventApplet::setupModel()
     m_view->expandAll();
     connect(m_model, SIGNAL(modelNeedsExpanding()), m_view, SLOT(expandAll()));
 
-        setupActions();
+    setupActions();
+    
 //     } else {
 //         busy->setLabel(i18n("%1 retries to start/connect to the Akonadi server", m_try + 1));
 //         ++m_try;
@@ -307,8 +310,8 @@ void EventApplet::setShownResources()
         cg.writeEntry("DisabledResources", disabledResources);
         emit configNeedsSaving();
 
-//         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-//         updateEventList(data["events"].toList());
+        m_filterModel->setExcludedResources(disabledResources);
+        m_view->expandAll();
     }
 }
 
@@ -423,14 +426,13 @@ void EventApplet::configAccepted()
     m_model->settingsChanged(m_urgency, m_colors, m_period);
 
     if (oldPeriod != m_period) { //just rebuild model if period changed
-//         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-//         updateEventList(data["events"].toList());
-    } else {
-        colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
-        colorizeUrgentAndPassed();
+        m_filterModel->setPeriod(m_period);
     }
 
-    m_view->setModel(m_model);
+    colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
+    colorizeUrgentAndPassed();
+
+//     m_view->setModel(m_model);
 
     emit configNeedsSaving();
 }
@@ -443,12 +445,12 @@ void EventApplet::colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor 
         int childRows = m_model->rowCount(headerIndex);
         for (int c = 0; c < childRows; ++c) {
             QModelIndex index = m_model->index(c, 0, headerIndex);
-            int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
-            if (itemRole == BirthdayItem) {
+            int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
+            if (itemRole == EventModel::BirthdayItem) {
                 m_model->setData(index, QVariant(QBrush(birthdayColor)), Qt::BackgroundRole);
-            } else if (itemRole == AnniversaryItem) {
+            } else if (itemRole == EventModel::AnniversaryItem) {
                 m_model->setData(index, QVariant(QBrush(anniversariesColor)), Qt::BackgroundRole);
-            } else if (itemRole == BirthdayItem || itemRole == AnniversaryItem) {
+            } else if (itemRole == EventModel::BirthdayItem || itemRole == EventModel::AnniversaryItem) {
                 m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
             }
         }
@@ -463,9 +465,9 @@ void EventApplet::colorizeUrgentAndPassed()
     int todayRows = m_model->rowCount(todayIndex);
     for (int t = 0; t < todayRows; ++t) {
         QModelIndex index = m_model->index(t, 0, todayIndex);
-        int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
+        int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
         QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
-        if (itemRole == NormalItem) {
+        if (itemRole == EventModel::NormalItem) {
             if (itemDtTime > now && now.secsTo(itemDtTime) < m_urgency * 60) {
                 m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
             } else if (now > itemDtTime) {
@@ -483,9 +485,9 @@ void EventApplet::colorizeUrgentAndPassed()
     int tomorrowRows = m_model->rowCount(tomorrowIndex);
     for (int w = 0; w < tomorrowRows; ++w) {
         QModelIndex index = m_model->index(w, 0, tomorrowIndex);
-        int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
+        int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
         QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
-        if (itemRole == NormalItem) {
+        if (itemRole == EventModel::NormalItem) {
             if (now.secsTo(itemDtTime) < m_urgency * 60) {
                 m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
             } else {

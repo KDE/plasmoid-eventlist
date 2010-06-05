@@ -134,14 +134,15 @@ void EventModel::initModel()
 
 void EventModel::initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days)
 {
-        item->setData(QVariant(title), Qt::DisplayRole);
-        item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), EventModel::SortRole);
-        item->setData(QVariant(HeaderItem), EventModel::ItemRole);
-        item->setData(QVariant(QString()), EventModel::UIDRole);
-        item->setData(QVariant("<qt><b>" + toolTip + "</b></qt>"), EventModel::TooltipRole);
-        QFont bold = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-        bold.setBold(true);
-        item->setFont(bold);
+    item->setData(QVariant(title), Qt::DisplayRole);
+    item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), SortRole);
+    item->setData(QVariant(HeaderItem), ItemTypeRole);
+    item->setData(QVariant(QStringList()), ResourceRole);
+    item->setData(QVariant(QString()), UIDRole);
+    item->setData(QVariant("<qt><b>" + toolTip + "</b></qt>"), TooltipRole);
+    QFont bold = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+    bold.setBold(true);
+    item->setFont(bold);
 }
 
 void EventModel::resetModel(bool isRunning)
@@ -223,46 +224,48 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 
             if (values["isBirthday"].toBool()) {
                 eventItem->setBackground(QBrush(birthdayBg));
-                eventItem->setData(QVariant(BirthdayItem), EventModel::ItemRole);
+                eventItem->setData(QVariant(BirthdayItem), ItemTypeRole);
             } else if (values["isAnniversary"].toBool()) {
                 eventItem->setBackground(QBrush(anniversariesBg));
-                eventItem->setData(QVariant(AnniversaryItem), EventModel::ItemRole);
+                eventItem->setData(QVariant(AnniversaryItem), ItemTypeRole);
             }
 
             eventItem->setData(data, Qt::DisplayRole);
-            eventItem->setData(eventDtTime, EventModel::SortRole);
-            eventItem->setData(values["uid"], EventModel::UIDRole);
+            eventItem->setData(eventDtTime, SortRole);
+            eventItem->setData(values["uid"], UIDRole);
             eventItem->setData(values["itemid"], ItemIDRole);
-            eventItem->setData(values["tooltip"], EventModel::TooltipRole);
+            eventItem->setData(values["resource"], ResourceRole);
+            eventItem->setData(values["tooltip"], TooltipRole);
 
             addItemRow(eventDtTime.toDate(), eventItem);
         }
     } else {
-            QStandardItem *eventItem;
-            eventItem = new QStandardItem();
-            data.insert(StartDtTimePos, values["startDate"]);
-            data.insert(EndDtTimePos, values["endDate"]);
-            data.insert(SummaryPos, values["summary"]);
-            data.insert(DescriptionPos, values["description"]);
-            data.insert(LocationPos, values["location"]);
-            data.insert(YearsSincePos, QVariant(QString()));
-            data.insert(resourceNamePos, values["resourceName"]);
-            data.insert(BirthdayOrAnniversaryPos, QVariant(FALSE));
+        QStandardItem *eventItem;
+        eventItem = new QStandardItem();
+        data.insert(StartDtTimePos, values["startDate"]);
+        data.insert(EndDtTimePos, values["endDate"]);
+        data.insert(SummaryPos, values["summary"]);
+        data.insert(DescriptionPos, values["description"]);
+        data.insert(LocationPos, values["location"]);
+        data.insert(YearsSincePos, QVariant(QString()));
+        data.insert(resourceNamePos, values["resourceName"]);
+        data.insert(BirthdayOrAnniversaryPos, QVariant(FALSE));
 
-            eventItem->setData(QVariant(NormalItem), EventModel::ItemRole);
-            eventItem->setData(data, Qt::DisplayRole);
-            eventItem->setData(values["startDate"].toDateTime(), EventModel::SortRole);
-            eventItem->setData(values["uid"], EventModel::UIDRole);
-            eventItem->setData(values["itemid"], ItemIDRole);
-            eventItem->setData(values["tooltip"], EventModel::TooltipRole);
-            QDateTime itemDtTime = values["startDate"].toDateTime();
-            if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
-                eventItem->setBackground(QBrush(urgentBg));
-            } else if (QDateTime::currentDateTime() > itemDtTime) {
-                eventItem->setForeground(QBrush(passedFg));
-            }
+        eventItem->setData(QVariant(NormalItem), ItemTypeRole);
+        eventItem->setData(data, Qt::DisplayRole);
+        eventItem->setData(values["startDate"].toDateTime(), SortRole);
+        eventItem->setData(values["uid"], EventModel::UIDRole);
+        eventItem->setData(values["itemid"], ItemIDRole);
+        eventItem->setData(values["resource"], ResourceRole);
+        eventItem->setData(values["tooltip"], TooltipRole);
+        QDateTime itemDtTime = values["startDate"].toDateTime();
+        if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
+            eventItem->setBackground(QBrush(urgentBg));
+        } else if (QDateTime::currentDateTime() > itemDtTime) {
+            eventItem->setForeground(QBrush(passedFg));
+        }
 
-            addItemRow(values["startDate"].toDate(), eventItem);
+        addItemRow(values["startDate"].toDate(), eventItem);
     }
 }
 
@@ -271,26 +274,46 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
     if (eventDate == QDate::currentDate()) {
         todayItem->appendRow(item);
         todayItem->sortChildren(0, Qt::AscendingOrder);
+        QStringList resources = todayItem->data(ResourceRole).toStringList();
+        resources.append(item->data(ResourceRole).toString());
+        resources.removeDuplicates();
+        todayItem->setData(resources, ResourceRole);
         if (todayItem->row() == -1)
             parentItem->insertRow(figureRow(todayItem), todayItem);
     } else if (eventDate > QDate::currentDate() && eventDate <= QDate::currentDate().addDays(1)) {
         tomorrowItem->appendRow(item);
         tomorrowItem->sortChildren(0, Qt::AscendingOrder);
+        QStringList resources = tomorrowItem->data(ResourceRole).toStringList();
+        resources.append(item->data(ResourceRole).toString());
+        resources.removeDuplicates();
+        tomorrowItem->setData(resources, ResourceRole);
         if (tomorrowItem->row() == -1)
             parentItem->insertRow(figureRow(tomorrowItem), tomorrowItem);
     } else if (eventDate > QDate::currentDate().addDays(1) && eventDate <= QDate::currentDate().addDays(7)) {
         weekItem->appendRow(item);
         weekItem->sortChildren(0, Qt::AscendingOrder);
+        QStringList resources = weekItem->data(ResourceRole).toStringList();
+        resources.append(item->data(ResourceRole).toString());
+        resources.removeDuplicates();
+        weekItem->setData(resources, ResourceRole);
         if (weekItem->row() == -1)
             parentItem->insertRow(figureRow(weekItem), weekItem);
     } else if (eventDate > QDate::currentDate().addDays(7) && eventDate <= QDate::currentDate().addDays(28)) {
         monthItem->appendRow(item);
         monthItem->sortChildren(0, Qt::AscendingOrder);
+        QStringList resources = monthItem->data(ResourceRole).toStringList();
+        resources.append(item->data(ResourceRole).toString());
+        resources.removeDuplicates();
+        monthItem->setData(resources, ResourceRole);
         if (monthItem->row() == -1)
             parentItem->insertRow(figureRow(monthItem), monthItem);
     } else if (eventDate > QDate::currentDate().addDays(28) && eventDate <= QDate::currentDate().addDays(365)) {
         laterItem->appendRow(item);
         laterItem->sortChildren(0, Qt::AscendingOrder);
+        QStringList resources = laterItem->data(ResourceRole).toStringList();
+        resources.append(item->data(ResourceRole).toString());
+        resources.removeDuplicates();
+        laterItem->setData(resources, ResourceRole);
         if (laterItem->row() == -1)
             parentItem->appendRow(laterItem);
     }
