@@ -18,6 +18,7 @@
 
 #include "eventapplet.h"
 #include "eventmodel.h"
+#include "eventfiltermodel.h"
 #include "eventitemdelegate.h"
 #include "korganizerappletutil.h"
 #include "eventtreeview.h"
@@ -54,15 +55,10 @@
 
 K_EXPORT_PLASMA_APPLET(events, EventApplet)
 
-static const char *CATEGORY_SOURCE = "Categories";
-static const char *COLOR_SOURCE    = "Colors";
-static const char *EVENT_SOURCE    = "Events";
-static const char *SERVERSTATE_SOURCE = "ServerState";
 static const int MAX_RETRIES = 12;
 
 EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     Plasma::PopupApplet(parent, args),
-    m_engine(0),
     m_graphicsWidget(0),
     m_view(0),
     m_delegate(0),
@@ -97,28 +93,26 @@ void EventApplet::init()
     QString recurringEventFormat = cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}"));
     int dtFormat = cg.readEntry("DateFormat", ShortDateFormat);
     QString dtString = cg.readEntry("CustomDateFormat", QString("dd.MM."));
-    int period = cg.readEntry("Period", 365);
+    m_period = cg.readEntry("Period", 365);
 
     m_urgency = cg.readEntry("UrgencyTime", 15);
 
-    QList<QColor> colors;
     QColor urgentColor = QColor(cg.readEntry("UrgentColor", QString("#FF0000")));
     urgentColor.setAlphaF(cg.readEntry("UrgentOpacity", 10)/100.0);
-    colors.insert(urgentColorPos, urgentColor);
+    m_colors.insert(urgentColorPos, urgentColor);
     QColor passedColor = QColor(cg.readEntry("PassedColor", QString("#C3C3C3")));
-    colors.insert(passedColorPos, passedColor);
+    m_colors.insert(passedColorPos, passedColor);
     
     QColor birthdayColor = QColor(cg.readEntry("BirthdayColor", QString("#C0FFC0")));
     birthdayColor.setAlphaF(cg.readEntry("BirthdayOpacity", 10)/100.0);
-    colors.insert(birthdayColorPos, birthdayColor);
+    m_colors.insert(birthdayColorPos, birthdayColor);
     QColor anniversariesColor = QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA")));
     anniversariesColor.setAlphaF(cg.readEntry("AnniversariesOpacity", 10)/100.0);
-    colors.insert(anniversariesColorPos, anniversariesColor);
+    m_colors.insert(anniversariesColorPos, anniversariesColor);
 
     m_urgentBg = urgentColor;
     m_passedFg = passedColor;
 
-    m_model = new EventModel(this, m_urgency, colors, period);
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, dtFormat, dtString);
 
     graphicsWidget();
@@ -130,53 +124,46 @@ void EventApplet::init()
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
     m_try = 0;
-    QTimer::singleShot(2000, this, SLOT(setupDataEngine()));
+    QTimer::singleShot(2000, this, SLOT(setupModel()));
     // Hmm, this could be probably done via Akonadi::started/stopped signals
 }
 
-void EventApplet::setupDataEngine()
+void EventApplet::setupModel()
 {
     Akonadi::Control::start();
 
-    if (Akonadi::ServerManager::isRunning()) {
-        m_manager = Akonadi::AgentManager::self();
-        m_engine = dataEngine("events");
-        if (m_engine) {
-            m_engine->connectSource(EVENT_SOURCE, this);
-            m_engine->connectSource(CATEGORY_SOURCE, this);
-            m_engine->connectSource(COLOR_SOURCE, this);
-            m_engine->connectSource(SERVERSTATE_SOURCE, this);
-        }
+    m_manager = Akonadi::AgentManager::self();
 
-        m_view->setModel(m_model);
-        layout->removeItem(busy);
-        busy->hide();
-        layout->addItem(proxyWidget);
+    m_model = new EventModel(this, m_urgency, m_colors, m_period);
+    m_model->setSortRole(EventModel::SortRole);
+    m_model->sort(0, Qt::AscendingOrder);
 
-        setupActions();
-    } else {
-        busy->setLabel(i18n("%1 retries to start/connect to the Akonadi server", m_try + 1));
-        ++m_try;
-        if (m_try < MAX_RETRIES) {
-            QTimer::singleShot(5000, this, SLOT(setupDataEngine()));
-        } else {
-            busy->setLabel(i18n("Could not connect to the Akonadi server"));
-            busy->setRunning(FALSE);
-        }
-    }
-}
+    m_filterModel = new EventFilterModel(this);
+    m_filterModel->setPeriod(m_period);
+    m_filterModel->setExcludedResources(disabledResources);
+    m_filterModel->setDynamicSortFilter(TRUE);
+    m_filterModel->setSourceModel(m_model);
 
-void EventApplet::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
-{
-    if (QString::compare(name, EVENT_SOURCE) == 0) {
-        updateEventList(data["events"].toList());
-    } else if (QString::compare(name, SERVERSTATE_SOURCE) == 0) {
-        updateAkonadiState(data["serverrunning"].toBool());
-    }
-//     else if (QString::compare(name, CATEGORY_SOURCE) == 0) {
-//         updateCategories(data["categories"].toStringList());
-//     } else if (QString::compare(name, COLOR_SOURCE) == 0) {
-//         updateColors(data["colors"].toMap());
+    m_view->setModel(m_filterModel);
+
+    
+    layout->removeItem(busy);
+    busy->hide();
+    layout->addItem(proxyWidget);
+    m_view->expandAll();
+    connect(m_model, SIGNAL(modelNeedsExpanding()), m_view, SLOT(expandAll()));
+
+    setupActions();
+    
+//     } else {
+//         busy->setLabel(i18n("%1 retries to start/connect to the Akonadi server", m_try + 1));
+//         ++m_try;
+//         if (m_try < MAX_RETRIES) {
+//             QTimer::singleShot(5000, this, SLOT(setupDataEngine()));
+//         } else {
+//             busy->setLabel(i18n("Could not connect to the Akonadi server"));
+//             busy->setRunning(FALSE);
+//         }
 //     }
 }
 
@@ -237,59 +224,6 @@ QGraphicsWidget *EventApplet::graphicsWidget()
     return m_graphicsWidget;
 }
 
-// void EventApplet::updateCategories(const QStringList &categories)
-// {
-//     m_types->addItem(QString());
-// 
-//     foreach(const QString &category, categories) {
-//         m_types->addItem(category);
-//     }
-// }
-
-// void EventApplet::updateColors(const QMap <QString, QVariant> &colors)
-// {
-//     foreach(const QString &category, colors.keys()) {
-//         if (colors[category].value<QColor>().value() > 0) {
-//             m_types->setItemData(m_types->findText(category),
-//                                 colors[category].value<QColor>(),
-//                                 Qt::DecorationRole);
-// 
-//             // search for the categories event's to set the category color
-//             foreach(const QModelIndex &index, m_model->match(m_model->index(0, 0),
-//                                                             Qt::UserRole, category, -1)) {
-//                 m_model->setCategory(index, colors[category].value<QColor>());
-//             }
-//         }
-//     }
-// }
-
-void EventApplet::updateEventList(const QList <QVariant> &events)
-{
-    Plasma::DataEngine::Data data = m_engine->query(SERVERSTATE_SOURCE);
-    bool isRunning = data["serverrunning"].toBool();
-    
-    m_model->resetModel(isRunning);
-
-    if (isRunning) {
-        foreach (const QVariant &event, events) {
-            QMap <QString, QVariant> values = event.toMap();
-            if (!disabledResources.contains(values["resource"].toString()))
-                m_model->addEventItem(values);
-        }
-
-        m_model->setSortRole(EventModel::SortRole);
-        m_model->sort(0, Qt::AscendingOrder);
-        m_view->expandAll();
-        m_timer->start(2 * 60 * 1000);
-    }
-}
-
-void EventApplet::updateAkonadiState(bool isRunning)
-{
-    if (!isRunning)
-        updateEventList(QList<QVariant>());
-}
-
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
     QString uid = m_model->data(index, EventModel::UIDRole).toString();
@@ -310,8 +244,8 @@ void EventApplet::slotAddEvent()
 void EventApplet::timerExpired()
 {
     if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
-        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-        updateEventList(data["events"].toList());
+//         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
+//         updateEventList(data["events"].toList());
     } else {
         colorizeUrgentAndPassed();
     }
@@ -376,8 +310,8 @@ void EventApplet::setShownResources()
         cg.writeEntry("DisabledResources", disabledResources);
         emit configNeedsSaving();
 
-        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-        updateEventList(data["events"].toList());
+        m_filterModel->setExcludedResources(disabledResources);
+        m_view->expandAll();
     }
 }
 
@@ -456,50 +390,49 @@ void EventApplet::configAccepted()
 	m_delegate->settingsChanged(normalEventFormat, recurringEventsFormat, dateFormat, customString);
 
     int oldPeriod = cg.readEntry("Period", 365);
-    int period = m_formatConfigUi.periodBox->value();
-    cg.writeEntry("Period", period);
+    m_period = m_formatConfigUi.periodBox->value();
+    cg.writeEntry("Period", m_period);
 
     m_urgency = m_colorConfigUi.urgencyBox->value();
     cg.writeEntry("UrgencyTime", m_urgency);
     
-    QList<QColor> colors;
+    m_colors.clear();
 
     m_urgentBg = m_colorConfigUi.urgentColorButton->color();
     int urgentOpacity = m_colorConfigUi.urgentOpacity->value();
     cg.writeEntry("UrgentColor", m_urgentBg.name());
     cg.writeEntry("UrgentOpacity", urgentOpacity);
     m_urgentBg.setAlphaF(urgentOpacity/100.0);
-    colors.insert(urgentColorPos, m_urgentBg);
+    m_colors.insert(urgentColorPos, m_urgentBg);
 
     m_passedFg = m_colorConfigUi.startedColorButton->color();
     cg.writeEntry("PassedColor", m_passedFg.name());
-    colors.insert(passedColorPos, m_passedFg);
+    m_colors.insert(passedColorPos, m_passedFg);
     
     QColor birthdayColor = m_colorConfigUi.birthdayColorButton->color();
     int birthdayOpacity = m_colorConfigUi.birthdayOpacity->value();
     cg.writeEntry("BirthdayColor", birthdayColor.name());
     cg.writeEntry("BirthdayOpacity", birthdayOpacity);
     birthdayColor.setAlphaF(birthdayOpacity/100.0);
-    colors.insert(birthdayColorPos, birthdayColor);
+    m_colors.insert(birthdayColorPos, birthdayColor);
 
     QColor anniversariesColor = m_colorConfigUi.anniversariesColorButton->color();
     int anniversariesOpacity = m_colorConfigUi.anniversariesOpacity->value();
     cg.writeEntry("AnniversariesColor", anniversariesColor.name());
     cg.writeEntry("AnniversariesOpacity", anniversariesOpacity);
     anniversariesColor.setAlphaF(anniversariesOpacity/100.0);
-    colors.insert(anniversariesColorPos, anniversariesColor);
+    m_colors.insert(anniversariesColorPos, anniversariesColor);
 
-    m_model->settingsChanged(m_urgency, colors, period);
+    m_model->settingsChanged(m_urgency, m_colors, m_period);
 
-    if (oldPeriod != period) { //just rebuild model if period changed
-        Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-        updateEventList(data["events"].toList());
-    } else {
-        colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
-        colorizeUrgentAndPassed();
+    if (oldPeriod != m_period) { //just rebuild model if period changed
+        m_filterModel->setPeriod(m_period);
     }
 
-    m_view->setModel(m_model);
+    colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
+    colorizeUrgentAndPassed();
+
+//     m_view->setModel(m_model);
 
     emit configNeedsSaving();
 }
@@ -512,12 +445,12 @@ void EventApplet::colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor 
         int childRows = m_model->rowCount(headerIndex);
         for (int c = 0; c < childRows; ++c) {
             QModelIndex index = m_model->index(c, 0, headerIndex);
-            int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
-            if (itemRole == BirthdayItem) {
+            int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
+            if (itemRole == EventModel::BirthdayItem) {
                 m_model->setData(index, QVariant(QBrush(birthdayColor)), Qt::BackgroundRole);
-            } else if (itemRole == AnniversaryItem) {
+            } else if (itemRole == EventModel::AnniversaryItem) {
                 m_model->setData(index, QVariant(QBrush(anniversariesColor)), Qt::BackgroundRole);
-            } else if (itemRole == BirthdayItem || itemRole == AnniversaryItem) {
+            } else if (itemRole == EventModel::BirthdayItem || itemRole == EventModel::AnniversaryItem) {
                 m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
             }
         }
@@ -532,9 +465,9 @@ void EventApplet::colorizeUrgentAndPassed()
     int todayRows = m_model->rowCount(todayIndex);
     for (int t = 0; t < todayRows; ++t) {
         QModelIndex index = m_model->index(t, 0, todayIndex);
-        int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
+        int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
         QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
-        if (itemRole == NormalItem) {
+        if (itemRole == EventModel::NormalItem) {
             if (itemDtTime > now && now.secsTo(itemDtTime) < m_urgency * 60) {
                 m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
             } else if (now > itemDtTime) {
@@ -552,9 +485,9 @@ void EventApplet::colorizeUrgentAndPassed()
     int tomorrowRows = m_model->rowCount(tomorrowIndex);
     for (int w = 0; w < tomorrowRows; ++w) {
         QModelIndex index = m_model->index(w, 0, tomorrowIndex);
-        int itemRole = m_model->data(index, EventModel::ItemRole).toInt();
+        int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
         QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
-        if (itemRole == NormalItem) {
+        if (itemRole == EventModel::NormalItem) {
             if (now.secsTo(itemDtTime) < m_urgency * 60) {
                 m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
             } else {

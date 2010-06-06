@@ -30,7 +30,6 @@
 
 // Plasma includes
 #include <Plasma/PopupApplet>
-#include <Plasma/DataEngine>
 #include <Plasma/TreeView>
 #include <Plasma/Label>
 #include <Plasma/BusyWidget>
@@ -44,6 +43,7 @@ class QModelIndex;
 class QAction;
 class KConfigDialog;
 class EventModel;
+class EventFilterModel;
 class EventItemDelegate;
 class QGraphicsLinearLayout;
 class QGraphicsProxyWidget;
@@ -62,9 +62,6 @@ public:
     QGraphicsWidget *graphicsWidget();
     virtual QList<QAction *> contextualActions();
 
-public slots:
-    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
-
 private slots:
     void slotOpenEvent(const QModelIndex &index);
     void slotUpdateTooltip(QString);
@@ -72,7 +69,7 @@ private slots:
     void slotAddEvent();
     void timerExpired();
     void setShownResources();
-    void setupDataEngine();
+    void setupModel();
 
 protected slots:
     void configAccepted();
@@ -82,9 +79,6 @@ protected:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
-//     void updateCategories(const QStringList &categories);
-//     void updateColors(const QMap <QString, QVariant> &colors);
-    void updateEventList(const QList <QVariant> &events);
     void updateAkonadiState(bool isRunning);
     void setupActions();
     void colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor anniversariesColor);
@@ -92,10 +86,10 @@ private:
     void createToolTip();
     
 private:
-    Plasma::DataEngine *m_engine;
     QGraphicsWidget *m_graphicsWidget;
     QGraphicsLinearLayout *layout;
     EventModel *m_model;
+    EventFilterModel *m_filterModel;
 //    Plasma::TreeView *m_view;
     QGraphicsProxyWidget *proxyWidget;
     EventTreeView *m_view;
@@ -104,8 +98,9 @@ private:
     EventItemDelegate *m_delegate;
     Ui::EventAppletFormatConfig m_formatConfigUi;
     Ui::EventAppletColorConfig m_colorConfigUi;
-    int m_urgency, m_checkInterval, m_try;
+    int m_urgency, m_checkInterval, m_period, m_try;
     QColor m_urgentBg, m_passedFg;
+    QList<QColor> m_colors;
     QTimer *m_timer;
     QList<QAction *> actions;
     Akonadi::AgentManager *m_manager;

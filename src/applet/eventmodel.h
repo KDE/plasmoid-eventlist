@@ -19,6 +19,11 @@
 #ifndef EVENTMODEL_H
 #define EVENTMODEL_H
 
+#include <akonadi/monitor.h>
+#include <akonadi/collection.h>
+
+#include <kcal/event.h>
+
 // qt headers
 #include <QStandardItemModel>
 #include <QColor>
@@ -37,14 +42,14 @@ static const int SummaryPos = 2;
 static const int DescriptionPos = 3;
 static const int LocationPos = 4;
 static const int YearsSincePos = 5;
-static const int BirthdayOrAnniversayPos = 6;
+static const int BirthdayOrAnniversaryPos = 6;
 static const int resourceNamePos = 7;
 //static const int UIDPos = 8;
 
-static const int HeaderItem = 0;
-static const int NormalItem = 1;
-static const int BirthdayItem = 2;
-static const int AnniversaryItem = 3;
+// static const int HeaderItem = 0;
+// static const int NormalItem = 1;
+// static const int BirthdayItem = 2;
+// static const int AnniversaryItem = 3;
 
 static const int urgentColorPos = 0;
 static const int passedColorPos = 1;
@@ -60,15 +65,19 @@ class EventModel : public QStandardItemModel
     Q_OBJECT
 public:
     enum EventRole {
-		SortRole = Qt::UserRole + 1,
+        SortRole = Qt::UserRole + 1,
         UIDRole,
-        ItemRole,
-        TooltipRole
+        ItemTypeRole,
+        TooltipRole,
+        ItemIDRole,
+        ResourceRole
     };
 
-    enum EventCategoryType {
-        ByStartDate = 0,
-        ByDueDate = 1
+    enum ItemType {
+        HeaderItem = 0,
+        NormalItem,
+        BirthdayItem,
+        AnniversaryItem
     };
 
     EventModel(QObject *parent = 0, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>(), int days = 365);
@@ -80,18 +89,26 @@ public:
     void resetModel(bool isRunning);
     void settingsChanged(int urgencyTime, QList<QColor> itemColors, int period);
 
-public slots:
+private slots:
     void addEventItem(const QMap <QString, QVariant> &values);
+    void eventAdded(const Akonadi::Item &, const Akonadi::Collection &);
+    void eventRemoved(const Akonadi::Item &);
 
 private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
     void addItemRow(QDate eventDate, QStandardItem *items);
     int figureRow(QStandardItem *headerItem);
+    QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *, const Akonadi::Collection &);
 
 private:
     QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
-    int urgency, m_period;
+    QList<QStandardItem *> sectionItems;
+    int urgency;
     QColor urgentBg, passedFg, birthdayBg, anniversariesBg;
+    Akonadi::Monitor *m_monitor;
+
+signals:
+    void modelNeedsExpanding();
 };
 
 #endif
