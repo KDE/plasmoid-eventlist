@@ -394,7 +394,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
 #if KDE_IS_VERSION(4,4,60)
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(resource, event);
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), event);
 #else
     values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
 #endif
