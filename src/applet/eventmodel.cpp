@@ -61,7 +61,7 @@ EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList
     m_monitor = new Akonadi::Monitor(this);
     Akonadi::ItemFetchScope scope;
     scope.fetchFullPayload(true);
-    scope.fetchAllAttributes(true);;
+    scope.fetchAllAttributes(true);
     m_monitor->fetchCollection(true);
     m_monitor->setItemFetchScope(scope);
     m_monitor->setCollectionMonitored(Akonadi::Collection::root());
@@ -71,6 +71,10 @@ EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList
                        SLOT(eventAdded(const Akonadi::Item &, const Akonadi::Collection &)));
     connect(m_monitor, SIGNAL(itemRemoved(const Akonadi::Item &)),
                        SLOT(eventRemoved(const Akonadi::Item &)));
+    connect(m_monitor, SIGNAL(itemChanged(const Akonadi::Item &, const QSet<QByteArray> &)),
+                       SLOT(eventChanged(const Akonadi::Item &, const QSet<QByteArray> &)));
+    connect(m_monitor, SIGNAL(itemMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)),
+                       SLOT(eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)));
 }
 
 EventModel::~EventModel()
@@ -202,6 +206,16 @@ void EventModel::eventRemoved(const Akonadi::Item &item)
             emit modelNeedsExpanding();
         }
     }
+}
+
+void EventModel::eventChanged(const Akonadi::Item &, const QSet<QByteArray> &)
+{
+    kDebug() << "event changed";
+}
+
+void EventModel::eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)
+{
+    kDebug() << "event moved";
 }
 
 void EventModel::addEventItem(const QMap <QString, QVariant> &values)

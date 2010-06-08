@@ -93,6 +93,8 @@ private slots:
     void addEventItem(const QMap <QString, QVariant> &values);
     void eventAdded(const Akonadi::Item &, const Akonadi::Collection &);
     void eventRemoved(const Akonadi::Item &);
+    void eventChanged(const Akonadi::Item &, const QSet<QByteArray> &);
+    void eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &);
 
 private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
