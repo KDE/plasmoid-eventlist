@@ -29,6 +29,7 @@
 #include <akonadi/kcal/incidencemimetypevisitor.h>
 #include <akonadi/itemfetchscope.h>
 #include <akonadi/entitydisplayattribute.h>
+#include <akonadi/servermanager.h>
 
 
 // qt headers
@@ -57,24 +58,7 @@ EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList
     parentItem = invisibleRootItem();
     settingsChanged(urgencyTime, colorList, days);
     initModel();
-
-    m_monitor = new Akonadi::Monitor(this);
-    Akonadi::ItemFetchScope scope;
-    scope.fetchFullPayload(true);
-    scope.fetchAllAttributes(true);
-    m_monitor->fetchCollection(true);
-    m_monitor->setItemFetchScope(scope);
-    m_monitor->setCollectionMonitored(Akonadi::Collection::root());
-    m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
-
-    connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
-                       SLOT(eventAdded(const Akonadi::Item &, const Akonadi::Collection &)));
-    connect(m_monitor, SIGNAL(itemRemoved(const Akonadi::Item &)),
-                       SLOT(eventRemoved(const Akonadi::Item &)));
-    connect(m_monitor, SIGNAL(itemChanged(const Akonadi::Item &, const QSet<QByteArray> &)),
-                       SLOT(eventChanged(const Akonadi::Item &, const QSet<QByteArray> &)));
-    connect(m_monitor, SIGNAL(itemMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)),
-                       SLOT(eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)));
+    initMonitor();
 }
 
 EventModel::~EventModel()
@@ -136,6 +120,27 @@ void EventModel::initModel()
     }
 }
 
+void EventModel::initMonitor()
+{
+    m_monitor = new Akonadi::Monitor(this);
+    Akonadi::ItemFetchScope scope;
+    scope.fetchFullPayload(true);
+    scope.fetchAllAttributes(true);
+    m_monitor->fetchCollection(true);
+    m_monitor->setItemFetchScope(scope);
+    m_monitor->setCollectionMonitored(Akonadi::Collection::root());
+    m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
+
+    connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
+                       SLOT(eventAdded(const Akonadi::Item &, const Akonadi::Collection &)));
+    connect(m_monitor, SIGNAL(itemRemoved(const Akonadi::Item &)),
+                       SLOT(eventRemoved(const Akonadi::Item &)));
+    connect(m_monitor, SIGNAL(itemChanged(const Akonadi::Item &, const QSet<QByteArray> &)),
+                       SLOT(eventChanged(const Akonadi::Item &, const QSet<QByteArray> &)));
+    connect(m_monitor, SIGNAL(itemMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)),
+                       SLOT(eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)));
+}
+
 void EventModel::initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days)
 {
     item->setData(QVariant(title), Qt::DisplayRole);
@@ -149,7 +154,7 @@ void EventModel::initHeaderItem(QStandardItem *item, QString title, QString tool
     item->setFont(bold);
 }
 
-void EventModel::resetModel(bool isRunning)
+void EventModel::resetModel()
 {
     clear();
     parentItem = invisibleRootItem();
@@ -159,13 +164,16 @@ void EventModel::resetModel(bool isRunning)
     monthItem = 0;
     laterItem = 0;
     sectionItems.clear();
+    delete m_monitor;
+    m_monitor = 0;
 
-    if (!isRunning) {
+    if (!Akonadi::ServerManager::isRunning()) {
         QStandardItem *errorItem = new QStandardItem();
         errorItem->setData(QVariant(i18n("The Akonadi server is not running!")), Qt::DisplayRole);
         parentItem->appendRow(errorItem);
     } else {
         initModel();
+        initMonitor();
     }
 }
 

@@ -65,7 +65,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_formatConfigUi(),
     m_colorConfigUi(),
     m_timer(0),
-    m_manager(0)
+    m_agentManager(0)
 {
     KGlobal::locale()->insertCatalog("libkcal");
     KGlobal::locale()->insertCatalog("eventapplet");
@@ -123,16 +123,16 @@ void EventApplet::init()
     lastCheckTime = QDateTime::currentDateTime();
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
-    m_try = 0;
-    QTimer::singleShot(2000, this, SLOT(setupModel()));
-    // Hmm, this could be probably done via Akonadi::started/stopped signals
+    QTimer::singleShot(0, this, SLOT(setupModel()));
 }
 
 void EventApplet::setupModel()
 {
-    Akonadi::Control::start();
+    Akonadi::Control::widgetNeedsAkonadi(m_view);
 
-    m_manager = Akonadi::AgentManager::self();
+    Akonadi::Control::start();
+    
+    m_agentManager = Akonadi::AgentManager::self();
 
     m_model = new EventModel(this, m_urgency, m_colors, m_period);
     m_model->setSortRole(EventModel::SortRole);
@@ -145,26 +145,18 @@ void EventApplet::setupModel()
     m_filterModel->setSourceModel(m_model);
 
     m_view->setModel(m_filterModel);
-
-    
-    layout->removeItem(busy);
-    busy->hide();
-    layout->addItem(proxyWidget);
     m_view->expandAll();
     connect(m_model, SIGNAL(modelNeedsExpanding()), m_view, SLOT(expandAll()));
 
     setupActions();
-    
-//     } else {
-//         busy->setLabel(i18n("%1 retries to start/connect to the Akonadi server", m_try + 1));
-//         ++m_try;
-//         if (m_try < MAX_RETRIES) {
-//             QTimer::singleShot(5000, this, SLOT(setupDataEngine()));
-//         } else {
-//             busy->setLabel(i18n("Could not connect to the Akonadi server"));
-//             busy->setRunning(FALSE);
-//         }
-//     }
+    m_timer->start(2 * 60 * 1000);
+
+    connect(Akonadi::ServerManager::self(), SIGNAL(started()), this, SLOT(akonadiStatusChanged()));
+}
+
+void EventApplet::akonadiStatusChanged()
+{
+    m_model->resetModel();
 }
 
 QGraphicsWidget *EventApplet::graphicsWidget()
@@ -214,8 +206,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 
         layout = new QGraphicsLinearLayout(Qt::Vertical);
         layout->addItem(title);
-        busy = new Plasma::BusyWidget();
-        layout->addItem(busy);
+        layout->addItem(proxyWidget);
 
         m_graphicsWidget->setLayout(layout);
         registerAsDragHandle(m_graphicsWidget);
@@ -244,8 +235,7 @@ void EventApplet::slotAddEvent()
 void EventApplet::timerExpired()
 {
     if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
-//         Plasma::DataEngine::Data data = m_engine->query(EVENT_SOURCE);
-//         updateEventList(data["events"].toList());
+        m_model->resetModel();
     } else {
         colorizeUrgentAndPassed();
     }
@@ -283,7 +273,7 @@ void EventApplet::setShownResources()
     QWidget *widget = new QWidget(dialog);
     QVBoxLayout *layout = new QVBoxLayout();
     
-    Akonadi::AgentInstance::List instList = m_manager->instances();
+    Akonadi::AgentInstance::List instList = m_agentManager->instances();
     foreach (const Akonadi::AgentInstance &inst, instList) {
         QStringList agentMimeTypes = inst.type().mimeTypes();
         if (agentMimeTypes.contains("application/x-vnd.akonadi.calendar.event")) {

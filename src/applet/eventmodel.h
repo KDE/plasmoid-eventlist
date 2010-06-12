@@ -86,7 +86,8 @@ public:
 public:
     void setDateFormat(int format, QString string);
     void initModel();
-    void resetModel(bool isRunning);
+    void initMonitor();
+    void resetModel();
     void settingsChanged(int urgencyTime, QList<QColor> itemColors, int period);
 
 private slots:
