@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
-    <height>601</height>
+    <width>456</width>
+    <height>681</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Event text formatting</string>
@@ -58,7 +58,29 @@ Substitutions are:
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item>
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>Todo text formatting</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>The format fot the displayed text for todos.
+Substutions are:
+%{dueDate} - the date due
+%{summary} - summary</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KLineEdit" name="todoEdit"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Date appearance settings</string>
@@ -110,7 +132,7 @@ Substitutions are:
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
       <string>Miscellenous options</string>
@@ -152,7 +174,7 @@ Substitutions are:
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

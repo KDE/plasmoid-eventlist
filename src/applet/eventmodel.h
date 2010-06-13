@@ -23,6 +23,7 @@
 #include <akonadi/collection.h>
 
 #include <kcal/event.h>
+#include <kcal/todo.h>
 
 // qt headers
 #include <QStandardItemModel>
@@ -36,25 +37,11 @@ static const int ShortDateFormat = 0;
 static const int LongDateFormat = 1;
 static const int CustomDateFormat = 2;
 
-static const int StartDtTimePos = 0;
-static const int EndDtTimePos = 1;
-static const int SummaryPos = 2;
-static const int DescriptionPos = 3;
-static const int LocationPos = 4;
-static const int YearsSincePos = 5;
-static const int BirthdayOrAnniversaryPos = 6;
-static const int resourceNamePos = 7;
-//static const int UIDPos = 8;
-
-// static const int HeaderItem = 0;
-// static const int NormalItem = 1;
-// static const int BirthdayItem = 2;
-// static const int AnniversaryItem = 3;
-
 static const int urgentColorPos = 0;
 static const int passedColorPos = 1;
 static const int birthdayColorPos = 2;
 static const int anniversariesColorPos = 3;
+static const int todoColorPos = 4;
 
 /**
 * Model of the view
@@ -77,7 +64,8 @@ public:
         HeaderItem = 0,
         NormalItem,
         BirthdayItem,
-        AnniversaryItem
+        AnniversaryItem,
+        TodoItem
     };
 
     EventModel(QObject *parent = 0, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>(), int days = 365);
@@ -92,6 +80,7 @@ public:
 
 private slots:
     void addEventItem(const QMap <QString, QVariant> &values);
+    void addTodoItem(const QMap <QString, QVariant> &values);
     void eventAdded(const Akonadi::Item &, const Akonadi::Collection &);
     void eventRemoved(const Akonadi::Item &);
     void eventChanged(const Akonadi::Item &, const QSet<QByteArray> &);
@@ -102,12 +91,13 @@ private:
     void addItemRow(QDate eventDate, QStandardItem *items);
     int figureRow(QStandardItem *headerItem);
     QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *, const Akonadi::Collection &);
+    QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCal::Todo *, const Akonadi::Collection &);
 
 private:
     QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
     QList<QStandardItem *> sectionItems;
     int urgency;
-    QColor urgentBg, passedFg, birthdayBg, anniversariesBg;
+    QColor urgentBg, passedFg, birthdayBg, anniversariesBg, todoBg;
     Akonadi::Monitor *m_monitor;
 
 signals:

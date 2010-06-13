@@ -91,6 +91,7 @@ void EventApplet::init()
 
     QString normalEventFormat = cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}"));
     QString recurringEventFormat = cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}"));
+    QString todoFormat = cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}"));
     int dtFormat = cg.readEntry("DateFormat", ShortDateFormat);
     QString dtString = cg.readEntry("CustomDateFormat", QString("dd.MM."));
     m_period = cg.readEntry("Period", 365);
@@ -109,11 +110,14 @@ void EventApplet::init()
     QColor anniversariesColor = QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA")));
     anniversariesColor.setAlphaF(cg.readEntry("AnniversariesOpacity", 10)/100.0);
     m_colors.insert(anniversariesColorPos, anniversariesColor);
+    QColor todoColor = QColor(cg.readEntry("TodoColor", QString("#FFD235")));
+    todoColor.setAlphaF(cg.readEntry("TodoOpacity", 10)/100.0);
+    m_colors.insert(todoColorPos, todoColor);
 
     m_urgentBg = urgentColor;
     m_passedFg = passedColor;
 
-    m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, dtFormat, dtString);
+    m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, dtFormat, dtString);
 
     graphicsWidget();
 
@@ -346,10 +350,11 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 
     KConfigGroup cg = config();
 
-	m_formatConfigUi.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
-	m_formatConfigUi.recurringEventsEdit->setText(cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}")));
-	m_formatConfigUi.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
-	m_formatConfigUi.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
+    m_formatConfigUi.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
+    m_formatConfigUi.recurringEventsEdit->setText(cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}")));
+    m_formatConfigUi.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
+    m_formatConfigUi.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
+    m_formatConfigUi.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
     m_formatConfigUi.periodBox->setValue(cg.readEntry("Period", 365));
 
     m_colorConfigUi.urgencyBox->setValue(cg.readEntry("UrgencyTime", 15));
@@ -362,22 +367,26 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_colorConfigUi.birthdayOpacity->setValue(cg.readEntry("BirthdayOpacity", 10));
     m_colorConfigUi.anniversariesColorButton->setColor(QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA"))));
     m_colorConfigUi.anniversariesOpacity->setValue(cg.readEntry("AnniversariesOpacity", 10));
+    m_colorConfigUi.todoColorButton->setColor(QColor(cg.readEntry("TodoColor", QString("#FFD235"))));
+    m_colorConfigUi.todoOpacity->setValue(cg.readEntry("TodoOpacity", 10));
 }
 
 void EventApplet::configAccepted()
 {
-	KConfigGroup cg = config();
+    KConfigGroup cg = config();
 
-	QString normalEventFormat = m_formatConfigUi.normalEventEdit->text();
-	cg.writeEntry("NormalEventFormat", normalEventFormat);
-	QString recurringEventsFormat = m_formatConfigUi.recurringEventsEdit->text();
-	cg.writeEntry("RecurringEventsFormat", recurringEventsFormat);
-	int dateFormat = m_formatConfigUi.dateFormatBox->currentIndex();
-	cg.writeEntry("DateFormat", dateFormat);
-	QString customString = m_formatConfigUi.customFormatEdit->text();
-	cg.writeEntry("CustomDateFormat", customString);
+    QString normalEventFormat = m_formatConfigUi.normalEventEdit->text();
+    cg.writeEntry("NormalEventFormat", normalEventFormat);
+    QString recurringEventsFormat = m_formatConfigUi.recurringEventsEdit->text();
+    cg.writeEntry("RecurringEventsFormat", recurringEventsFormat);
+    QString todoFormat = m_formatConfigUi.todoEdit->text();
+    cg.writeEntry("TodoFormat", todoFormat);
+    int dateFormat = m_formatConfigUi.dateFormatBox->currentIndex();
+    cg.writeEntry("DateFormat", dateFormat);
+    QString customString = m_formatConfigUi.customFormatEdit->text();
+    cg.writeEntry("CustomDateFormat", customString);
 
-	m_delegate->settingsChanged(normalEventFormat, recurringEventsFormat, dateFormat, customString);
+    m_delegate->settingsChanged(normalEventFormat, recurringEventsFormat, todoFormat, dateFormat, customString);
 
     int oldPeriod = cg.readEntry("Period", 365);
     m_period = m_formatConfigUi.periodBox->value();
@@ -413,6 +422,13 @@ void EventApplet::configAccepted()
     anniversariesColor.setAlphaF(anniversariesOpacity/100.0);
     m_colors.insert(anniversariesColorPos, anniversariesColor);
 
+    QColor todoColor = m_colorConfigUi.todoColorButton->color();
+    int todoOpacity = m_colorConfigUi.todoOpacity->value();
+    cg.writeEntry("TodoColor", todoColor.name());
+    cg.writeEntry("TodoOpacity", todoOpacity);
+    todoColor.setAlphaF(todoOpacity/100.0);
+    m_colors.insert(todoColorPos, todoColor);
+
     m_model->settingsChanged(m_urgency, m_colors, m_period);
 
     if (oldPeriod != m_period) { //just rebuild model if period changed
@@ -421,8 +437,6 @@ void EventApplet::configAccepted()
 
     colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
     colorizeUrgentAndPassed();
-
-//     m_view->setModel(m_model);
 
     emit configNeedsSaving();
 }

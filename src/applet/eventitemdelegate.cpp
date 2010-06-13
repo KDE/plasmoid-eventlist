@@ -30,12 +30,13 @@
 // #include <QRectF>
 // #include <QStyleOptionViewItem>
 
-EventItemDelegate::EventItemDelegate(QObject* parent, QString normal, QString birthdayOrAnniversay, int dtFormat, QString dtString)
-	: QStyledItemDelegate(parent),
-	m_normal(normal),
-	m_birthdayOrAnniversary(birthdayOrAnniversay),
-	m_dateString(dtString),
-	m_dateFormat(dtFormat)
+EventItemDelegate::EventItemDelegate(QObject* parent, QString normal, QString birthdayOrAnniversay, QString todo, int dtFormat, QString dtString)
+    : QStyledItemDelegate(parent),
+    m_normal(normal),
+    m_birthdayOrAnniversary(birthdayOrAnniversay),
+    m_todo(todo),
+    m_dateString(dtString),
+    m_dateFormat(dtFormat)
 {
 }
 
@@ -45,74 +46,73 @@ EventItemDelegate::~EventItemDelegate()
 
 QString EventItemDelegate::displayText(const QVariant &value, const QLocale &locale) const
 {
-	Q_UNUSED(locale);
-	if (value.type() == QVariant::String)
-		return value.toString();
+    Q_UNUSED(locale);
+    QMap<QString, QVariant> data = value.toMap();
+    QHash<QString,QString> dataHash;
+    ulong s;
 
-	QList<QVariant> data = value.toList();
-	QHash<QString,QString> dataHash;
-	dataHash.insert("startDate", formattedDate(data.at(StartDtTimePos)));
-	dataHash.insert("endDate", formattedDate(data.at(EndDtTimePos)));
-	dataHash.insert("startTime", KGlobal::locale()->formatTime(data.at(StartDtTimePos).toTime()));
-	dataHash.insert("endTime", KGlobal::locale()->formatTime(data.at(StartDtTimePos).toTime()));
-	ulong s = data.at(StartDtTimePos).toDateTime().secsTo(data.at(EndDtTimePos).toDateTime());
-	dataHash.insert("duration", QString::number(s / 3600));
-	dataHash.insert("summary", data.at(SummaryPos).toString());
-	dataHash.insert("description", data.at(DescriptionPos).toString());
-	dataHash.insert("location", data.at(LocationPos).toString());
-	dataHash.insert("yearsSince", data.at(YearsSincePos).toString());
-    dataHash.insert("resourceName", data.at(resourceNamePos).toString());
-	dataHash.insert("tab", "\t");
+    int itemType = data["itemType"].toInt();
+    switch (itemType) {
+        case EventModel::HeaderItem:
+            return data["title"].toString();
+            break;
+        case EventModel::NormalItem:
+        case EventModel::BirthdayItem:
+        case EventModel::AnniversaryItem:
+            dataHash.insert("startDate", formattedDate(data["startDate"]));
+            dataHash.insert("endDate", formattedDate(data["endDate"]));
+            dataHash.insert("startTime", KGlobal::locale()->formatTime(data["startDate"].toTime()));
+            dataHash.insert("endTime", KGlobal::locale()->formatTime(data["endDate"].toTime()));
+            s = data["startDate"].toDateTime().secsTo(data["endDate"].toDateTime());
+            dataHash.insert("duration", QString::number(s / 3600));
+            dataHash.insert("summary", data["summary"].toString());
+            dataHash.insert("description", data["description"].toString());
+            dataHash.insert("location", data["location"].toString());
+            dataHash.insert("yearsSince", data["yearsSince"].toString());
+            dataHash.insert("resourceName", data["resourceName"].toString());
+            dataHash.insert("tab", "\t");
+            break;
+        case EventModel::TodoItem:
+            return formattedDate(data["dueDate"]) + " " + data["summary"].toString();
+        default:
+            break;
+    }
 
-	QString myText;
-	if (data.at(BirthdayOrAnniversaryPos).toBool() == TRUE) {
-		myText = m_birthdayOrAnniversary;
-	} else {
-		myText = m_normal;
-	}
+    QString myText;
+    if (data["isBirthday"].toBool() == TRUE || data["isAnniversary"].toBool() == TRUE) {
+        myText = m_birthdayOrAnniversary;
+    } else {
+        myText = m_normal;
+    }
 
-	return KMacroExpander::expandMacros(myText, dataHash);
+    return KMacroExpander::expandMacros(myText, dataHash);
 }
-
-// void EventItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-//                                                 const QModelIndex &index) const
-// {
-// 	const QAbstractItemModel *model = index.model();
-// 	QStyleOptionViewItem textOption = option;
-// 	Plasma::Svg *svg = new Plasma::Svg();
-// 	svg->setImagePath("widgets/calendar");
-// 	svg->setContainsMultipleImages(true);
-// 	QRect r = textOption.rect;
-// 	svg->paint(painter, QRectF(r), "active");
-// 
-// // 	painter->drawText(textOption.rect(), 
-// 	QStyledItemDelegate::paint(painter, textOption, index);
-// }
 
 QString EventItemDelegate::formattedDate(const QVariant &dtTime) const
 {
-	QString date;
-	if (dtTime.toDateTime().isValid()) {
-		switch (m_dateFormat) {
-			case ShortDateFormat:
-				date = KGlobal::locale()->formatDate(dtTime.toDate(), KLocale::ShortDate);
-				break;
-			case LongDateFormat:
-				date = KGlobal::locale()->formatDate(dtTime.toDate(), KLocale::LongDate);
-				break;
-			case CustomDateFormat:
-				date = dtTime.toDate().toString(m_dateString);
-				break;
-		}
-	}
+    QString date;
+    if (dtTime.toDateTime().isValid()) {
+        switch (m_dateFormat) {
+            case ShortDateFormat:
+                date = KGlobal::locale()->formatDate(dtTime.toDate(), KLocale::ShortDate);
+                break;
+            case LongDateFormat:
+                date = KGlobal::locale()->formatDate(dtTime.toDate(), KLocale::LongDate);
+                break;
+            case CustomDateFormat:
+                date = dtTime.toDate().toString(m_dateString);
+                break;
+        }
+    }
 
-	return date;
+    return date;
 }
 
-void EventItemDelegate::settingsChanged(QString normal, QString birthdayOrAnniversary, int format, QString customString)
+void EventItemDelegate::settingsChanged(QString normal, QString birthdayOrAnniversary, QString todo, int format, QString customString)
 {
-	m_normal = normal;
-	m_birthdayOrAnniversary = birthdayOrAnniversary;
-	m_dateFormat = format;
-	m_dateString = customString;
+    m_normal = normal;
+    m_birthdayOrAnniversary = birthdayOrAnniversary;
+    m_todo= todo;
+    m_dateFormat = format;
+    m_dateString = customString;
 }

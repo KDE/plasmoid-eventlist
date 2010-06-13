@@ -113,6 +113,11 @@ void EventModel::initModel()
                         if (event) {
                             addEventItem(eventDetails(item, event, collection));
                         } // if event
+                    } else if (item.hasPayload <KCal::Todo::Ptr>()) {
+                        KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
+                        if (todo) {
+                            addTodoItem(todoDetails(item, todo, collection));
+                        }
                     } // if hasPayload
                 } // foreach
             }
@@ -130,6 +135,9 @@ void EventModel::initMonitor()
     m_monitor->setItemFetchScope(scope);
     m_monitor->setCollectionMonitored(Akonadi::Collection::root());
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
+    m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::todoMimeType(), true);
+
+    kDebug() << m_monitor->mimeTypesMonitored();
 
     connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
                        SLOT(eventAdded(const Akonadi::Item &, const Akonadi::Collection &)));
@@ -143,7 +151,10 @@ void EventModel::initMonitor()
 
 void EventModel::initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days)
 {
-    item->setData(QVariant(title), Qt::DisplayRole);
+    QMap<QString, QVariant> data;
+    data["itemType"] = HeaderItem;
+    data["title"] = title;
+    item->setData(data, Qt::DisplayRole);
     item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), SortRole);
     item->setData(QVariant(HeaderItem), ItemTypeRole);
     item->setData(QVariant(QStringList()), ResourceRole);
@@ -184,16 +195,22 @@ void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors, int 
     passedFg = itemColors.at(passedColorPos);
     birthdayBg = itemColors.at(birthdayColorPos);
     anniversariesBg = itemColors.at(anniversariesColorPos);
+    todoBg = itemColors.at(todoColorPos);
 }
 
 void EventModel::eventAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
     kDebug() << "item added" << item.remoteId();
-    if (item.hasPayload <KCal::Event::Ptr>()) {
+    if (item.hasPayload<KCal::Event::Ptr>()) {
         KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
         if (event) {
             addEventItem(eventDetails(item, event, collection));
         } // if event
+    } else if (item.hasPayload <KCal::Todo::Ptr>()) {
+        KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
+        if (todo) {
+            addTodoItem(todoDetails(item, todo, collection));
+        }
     }
 }
 
@@ -226,28 +243,24 @@ void EventModel::eventMoved(const Akonadi::Item &, const Akonadi::Collection &, 
     kDebug() << "event moved";
 }
 
-void EventModel::addEventItem(const QMap <QString, QVariant> &values)
+void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 {
-    QList<QVariant> data;
+    QMap<QString, QVariant> data = values;
     if (values["recurs"].toBool()) {
         QList<QVariant> dtTimes = values["recurDates"].toList();
         foreach (QVariant eventDtTime, dtTimes) {
             QStandardItem *eventItem;
             eventItem = new QStandardItem();
-            data.insert(StartDtTimePos, eventDtTime);
-            data.insert(EndDtTimePos, values["endDate"]);
-            data.insert(SummaryPos, values["summary"]);
-            data.insert(DescriptionPos, values["description"]);
-            data.insert(LocationPos, values["location"]);
+            data["startDate"] = eventDtTime;
             int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
-            data.insert(YearsSincePos, QVariant(QString::number(n)));
-            data.insert(resourceNamePos, values["resourceName"]);
-            data.insert(BirthdayOrAnniversaryPos, QVariant(values["isBirthday"].toBool() || values["isAnniversary"].toBool()));
+            data["yearsSince"] = QString::number(n);
 
             if (values["isBirthday"].toBool()) {
+                data["itemType"] = BirthdayItem;
                 eventItem->setBackground(QBrush(birthdayBg));
                 eventItem->setData(QVariant(BirthdayItem), ItemTypeRole);
             } else if (values["isAnniversary"].toBool()) {
+                data["itemType"] = AnniversaryItem;
                 eventItem->setBackground(QBrush(anniversariesBg));
                 eventItem->setData(QVariant(AnniversaryItem), ItemTypeRole);
             }
@@ -264,15 +277,7 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
     } else {
         QStandardItem *eventItem;
         eventItem = new QStandardItem();
-        data.insert(StartDtTimePos, values["startDate"]);
-        data.insert(EndDtTimePos, values["endDate"]);
-        data.insert(SummaryPos, values["summary"]);
-        data.insert(DescriptionPos, values["description"]);
-        data.insert(LocationPos, values["location"]);
-        data.insert(YearsSincePos, QVariant(QString()));
-        data.insert(resourceNamePos, values["resourceName"]);
-        data.insert(BirthdayOrAnniversaryPos, QVariant(FALSE));
-
+        data["itemType"] = NormalItem;
         eventItem->setData(QVariant(NormalItem), ItemTypeRole);
         eventItem->setData(data, Qt::DisplayRole);
         eventItem->setData(values["startDate"].toDateTime(), SortRole);
@@ -289,6 +294,24 @@ void EventModel::addEventItem(const QMap <QString, QVariant> &values)
 
         addItemRow(values["startDate"].toDate(), eventItem);
     }
+}
+
+void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
+{
+    kDebug() << values["summary"];
+    QMap<QString, QVariant> data = values;
+    QStandardItem *todoItem = new QStandardItem();
+    data["itemType"] = TodoItem;
+    todoItem->setData(QVariant(TodoItem), ItemTypeRole);
+    todoItem->setData(data, Qt::DisplayRole);
+    todoItem->setData(values["dueDate"].toDateTime(), SortRole);
+    todoItem->setData(values["uid"], EventModel::UIDRole);
+    todoItem->setData(values["itemid"], ItemIDRole);
+    todoItem->setData(values["resource"], ResourceRole);
+    todoItem->setData(values["tooltip"], TooltipRole);
+    todoItem->setBackground(QBrush(todoBg));
+
+    addItemRow(values["dueDate"].toDate(), todoItem);
 }
 
 void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
@@ -406,6 +429,29 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
 #else
     values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
 #endif
+
+    return values;
+}
+
+QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal::Todo *todo, const Akonadi::Collection &collection)
+{
+    QMap <QString, QVariant> values;
+    values["resource"] = collection.resource();
+    values["resourceName"] = collection.name();
+    values["uid"] = todo->uid();
+    values["itemid"] = item.remoteId();
+    values["summary"] = todo->summary();
+    if (todo->hasDueDate()) {
+        values["dueDate"] = todo->dtDue().dateTime();
+    } else {
+        values["dueDate"] = QDateTime::currentDateTime().addDays(365);
+    }
+#if KDE_IS_VERSION(4,4,60)
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), todo);
+#else
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(todo);
+#endif
+
     return values;
 }
 
