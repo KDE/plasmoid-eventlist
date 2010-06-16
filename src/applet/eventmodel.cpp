@@ -425,8 +425,8 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["summary"] = event->summary();
     values["categories"] = event->categories();
     values["status"] = event->status();
-    values["startDate"] = event->dtStart().dateTime();
-    values["endDate"] = event->dtEnd().dateTime();
+    values["startDate"] = event->dtStart().dateTime().toLocalTime();
+    values["endDate"] = event->dtEnd().dateTime().toLocalTime();
     values["uid"] = event->uid();
     values["itemid"] = item.remoteId();
     values["description"] = event->description();
@@ -439,7 +439,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
         KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(366));
         dtTimes.sortUnique();
         foreach (KDateTime t, dtTimes) {
-            recurDates << QVariant(t.dateTime());
+            recurDates << QVariant(t.dateTime().toLocalTime());
         }
     }
     values["recurDates"] = recurDates;
@@ -464,11 +464,11 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["summary"] = todo->summary();
     values["completed"] = todo->isCompleted();
     values["percent"] = todo->percentComplete();
-    values["completedDate"] = todo->completed().dateTime();
+    values["completedDate"] = todo->completed().dateTime().toLocalTime();
     values["inProgress"] = todo->isInProgress(FALSE);
     values["isOverdue"] = todo->isOverdue();
     if (todo->hasDueDate()) {
-        values["dueDate"] = todo->dtDue().dateTime();
+        values["dueDate"] = todo->dtDue().dateTime().toLocalTime();
         values["hasDueDate"] = TRUE;
     } else {
         values["dueDate"] = QDateTime::currentDateTime().addDays(366);
