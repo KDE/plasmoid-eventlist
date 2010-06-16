@@ -69,8 +69,11 @@ Substitutions are:
         <property name="text">
          <string>The format fot the displayed text for todos.
 Substutions are:
-%{dueDate} - the date due
-%{summary} - summary</string>
+%{dueDate} - the date due,
+%{summary} - summary,
+%{percent} - percent completed,
+%{resourceName} - the i18n name of the Akonadi resource,
+%{tab} - a tabulator</string>
         </property>
        </widget>
       </item>

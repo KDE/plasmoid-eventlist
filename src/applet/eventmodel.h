@@ -94,7 +94,7 @@ private:
     QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCal::Todo *, const Akonadi::Collection &);
 
 private:
-    QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem;
+    QStandardItem *parentItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem, *somedayItem;
     QList<QStandardItem *> sectionItems;
     int urgency;
     QColor urgentBg, passedFg, birthdayBg, anniversariesBg, todoBg;

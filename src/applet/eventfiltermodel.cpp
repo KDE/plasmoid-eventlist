@@ -51,8 +51,12 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
     const QVariant d = idx.data(EventModel::SortRole);
     QDate date= d.toDate();
 
-    if (date.isValid() && date > QDate::currentDate().addDays(m_period)) {
-        return false;
+    if (date.isValid()) {
+        if (date > QDate::currentDate().addDays(365)) {
+            return true; // todos with no specified due date
+        } else if (date > QDate::currentDate().addDays(m_period)) {
+            return false;
+        }
     }
 
     const QVariant t = idx.data(EventModel::ItemTypeRole);

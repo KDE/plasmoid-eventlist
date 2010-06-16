@@ -53,6 +53,7 @@ EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList
     weekItem(0),
     monthItem(0),
     laterItem(0),
+    somedayItem(0),
     m_monitor(0)
 {
     parentItem = invisibleRootItem();
@@ -92,10 +93,12 @@ void EventModel::initModel()
         initHeaderItem(laterItem, i18n("Later"), i18n("Events later than 4 weeks"), 29);
     }
 
-    sectionItems << todayItem << tomorrowItem << weekItem << monthItem << laterItem;
+    if (!somedayItem) {
+        somedayItem = new QStandardItem();
+        initHeaderItem(somedayItem, i18n("Some day"), i18n("Todos with no due date"), 366);
+    }
 
-//     if (!m_akonadiMonitor)
-//         return events;
+    sectionItems << todayItem << tomorrowItem << weekItem << monthItem << laterItem << somedayItem;
 
     Akonadi::CollectionFetchJob *job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(),
                                                                        Akonadi::CollectionFetchJob::Recursive);
@@ -137,8 +140,6 @@ void EventModel::initMonitor()
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::todoMimeType(), true);
 
-    kDebug() << m_monitor->mimeTypesMonitored();
-
     connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
                        SLOT(eventAdded(const Akonadi::Item &, const Akonadi::Collection &)));
     connect(m_monitor, SIGNAL(itemRemoved(const Akonadi::Item &)),
@@ -174,6 +175,7 @@ void EventModel::resetModel()
     weekItem = 0;
     monthItem = 0;
     laterItem = 0;
+    somedayItem = 0;
     sectionItems.clear();
     delete m_monitor;
     m_monitor = 0;
@@ -298,7 +300,6 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 
 void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
 {
-    kDebug() << values["summary"];
     QMap<QString, QVariant> data = values;
     QStandardItem *todoItem = new QStandardItem();
     data["itemType"] = TodoItem;
@@ -360,7 +361,16 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
         resources.removeDuplicates();
         laterItem->setData(resources, ResourceRole);
         if (laterItem->row() == -1)
-            parentItem->appendRow(laterItem);
+            parentItem->insertRow(figureRow(laterItem), laterItem);
+    } else if (eventDate > QDate::currentDate().addDays(365)) {
+        somedayItem->appendRow(item);
+        somedayItem->sortChildren(0, Qt::AscendingOrder);
+        QStringList resources = somedayItem->data(ResourceRole).toStringList();
+        resources.append(item->data(ResourceRole).toString());
+        resources.removeDuplicates();
+        somedayItem->setData(resources, ResourceRole);
+        if (somedayItem->row() == -1)
+            parentItem->appendRow(somedayItem);
     }
 
     emit modelNeedsExpanding();
@@ -389,6 +399,17 @@ int EventModel::figureRow(QStandardItem *headerItem)
             return weekItem->row() + 1;
         else if (todayItem->row() > -1 || tomorrowItem->row() > -1)
             return 1;
+        else
+            return 0;
+    } else if (headerItem == laterItem) {
+        if (todayItem->row() > -1 && tomorrowItem->row() > -1 && weekItem->row() > -1 && monthItem->row() > -1)
+            return 4;
+        else if (monthItem->row() > -1)
+            return monthItem->row() + 1;
+        else if (tomorrowItem->row() > -1)
+            return tomorrowItem->row() +1;
+        else if (todayItem->row() > -1)
+            return todayItem->row() +1;
         else
             return 0;
     }
@@ -441,10 +462,17 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["uid"] = todo->uid();
     values["itemid"] = item.remoteId();
     values["summary"] = todo->summary();
+    values["completed"] = todo->isCompleted();
+    values["percent"] = todo->percentComplete();
+    values["completedDate"] = todo->completed().dateTime();
+    values["inProgress"] = todo->isInProgress(FALSE);
+    values["isOverdue"] = todo->isOverdue();
     if (todo->hasDueDate()) {
         values["dueDate"] = todo->dtDue().dateTime();
+        values["hasDueDate"] = TRUE;
     } else {
-        values["dueDate"] = QDateTime::currentDateTime().addDays(365);
+        values["dueDate"] = QDateTime::currentDateTime().addDays(366);
+        values["hasDueDate"] = FALSE;
     }
 #if KDE_IS_VERSION(4,4,60)
     values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), todo);

@@ -48,8 +48,6 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
 {
     Q_UNUSED(locale);
     QMap<QString, QVariant> data = value.toMap();
-    QHash<QString,QString> dataHash;
-    ulong s;
 
     int itemType = data["itemType"].toInt();
     switch (itemType) {
@@ -59,33 +57,55 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
         case EventModel::NormalItem:
         case EventModel::BirthdayItem:
         case EventModel::AnniversaryItem:
-            dataHash.insert("startDate", formattedDate(data["startDate"]));
-            dataHash.insert("endDate", formattedDate(data["endDate"]));
-            dataHash.insert("startTime", KGlobal::locale()->formatTime(data["startDate"].toTime()));
-            dataHash.insert("endTime", KGlobal::locale()->formatTime(data["endDate"].toTime()));
-            s = data["startDate"].toDateTime().secsTo(data["endDate"].toDateTime());
-            dataHash.insert("duration", QString::number(s / 3600));
-            dataHash.insert("summary", data["summary"].toString());
-            dataHash.insert("description", data["description"].toString());
-            dataHash.insert("location", data["location"].toString());
-            dataHash.insert("yearsSince", data["yearsSince"].toString());
-            dataHash.insert("resourceName", data["resourceName"].toString());
-            dataHash.insert("tab", "\t");
+            if (data["isBirthday"].toBool() == TRUE || data["isAnniversary"].toBool() == TRUE) {
+                return KMacroExpander::expandMacros(m_birthdayOrAnniversary, eventHash(data));
+            } else {
+                return KMacroExpander::expandMacros(m_normal, eventHash(data));
+            }
             break;
         case EventModel::TodoItem:
-            return formattedDate(data["dueDate"]) + " " + data["summary"].toString();
+            if (data["hasDueDate"].toBool() == FALSE)
+                return data["summary"].toString();
+            else
+                return KMacroExpander::expandMacros(m_todo, todoHash(data));
+            break;
         default:
             break;
     }
 
-    QString myText;
-    if (data["isBirthday"].toBool() == TRUE || data["isAnniversary"].toBool() == TRUE) {
-        myText = m_birthdayOrAnniversary;
-    } else {
-        myText = m_normal;
-    }
+    return QString();
+}
 
-    return KMacroExpander::expandMacros(myText, dataHash);
+QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> data) const
+{
+    QHash<QString,QString> dataHash;
+    ulong s;
+    dataHash.insert("startDate", formattedDate(data["startDate"]));
+    dataHash.insert("endDate", formattedDate(data["endDate"]));
+    dataHash.insert("startTime", KGlobal::locale()->formatTime(data["startDate"].toTime()));
+    dataHash.insert("endTime", KGlobal::locale()->formatTime(data["endDate"].toTime()));
+    s = data["startDate"].toDateTime().secsTo(data["endDate"].toDateTime());
+    dataHash.insert("duration", QString::number(s / 3600));
+    dataHash.insert("summary", data["summary"].toString());
+    dataHash.insert("description", data["description"].toString());
+    dataHash.insert("location", data["location"].toString());
+    dataHash.insert("yearsSince", data["yearsSince"].toString());
+    dataHash.insert("resourceName", data["resourceName"].toString());
+    dataHash.insert("tab", "\t");
+
+    return dataHash;
+}
+
+QHash<QString, QString> EventItemDelegate::todoHash(QMap<QString, QVariant> data) const
+{
+    QHash<QString,QString> dataHash;
+    dataHash.insert("dueDate", formattedDate(data["dueDate"]));
+    dataHash.insert("summary", data["summary"].toString());
+    dataHash.insert("resourceName", data["resourceName"].toString());
+    dataHash.insert("percent", QString::number(data["percent"].toInt()));
+    dataHash.insert("tab", "\t");
+
+    return dataHash;
 }
 
 QString EventItemDelegate::formattedDate(const QVariant &dtTime) const
