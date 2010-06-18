@@ -141,13 +141,13 @@ void EventModel::initMonitor()
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::todoMimeType(), true);
 
     connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
-                       SLOT(eventAdded(const Akonadi::Item &, const Akonadi::Collection &)));
+                       SLOT(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)));
     connect(m_monitor, SIGNAL(itemRemoved(const Akonadi::Item &)),
-                       SLOT(eventRemoved(const Akonadi::Item &)));
+                       SLOT(removeItem(const Akonadi::Item &)));
     connect(m_monitor, SIGNAL(itemChanged(const Akonadi::Item &, const QSet<QByteArray> &)),
-                       SLOT(eventChanged(const Akonadi::Item &, const QSet<QByteArray> &)));
+                       SLOT(itemChanged(const Akonadi::Item &, const QSet<QByteArray> &)));
     connect(m_monitor, SIGNAL(itemMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)),
-                       SLOT(eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)));
+                       SLOT(itemMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)));
 }
 
 void EventModel::initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days)
@@ -200,23 +200,13 @@ void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors, int 
     todoBg = itemColors.at(todoColorPos);
 }
 
-void EventModel::eventAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
+void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
     kDebug() << "item added" << item.remoteId();
-    if (item.hasPayload<KCal::Event::Ptr>()) {
-        KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
-        if (event) {
-            addEventItem(eventDetails(item, event, collection));
-        } // if event
-    } else if (item.hasPayload <KCal::Todo::Ptr>()) {
-        KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
-        if (todo) {
-            addTodoItem(todoDetails(item, todo, collection));
-        }
-    }
+    addItem(item, collection);
 }
 
-void EventModel::eventRemoved(const Akonadi::Item &item)
+void EventModel::removeItem(const Akonadi::Item &item)
 {
     kDebug() << "eventRemoved" << item.remoteId();
     foreach (QStandardItem *i, sectionItems) {
@@ -235,14 +225,31 @@ void EventModel::eventRemoved(const Akonadi::Item &item)
     }
 }
 
-void EventModel::eventChanged(const Akonadi::Item &, const QSet<QByteArray> &)
+void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &)
 {
     kDebug() << "event changed";
 }
 
-void EventModel::eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &)
+void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection &, const Akonadi::Collection &)
 {
     kDebug() << "event moved";
+    removeItem(item);
+    addItem(item, item.parentCollection());
+}
+
+void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &collection)
+{
+    if (item.hasPayload<KCal::Event::Ptr>()) {
+        KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
+        if (event) {
+            addEventItem(eventDetails(item, event, collection));
+        } // if event
+    } else if (item.hasPayload <KCal::Todo::Ptr>()) {
+        KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
+        if (todo) {
+            addTodoItem(todoDetails(item, todo, collection));
+        }
+    }
 }
 
 void EventModel::addEventItem(const QMap<QString, QVariant> &values)

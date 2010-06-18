@@ -81,13 +81,14 @@ public:
 private slots:
     void addEventItem(const QMap <QString, QVariant> &values);
     void addTodoItem(const QMap <QString, QVariant> &values);
-    void eventAdded(const Akonadi::Item &, const Akonadi::Collection &);
-    void eventRemoved(const Akonadi::Item &);
-    void eventChanged(const Akonadi::Item &, const QSet<QByteArray> &);
-    void eventMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &);
+    void itemAdded(const Akonadi::Item &, const Akonadi::Collection &);
+    void removeItem(const Akonadi::Item &);
+    void itemChanged(const Akonadi::Item &, const QSet<QByteArray> &);
+    void itemMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &);
 
 private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
+    void addItem(const Akonadi::Item &item, const Akonadi::Collection &collection);
     void addItemRow(QDate eventDate, QStandardItem *items);
     int figureRow(QStandardItem *headerItem);
     QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *, const Akonadi::Collection &);
