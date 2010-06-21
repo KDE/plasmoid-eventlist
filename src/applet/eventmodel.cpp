@@ -325,62 +325,36 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
 void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
 {
     if (eventDate == QDate::currentDate()) {
-        todayItem->appendRow(item);
-        todayItem->sortChildren(0, Qt::AscendingOrder);
-        QStringList resources = todayItem->data(ResourceRole).toStringList();
-        resources.append(item->data(ResourceRole).toString());
-        resources.removeDuplicates();
-        todayItem->setData(resources, ResourceRole);
-        if (todayItem->row() == -1)
-            parentItem->insertRow(figureRow(todayItem), todayItem);
+        addItemToHeader(todayItem, item);
     } else if (eventDate > QDate::currentDate() && eventDate <= QDate::currentDate().addDays(1)) {
-        tomorrowItem->appendRow(item);
-        tomorrowItem->sortChildren(0, Qt::AscendingOrder);
-        QStringList resources = tomorrowItem->data(ResourceRole).toStringList();
-        resources.append(item->data(ResourceRole).toString());
-        resources.removeDuplicates();
-        tomorrowItem->setData(resources, ResourceRole);
-        if (tomorrowItem->row() == -1)
-            parentItem->insertRow(figureRow(tomorrowItem), tomorrowItem);
+        addItemToHeader(tomorrowItem, item);
     } else if (eventDate > QDate::currentDate().addDays(1) && eventDate <= QDate::currentDate().addDays(7)) {
-        weekItem->appendRow(item);
-        weekItem->sortChildren(0, Qt::AscendingOrder);
-        QStringList resources = weekItem->data(ResourceRole).toStringList();
-        resources.append(item->data(ResourceRole).toString());
-        resources.removeDuplicates();
-        weekItem->setData(resources, ResourceRole);
-        if (weekItem->row() == -1)
-            parentItem->insertRow(figureRow(weekItem), weekItem);
+        addItemToHeader(weekItem, item);
     } else if (eventDate > QDate::currentDate().addDays(7) && eventDate <= QDate::currentDate().addDays(28)) {
-        monthItem->appendRow(item);
-        monthItem->sortChildren(0, Qt::AscendingOrder);
-        QStringList resources = monthItem->data(ResourceRole).toStringList();
-        resources.append(item->data(ResourceRole).toString());
-        resources.removeDuplicates();
-        monthItem->setData(resources, ResourceRole);
-        if (monthItem->row() == -1)
-            parentItem->insertRow(figureRow(monthItem), monthItem);
+        addItemToHeader(monthItem, item);
     } else if (eventDate > QDate::currentDate().addDays(28) && eventDate <= QDate::currentDate().addDays(365)) {
-        laterItem->appendRow(item);
-        laterItem->sortChildren(0, Qt::AscendingOrder);
-        QStringList resources = laterItem->data(ResourceRole).toStringList();
-        resources.append(item->data(ResourceRole).toString());
-        resources.removeDuplicates();
-        laterItem->setData(resources, ResourceRole);
-        if (laterItem->row() == -1)
-            parentItem->insertRow(figureRow(laterItem), laterItem);
+        addItemToHeader(laterItem, item);
     } else if (eventDate > QDate::currentDate().addDays(365)) {
-        somedayItem->appendRow(item);
-        somedayItem->sortChildren(0, Qt::AscendingOrder);
-        QStringList resources = somedayItem->data(ResourceRole).toStringList();
-        resources.append(item->data(ResourceRole).toString());
-        resources.removeDuplicates();
-        somedayItem->setData(resources, ResourceRole);
-        if (somedayItem->row() == -1)
-            parentItem->appendRow(somedayItem);
+        addItemToHeader(somedayItem, item);
     }
 
     emit modelNeedsExpanding();
+}
+
+void EventModel::addItemToHeader(QStandardItem *headerItem, QStandardItem *item)
+{
+    headerItem->appendRow(item);
+    headerItem->sortChildren(0, Qt::AscendingOrder);
+    QStringList resources = headerItem->data(ResourceRole).toStringList();
+    resources.append(item->data(ResourceRole).toString());
+    resources.removeDuplicates();
+    headerItem->setData(resources, ResourceRole);
+    if (headerItem->row() == -1) {
+        if (headerItem == somedayItem)
+            parentItem->appendRow(headerItem);
+        else
+            parentItem->insertRow(figureRow(headerItem), headerItem);
+    }
 }
 
 int EventModel::figureRow(QStandardItem *headerItem)

@@ -90,6 +90,7 @@ private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
     void addItem(const Akonadi::Item &item, const Akonadi::Collection &collection);
     void addItemRow(QDate eventDate, QStandardItem *items);
+    void addItemToHeader(QStandardItem *headerItem, QStandardItem *item);
     int figureRow(QStandardItem *headerItem);
     QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *, const Akonadi::Collection &);
     QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCal::Todo *, const Akonadi::Collection &);
