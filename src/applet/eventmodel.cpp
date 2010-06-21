@@ -202,18 +202,19 @@ void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors, int 
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
+#if KDE_IS_VERSION(4,5,1)
     kDebug() << "item added" << item.remoteId();
+#else
     addItem(item, collection);
+#endif
 }
 
 void EventModel::removeItem(const Akonadi::Item &item)
 {
-    kDebug() << "eventRemoved" << item.remoteId();
     foreach (QStandardItem *i, sectionItems) {
         QModelIndexList l;
         if (i->hasChildren())
             l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.remoteId());
-        kDebug() << l;
         if (!l.isEmpty())
             i->removeRow(l[0].row());
         int r = i->row();
@@ -227,14 +228,20 @@ void EventModel::removeItem(const Akonadi::Item &item)
 
 void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &)
 {
-    kDebug() << "event changed";
+    kDebug() << "item changed";
+#if KDE_IS_VERSION(4,5,1)
+    removeItem(item);
+    addItem(item, item.parentCollection());
+#endif
 }
 
 void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection &, const Akonadi::Collection &)
 {
-    kDebug() << "event moved";
+    kDebug() << "item moved";
+#if KDE_IS_VERSION(4,5,1)
     removeItem(item);
     addItem(item, item.parentCollection());
+#endif
 }
 
 void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &collection)
