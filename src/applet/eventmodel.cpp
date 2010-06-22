@@ -26,7 +26,6 @@
 #include <akonadi/item.h>
 #include <akonadi/itemfetchjob.h>
 #include <akonadi/itemfetchscope.h>
-#include <akonadi/kcal/incidencemimetypevisitor.h>
 #include <akonadi/itemfetchscope.h>
 #include <akonadi/entitydisplayattribute.h>
 #include <akonadi/servermanager.h>
@@ -45,6 +44,10 @@
 #include <Plasma/Theme>
 
 #include <KDebug>
+
+#if KDE_IS_VERSION(4,4,0)
+#include <akonadi/kcal/incidencemimetypevisitor.h>
+#endif
 
 EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList, int days) : QStandardItemModel(parent),
     parentItem(0),
@@ -137,8 +140,13 @@ void EventModel::initMonitor()
     m_monitor->fetchCollection(true);
     m_monitor->setItemFetchScope(scope);
     m_monitor->setCollectionMonitored(Akonadi::Collection::root());
+#if KDE_IS_VERSION(4,4,0)
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::todoMimeType(), true);
+#else
+    m_monitor->setMimeTypeMonitored("application/x-vnd.akonadi.calendar.event", true);
+    m_monitor->setMimeTypeMonitored("application/x-vnd.akonadi.calendar.todo", true);
+#endif
 
     connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
                        SLOT(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)));
