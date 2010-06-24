@@ -138,7 +138,7 @@ void EventApplet::setupModel()
     
     m_agentManager = Akonadi::AgentManager::self();
 
-    m_model = new EventModel(this, m_urgency, m_colors, m_period);
+    m_model = new EventModel(this, m_urgency, m_colors);
     m_model->setSortRole(EventModel::SortRole);
     m_model->sort(0, Qt::AscendingOrder);
 
@@ -429,9 +429,9 @@ void EventApplet::configAccepted()
     todoColor.setAlphaF(todoOpacity/100.0);
     m_colors.insert(todoColorPos, todoColor);
 
-    m_model->settingsChanged(m_urgency, m_colors, m_period);
+    m_model->settingsChanged(m_urgency, m_colors);
 
-    if (oldPeriod != m_period) { //just rebuild model if period changed
+    if (oldPeriod != m_period) {
         m_filterModel->setPeriod(m_period);
     }
 

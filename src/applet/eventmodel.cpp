@@ -49,7 +49,7 @@
 #include <akonadi/kcal/incidencemimetypevisitor.h>
 #endif
 
-EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList, int days) : QStandardItemModel(parent),
+EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList) : QStandardItemModel(parent),
     parentItem(0),
     todayItem(0),
     tomorrowItem(0),
@@ -60,7 +60,7 @@ EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList
     m_monitor(0)
 {
     parentItem = invisibleRootItem();
-    settingsChanged(urgencyTime, colorList, days);
+    settingsChanged(urgencyTime, colorList);
     initModel();
     initMonitor();
 }
@@ -198,7 +198,7 @@ void EventModel::resetModel()
     }
 }
 
-void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors, int period)
+void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors)
 {
     urgency = urgencyTime;
     urgentBg = itemColors.at(urgentColorPos);

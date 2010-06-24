@@ -68,7 +68,7 @@ public:
         TodoItem
     };
 
-    EventModel(QObject *parent = 0, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>(), int days = 365);
+    EventModel(QObject *parent = 0, int urgencyTime = 15, QList<QColor> colorList = QList<QColor>());
     ~EventModel();
 
 public:
@@ -76,7 +76,7 @@ public:
     void initModel();
     void initMonitor();
     void resetModel();
-    void settingsChanged(int urgencyTime, QList<QColor> itemColors, int period);
+    void settingsChanged(int urgencyTime, QList<QColor> itemColors);
 
 private slots:
     void addEventItem(const QMap <QString, QVariant> &values);
