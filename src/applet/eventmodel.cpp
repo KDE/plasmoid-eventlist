@@ -365,52 +365,22 @@ void EventModel::addItemToHeader(QStandardItem *headerItem, QStandardItem *item)
     resources.removeDuplicates();
     headerItem->setData(resources, ResourceRole);
     if (headerItem->row() == -1) {
-        if (headerItem == somedayItem)
-            parentItem->appendRow(headerItem);
-        else
-            parentItem->insertRow(figureRow(headerItem), headerItem);
+        parentItem->insertRow(figureRow(headerItem), headerItem);
     }
 }
 
 int EventModel::figureRow(QStandardItem *headerItem)
 {
-    if (headerItem == todayItem) {
-        return 0;
-    } else if (headerItem == tomorrowItem) {
-        if (todayItem->row() > -1)
-            return 1;
-        else
-            return 0;
-    } else if (headerItem == weekItem) {
-        if (todayItem->row() > -1 && tomorrowItem->row() > -1)
-            return 2;
-        else if (todayItem->row() > -1 || tomorrowItem->row() > -1)
-            return 1;
-        else
-            return 0;
-    } else if (headerItem == monthItem) {
-        if (todayItem->row() > -1 && tomorrowItem->row() > -1 && weekItem->row() > -1)
-            return 3;
-        else if (weekItem->row() > -1)
-            return weekItem->row() + 1;
-        else if (todayItem->row() > -1 || tomorrowItem->row() > -1)
-            return 1;
-        else
-            return 0;
-    } else if (headerItem == laterItem) {
-        if (todayItem->row() > -1 && tomorrowItem->row() > -1 && weekItem->row() > -1 && monthItem->row() > -1)
-            return 4;
-        else if (monthItem->row() > -1)
-            return monthItem->row() + 1;
-        else if (tomorrowItem->row() > -1)
-            return tomorrowItem->row() +1;
-        else if (todayItem->row() > -1)
-            return todayItem->row() +1;
-        else
-            return 0;
+    int row = 0;
+
+    foreach (QStandardItem *item, sectionItems) {
+        if (item->data(SortRole).toDateTime() >= headerItem->data(SortRole).toDateTime())
+            break;
+        if (item->row() != -1)
+            row = item->row() + 1;
     }
 
-    return -1;
+    return row;
 }
 
 QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal::Event *event, const Akonadi::Collection &collection)
