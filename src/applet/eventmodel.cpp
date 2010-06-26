@@ -431,7 +431,9 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["completed"] = todo->isCompleted();
     values["percent"] = todo->percentComplete();
     values["completedDate"] = todo->completed().dateTime().toLocalTime();
+#if KDE_IS_VERSION(4,4,0)
     values["inProgress"] = todo->isInProgress(FALSE);
+#endif
     values["isOverdue"] = todo->isOverdue();
     if (todo->hasDueDate()) {
         values["dueDate"] = todo->dtDue().dateTime().toLocalTime();
