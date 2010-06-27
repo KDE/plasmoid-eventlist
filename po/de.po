@@ -1,101 +1,110 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+# Gerd Fleischer <GerdFleischer@gmx.de>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.2.4\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-03-17 10:04+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Gerd Fleischer <gerdfleischer@web.de>\n"
-"Language-Team: de <LL@li.org>\n"
+"POT-Creation-Date: 2010-06-27 10:16+0200\n"
+"PO-Revision-Date: 2010-06-27 10:22+0200\n"
+"Last-Translator: Gerd Fleischer <GerdFleischer@gmx.de>\n"
+"Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: eventapplet.cpp:154
-msgid "%1 retries to start/connect to the Akonadi server"
-msgstr "%1 Versuche eine Verbindung zum Akonadiserver herzustellen"
-
-#: eventapplet.cpp:159
-msgid "Could not connect to the Akonadi server"
-msgstr "Konnte keine Verbindung zum Akonadiserver herstellen"
-
-#: eventapplet.cpp:219 eventapplet.cpp:388
+#: eventapplet.cpp:206 eventapplet.cpp:325
 msgid "Upcoming Events"
 msgstr "Anstehende Termine"
 
-#: eventapplet.cpp:323
+#: eventapplet.cpp:255
 msgid "Open current event"
 msgstr "Aktuellen Termin öffnen"
 
-#: eventapplet.cpp:328
+#: eventapplet.cpp:260
 msgid "Add new event"
 msgstr "Neuer Termin"
 
-#: eventapplet.cpp:333
+#: eventapplet.cpp:265
 msgid "Select shown resources"
 msgstr "Angezeigte Ressourcen auswählen"
 
-#: eventapplet.cpp:342
+#: eventapplet.cpp:274
 msgid "Select Resources"
 msgstr "Ressourcen auswählen"
 
-#: eventapplet.cpp:389
+#: eventapplet.cpp:326
 msgid "Upcoming events from Akonadi resources"
 msgstr "Anstehende Termine von Akonadi Ressourcen"
 
-#: eventapplet.cpp:411
+#: eventapplet.cpp:348
 msgid "Text Format"
 msgstr "Textformat"
 
-#: eventapplet.cpp:412
+#: eventapplet.cpp:349
 msgid "Colors"
 msgstr "Farben"
 
-#: eventmodel.cpp:56
+#: eventmodel.cpp:77
+msgid "Earlier stuff"
+msgstr "Ältere Dinge "
+
+#: eventmodel.cpp:77
+msgid "Unfinished todos, still ongoing earlier events etc."
+msgstr "Unfertige Aufgaben, noch währende Termine etc."
+
+#: eventmodel.cpp:82
 msgid "Today"
 msgstr "Heute"
 
-#: eventmodel.cpp:56
+#: eventmodel.cpp:82
 msgid "Events of today"
 msgstr "Termine von heute"
 
-#: eventmodel.cpp:61
+#: eventmodel.cpp:87
 msgid "Tomorrow"
 msgstr "Morgen"
 
-#: eventmodel.cpp:61
-msgid "Events for tomrrow"
+#: eventmodel.cpp:87
+msgid "Events for tomorrow"
 msgstr "Termine von morgen"
 
-#: eventmodel.cpp:66
+#: eventmodel.cpp:92
 msgid "Week"
 msgstr "Nächste 7 Tage"
 
-#: eventmodel.cpp:66
+#: eventmodel.cpp:92
 msgid "Events of the next week"
 msgstr "Termine der nächsten Woche"
 
-#: eventmodel.cpp:71
+#: eventmodel.cpp:97
 msgid "Next 4 weeks"
 msgstr "Nächste 4 Wochen"
 
-#: eventmodel.cpp:71
+#: eventmodel.cpp:97
 msgid "Events for the next 4 weeks"
 msgstr "Termine des nächsten Monats"
 
-#: eventmodel.cpp:76
+#: eventmodel.cpp:102
 msgid "Later"
 msgstr "Später"
 
-#: eventmodel.cpp:76
+#: eventmodel.cpp:102
 msgid "Events later than 4 weeks"
 msgstr "Termine später als 4 Wochen"
 
-#: eventmodel.cpp:104
+#: eventmodel.cpp:107
+msgid "Some day"
+msgstr "Irgendwann"
+
+#: eventmodel.cpp:107
+msgid "Todos with no due date"
+msgstr "Aufgaben ohne festen Termin"
+
+#: eventmodel.cpp:201
 msgid "The Akonadi server is not running!"
 msgstr "Der Akonadiserver läuft nicht!"
 
@@ -103,7 +112,7 @@ msgstr "Der Akonadiserver läuft nicht!"
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
 #. i18n: file: eventappletformatconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletFormatConfig)
-#: rc.cpp:3 rc.cpp:69
+#: rc.cpp:3 rc.cpp:82
 msgid "Form"
 msgstr "Form"
 
@@ -155,7 +164,9 @@ msgstr "Die Hintergrundfarbe für bald beginnende Termine."
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: file: eventappletcolorconfig.ui:191
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: rc.cpp:27 rc.cpp:49 rc.cpp:62
+#. i18n: file: eventappletcolorconfig.ui:234
+#. i18n: ectx: property (text), widget (QLabel, label_10)
+#: rc.cpp:27 rc.cpp:49 rc.cpp:62 rc.cpp:75
 msgid "Opacity:"
 msgstr "Deckkraft:"
 
@@ -165,7 +176,9 @@ msgstr "Deckkraft:"
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayOpacity)
 #. i18n: file: eventappletcolorconfig.ui:198
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, anniversariesOpacity)
-#: rc.cpp:31 rc.cpp:53 rc.cpp:66
+#. i18n: file: eventappletcolorconfig.ui:241
+#. i18n: ectx: property (suffix), widget (KIntSpinBox, todoOpacity)
+#: rc.cpp:31 rc.cpp:53 rc.cpp:66 rc.cpp:79
 #, no-c-format
 msgid "%"
 msgstr "%"
@@ -212,15 +225,27 @@ msgstr "Hintergrundfarbe für Jahrestage:"
 msgid "The backgroundcolor for anniversaries."
 msgstr "Die Hintergrundfarbe für Jahrestage."
 
+#. i18n: file: eventappletcolorconfig.ui:211
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rc.cpp:69
+msgid "Colors for todos"
+msgstr "Farben für Aufgaben"
+
+#. i18n: file: eventappletcolorconfig.ui:217
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: rc.cpp:72
+msgid "Backgroundcolor for todos:"
+msgstr "Hintergrundfarbe für Aufgaben:"
+
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: rc.cpp:72
+#: rc.cpp:85
 msgid "Event text formatting"
 msgstr "Ereigniss Textformatierung"
 
 #. i18n: file: eventappletformatconfig.ui:34
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: rc.cpp:76
+#: rc.cpp:89
 #, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
@@ -246,87 +271,120 @@ msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:41
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: rc.cpp:87
+#: rc.cpp:100
 msgid "Format for normal events:"
 msgstr "Format für normale Ereignisse"
 
 #. i18n: file: eventappletformatconfig.ui:51
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: rc.cpp:90
+#: rc.cpp:103
 msgid "Birthday & Anniversaries:"
 msgstr "Geburtstage & Jahrestage:"
 
 #. i18n: file: eventappletformatconfig.ui:64
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
+#: rc.cpp:106
+msgid "Todo text formatting"
+msgstr "Aufgaben Textformatierung"
+
+#. i18n: file: eventappletformatconfig.ui:76
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: rc.cpp:110
+#, no-c-format
+msgid ""
+"The format fot the displayed text for todos.\n"
+"Substutions are:\n"
+"%{dueDate} - the date due,\n"
+"%{summary} - summary,\n"
+"%{percent} - percent completed,\n"
+"%{resourceName} - the i18n name of the Akonadi resource,\n"
+"%{tab} - a tabulator"
+msgstr ""
+"Das Format für den angezeigten Text für Aufgaben.\n"
+"Als Platzhalter kann verwendet werden:\n"
+"%{dueDate} - Fälligkeitstermin,\n"
+"%{summary} - Zusammenfassung,\n"
+"%{percent} - erledigter Anteil,\n"
+"%{resourceName} - der i18n Name der Akonadi Ressource,\n"
+"%{tab} - ein Tabulator"
+
+#. i18n: file: eventappletformatconfig.ui:89
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: rc.cpp:93
+#: rc.cpp:119
 msgid "Date appearance settings"
 msgstr "Einstellung für die Datumsanzeige"
 
-#. i18n: file: eventappletformatconfig.ui:70
+#. i18n: file: eventappletformatconfig.ui:95
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rc.cpp:96
+#: rc.cpp:122
 msgid "Date format:"
 msgstr "Datumsformat:"
 
-#. i18n: file: eventappletformatconfig.ui:77
+#. i18n: file: eventappletformatconfig.ui:102
 #. i18n: ectx: property (toolTip), widget (KComboBox, dateFormatBox)
-#: rc.cpp:99
+#: rc.cpp:125
 msgid "What date format to use."
 msgstr "Verwendetes Datumsformat."
 
-#. i18n: file: eventappletformatconfig.ui:81
+#. i18n: file: eventappletformatconfig.ui:106
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:102
+#: rc.cpp:128
 msgid "KDE ShortDate"
 msgstr "KDE Kurzes Datum"
 
-#. i18n: file: eventappletformatconfig.ui:86
+#. i18n: file: eventappletformatconfig.ui:111
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:105
+#: rc.cpp:131
 msgid "KDE LongDate"
 msgstr "KDE Langes Datum"
 
-#. i18n: file: eventappletformatconfig.ui:91
+#. i18n: file: eventappletformatconfig.ui:116
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:108
+#: rc.cpp:134
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#. i18n: file: eventappletformatconfig.ui:99
+#. i18n: file: eventappletformatconfig.ui:124
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rc.cpp:111
+#: rc.cpp:137
 msgid "Custom format:"
 msgstr "Benutzerdefiniertes Format:"
 
-#. i18n: file: eventappletformatconfig.ui:106
+#. i18n: file: eventappletformatconfig.ui:131
 #. i18n: ectx: property (toolTip), widget (KLineEdit, customFormatEdit)
-#: rc.cpp:114
+#: rc.cpp:140
 msgid "A string describing the custom format. It is using the QDate syntax."
 msgstr ""
 "Eine Zeichenfolge für das benutzerdefinierte Format. Es wird die QDate "
 "Syntax verwendet."
 
-#. i18n: file: eventappletformatconfig.ui:116
+#. i18n: file: eventappletformatconfig.ui:141
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: rc.cpp:117
+#: rc.cpp:143
 msgid "Miscellenous options"
 msgstr "Verschiedene Optionen"
 
-#. i18n: file: eventappletformatconfig.ui:122
+#. i18n: file: eventappletformatconfig.ui:147
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: rc.cpp:120
+#: rc.cpp:146
 msgid "Period to show events (in days):"
 msgstr "Angezeigter Zeitraum (in Tagen):"
 
-#: rc.cpp:121
+#: rc.cpp:147
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Gerd Fleischer"
 
-#: rc.cpp:122
+#: rc.cpp:148
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "gerdfleischer@web.de"
+
+#~ msgid "%1 retries to start/connect to the Akonadi server"
+#~ msgstr "%1 Versuche eine Verbindung zum Akonadiserver herzustellen"
+
+#~ msgid "Could not connect to the Akonadi server"
+#~ msgstr "Konnte keine Verbindung zum Akonadiserver herstellen"
 
 #~ msgid "Events after the next month"
 #~ msgstr "Termine nach dem nächsten Monat"
