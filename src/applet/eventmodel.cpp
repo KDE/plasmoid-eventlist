@@ -51,6 +51,7 @@
 
 EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList) : QStandardItemModel(parent),
     parentItem(0),
+    olderItem(0),
     todayItem(0),
     tomorrowItem(0),
     weekItem(0),
@@ -71,6 +72,11 @@ EventModel::~EventModel()
 
 void EventModel::initModel()
 {
+    if (!olderItem) {
+        olderItem = new QStandardItem();
+        initHeaderItem(olderItem, i18n("Earlier stuff"), i18n("Unfinished todos, still ongoing earlier events etc."), -28);
+    }
+
     if (!todayItem) {
         todayItem = new QStandardItem();
         initHeaderItem(todayItem, i18n("Today"), i18n("Events of today"), 0);
@@ -101,7 +107,8 @@ void EventModel::initModel()
         initHeaderItem(somedayItem, i18n("Some day"), i18n("Todos with no due date"), 366);
     }
 
-    sectionItems << todayItem << tomorrowItem << weekItem << monthItem << laterItem << somedayItem;
+    // this list should always be sorted by date
+    sectionItems << olderItem << todayItem << tomorrowItem << weekItem << monthItem << laterItem << somedayItem;
 
     Akonadi::CollectionFetchJob *job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(),
                                                                        Akonadi::CollectionFetchJob::Recursive);
@@ -178,6 +185,7 @@ void EventModel::resetModel()
 {
     clear();
     parentItem = invisibleRootItem();
+    olderItem = 0;
     todayItem = 0;
     tomorrowItem = 0;
     weekItem = 0;
