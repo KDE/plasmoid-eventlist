@@ -337,35 +337,29 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
     addItemRow(values["dueDate"].toDate(), todoItem);
 }
 
-void EventModel::addItemRow(QDate eventDate, QStandardItem *item)
+void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
 {
-    if (eventDate == QDate::currentDate()) {
-        addItemToHeader(todayItem, item);
-    } else if (eventDate > QDate::currentDate() && eventDate <= QDate::currentDate().addDays(1)) {
-        addItemToHeader(tomorrowItem, item);
-    } else if (eventDate > QDate::currentDate().addDays(1) && eventDate <= QDate::currentDate().addDays(7)) {
-        addItemToHeader(weekItem, item);
-    } else if (eventDate > QDate::currentDate().addDays(7) && eventDate <= QDate::currentDate().addDays(28)) {
-        addItemToHeader(monthItem, item);
-    } else if (eventDate > QDate::currentDate().addDays(28) && eventDate <= QDate::currentDate().addDays(365)) {
-        addItemToHeader(laterItem, item);
-    } else if (eventDate > QDate::currentDate().addDays(365)) {
-        addItemToHeader(somedayItem, item);
+    QStandardItem *headerItem = 0;
+
+    foreach (QStandardItem *item, sectionItems) {
+        if (eventDate < item->data(SortRole).toDate())
+            break;
+        else
+            headerItem = item;
     }
 
-    emit modelNeedsExpanding();
-}
-
-void EventModel::addItemToHeader(QStandardItem *headerItem, QStandardItem *item)
-{
-    headerItem->appendRow(item);
-    headerItem->sortChildren(0, Qt::AscendingOrder);
-    QStringList resources = headerItem->data(ResourceRole).toStringList();
-    resources.append(item->data(ResourceRole).toString());
-    resources.removeDuplicates();
-    headerItem->setData(resources, ResourceRole);
-    if (headerItem->row() == -1) {
-        parentItem->insertRow(figureRow(headerItem), headerItem);
+    if (headerItem) {
+        headerItem->appendRow(incidenceItem);
+        headerItem->sortChildren(0, Qt::AscendingOrder);
+        QStringList resources = headerItem->data(ResourceRole).toStringList();
+        resources.append(incidenceItem->data(ResourceRole).toString());
+        resources.removeDuplicates();
+        headerItem->setData(resources, ResourceRole);
+        if (headerItem->row() == -1) {
+            parentItem->insertRow(figureRow(headerItem), headerItem);
+        }
+        
+        emit modelNeedsExpanding();
     }
 }
 
