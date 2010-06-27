@@ -48,27 +48,56 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
 {
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
 
+    const QVariant t = idx.data(EventModel::ItemTypeRole);
     const QVariant d = idx.data(EventModel::SortRole);
     QDate date= d.toDate();
 
     if (date.isValid()) {
         if (date > QDate::currentDate().addDays(365)) {
-            return true; // todos with no specified due date
+            return TRUE; // todos with no specified due date
         } else if (date > QDate::currentDate().addDays(m_period)) {
-            return false;
+            return FALSE;
+        } else if (date < QDate::currentDate()) {
+            if (t.toInt() == EventModel::HeaderItem) {
+                if (sourceModel()->hasChildren(idx)) {
+                    int rows = sourceModel()->rowCount(idx);
+                    for (int row = 0; row < rows; ++row) {
+                        QModelIndex childIdx = sourceModel()->index(row, 0, idx);
+                        const QVariant v = childIdx.data(Qt::DisplayRole);
+                        QMap<QString, QVariant> values = v.toMap();
+                        if (t.toInt() == EventModel::TodoItem) {
+                            if (values["completed"].toBool() == FALSE)
+                                return TRUE;
+                        } else {
+                            if (values["endDate"].toDate() >= QDate::currentDate())
+                                return TRUE;
+                        }
+                    }
+                }
+                return FALSE;
+            } else {
+                const QVariant v = idx.data(Qt::DisplayRole);
+                QMap<QString, QVariant> values = v.toMap();
+                if (t.toInt() == EventModel::TodoItem) {
+                    if (values["completed"].toBool() == TRUE)
+                        return FALSE;
+                } else {
+                    if (values["endDate"].toDate() < QDate::currentDate())
+                        return FALSE;
+                }
+            }
         }
     }
 
-    const QVariant t = idx.data(EventModel::ItemTypeRole);
     const QVariant r = idx.data(EventModel::ResourceRole);
     
     if (t.toInt() == EventModel::HeaderItem) {
         return !containsAllResources(r.toStringList());
     } else if (m_excludedResources.contains(r.toString())) {
-        return false;
+        return FALSE;
     }
 
-    return true;
+    return TRUE;
 }
 
 bool EventFilterModel::containsAllResources(const QStringList &resList) const
