@@ -240,6 +240,8 @@ void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &
 #if KDE_IS_VERSION(4,5,1)
     removeItem(item);
     addItem(item, item.parentCollection());
+#else
+    Q_UNUSED(item);
 #endif
 }
 
@@ -249,6 +251,8 @@ void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection 
 #if KDE_IS_VERSION(4,5,1)
     removeItem(item);
     addItem(item, item.parentCollection());
+#else
+    Q_UNUSED(item);
 #endif
 }
 
