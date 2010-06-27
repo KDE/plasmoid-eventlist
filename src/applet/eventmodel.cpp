@@ -78,7 +78,7 @@ void EventModel::initModel()
 
     if (!tomorrowItem) {
         tomorrowItem = new QStandardItem();
-        initHeaderItem(tomorrowItem, i18n("Tomorrow"), i18n("Events for tomrrow"), 1);
+        initHeaderItem(tomorrowItem, i18n("Tomorrow"), i18n("Events for tomorrow"), 1);
     }
 
     if (!weekItem) {
