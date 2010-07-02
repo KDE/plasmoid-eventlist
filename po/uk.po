@@ -121,13 +121,13 @@ msgstr "Форма"
 #. i18n: ectx: property (title), widget (QGroupBox, timeBox)
 #: rc.cpp:6
 msgid "Times"
-msgstr "Разів"
+msgstr "Час"
 
 #. i18n: file: eventappletcolorconfig.ui:26
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:9
 msgid "Urgency:"
-msgstr "Важливість:"
+msgstr "Терміновість:"
 
 #. i18n: file: eventappletcolorconfig.ui:33
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, urgencyBox)
