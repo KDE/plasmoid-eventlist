@@ -40,6 +40,7 @@
 #include <KGlobal>
 #include <KLocale>
 #include <KGlobalSettings>
+#include <KDateTime>
 
 #include <Plasma/Theme>
 
@@ -418,9 +419,9 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
 #if KDE_IS_VERSION(4,4,60)
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), event);
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 #else
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event);
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event, TRUE, KDateTime::Spec::LocalZone());
 #endif
 
     return values;
@@ -449,9 +450,9 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
         values["hasDueDate"] = FALSE;
     }
 #if KDE_IS_VERSION(4,4,60)
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), todo);
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 #else
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(todo);
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(todo, TRUE, KDateTime::Spec::LocalZone());
 #endif
 
     return values;
