@@ -408,7 +408,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     QList<QVariant> recurDates;
     if (recurs) {
         KCal::Recurrence *r = event->recurrence();
-        KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(366));
+        KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
         dtTimes.sortUnique();
         foreach (KDateTime t, dtTimes) {
             recurDates << QVariant(t.dateTime().toLocalTime());
