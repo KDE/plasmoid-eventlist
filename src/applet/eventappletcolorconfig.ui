@@ -19,15 +19,15 @@
      <property name="title">
       <string>Times</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Urgency:</string>
+         <string>Urgency for normal events:</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="1">
        <widget class="KIntSpinBox" name="urgencyBox">
         <property name="toolTip">
          <string>The time left until a event is marked as soon beginning.</string>
@@ -40,7 +40,7 @@
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="2" rowspan="2">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -52,6 +52,23 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>Urgency for birthdays:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KIntSpinBox" name="birthdayUrgencyBox">
+        <property name="suffix">
+         <string>days</string>
+        </property>
+        <property name="maximum">
+         <number>30</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

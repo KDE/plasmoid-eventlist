@@ -81,8 +81,7 @@ protected:
 
 private:
     void setupActions();
-    void colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor anniversariesColor);
-    void colorizeUrgentAndPassed();
+    void colorizeModel(bool timerTriggered);
     void createToolTip();
     
 private:
@@ -98,8 +97,8 @@ private:
     EventItemDelegate *m_delegate;
     Ui::EventAppletFormatConfig m_formatConfigUi;
     Ui::EventAppletColorConfig m_colorConfigUi;
-    int m_urgency, m_checkInterval, m_period;
-    QColor m_urgentBg, m_passedFg;
+    int m_urgency, m_birthdayUrgency, m_checkInterval, m_period;
+    QColor m_urgentBg, m_passedFg, m_birthdayBg, m_anniversaryBg, m_todoBg;
     QList<QColor> m_colors;
     QTimer *m_timer;
     QList<QAction *> actions;

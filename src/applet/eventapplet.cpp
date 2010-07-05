@@ -97,25 +97,23 @@ void EventApplet::init()
     m_period = cg.readEntry("Period", 365);
 
     m_urgency = cg.readEntry("UrgencyTime", 15);
+    m_birthdayUrgency = cg.readEntry("BirthdayUrgencyTime", 14);
 
-    QColor urgentColor = QColor(cg.readEntry("UrgentColor", QString("#FF0000")));
-    urgentColor.setAlphaF(cg.readEntry("UrgentOpacity", 10)/100.0);
-    m_colors.insert(urgentColorPos, urgentColor);
-    QColor passedColor = QColor(cg.readEntry("PassedColor", QString("#C3C3C3")));
-    m_colors.insert(passedColorPos, passedColor);
+    m_urgentBg = QColor(cg.readEntry("UrgentColor", QString("#FF0000")));
+    m_urgentBg.setAlphaF(cg.readEntry("UrgentOpacity", 10)/100.0);
+    m_colors.insert(urgentColorPos, m_urgentBg);
+    m_passedFg = QColor(cg.readEntry("PassedColor", QString("#C3C3C3")));
+    m_colors.insert(passedColorPos, m_passedFg);
     
-    QColor birthdayColor = QColor(cg.readEntry("BirthdayColor", QString("#C0FFC0")));
-    birthdayColor.setAlphaF(cg.readEntry("BirthdayOpacity", 10)/100.0);
-    m_colors.insert(birthdayColorPos, birthdayColor);
-    QColor anniversariesColor = QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA")));
-    anniversariesColor.setAlphaF(cg.readEntry("AnniversariesOpacity", 10)/100.0);
-    m_colors.insert(anniversariesColorPos, anniversariesColor);
-    QColor todoColor = QColor(cg.readEntry("TodoColor", QString("#FFD235")));
-    todoColor.setAlphaF(cg.readEntry("TodoOpacity", 10)/100.0);
-    m_colors.insert(todoColorPos, todoColor);
-
-    m_urgentBg = urgentColor;
-    m_passedFg = passedColor;
+    m_birthdayBg = QColor(cg.readEntry("BirthdayColor", QString("#C0FFC0")));
+    m_birthdayBg.setAlphaF(cg.readEntry("BirthdayOpacity", 10)/100.0);
+    m_colors.insert(birthdayColorPos, m_birthdayBg);
+    m_anniversaryBg = QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA")));
+    m_anniversaryBg.setAlphaF(cg.readEntry("AnniversariesOpacity", 10)/100.0);
+    m_colors.insert(anniversariesColorPos, m_anniversaryBg);
+    m_todoBg = QColor(cg.readEntry("TodoColor", QString("#FFD235")));
+    m_todoBg.setAlphaF(cg.readEntry("TodoOpacity", 10)/100.0);
+    m_colors.insert(todoColorPos, m_todoBg);
 
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, dtFormat, dtString);
 
@@ -138,7 +136,7 @@ void EventApplet::setupModel()
     
     m_agentManager = Akonadi::AgentManager::self();
 
-    m_model = new EventModel(this, m_urgency, m_colors);
+    m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors);
     m_model->setSortRole(EventModel::SortRole);
     m_model->sort(0, Qt::AscendingOrder);
 
@@ -241,7 +239,7 @@ void EventApplet::timerExpired()
     if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
         m_model->resetModel();
     } else {
-        colorizeUrgentAndPassed();
+        colorizeModel(TRUE);
     }
 
     lastCheckTime = QDateTime::currentDateTime();
@@ -358,6 +356,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_formatConfigUi.periodBox->setValue(cg.readEntry("Period", 365));
 
     m_colorConfigUi.urgencyBox->setValue(cg.readEntry("UrgencyTime", 15));
+    m_colorConfigUi.birthdayUrgencyBox->setValue(cg.readEntry("BirthdayUrgencyTime", 14));
 
     m_colorConfigUi.startedColorButton->setColor(QColor(cg.readEntry("PassedColor", QString("#C3C3C3"))));
     m_colorConfigUi.urgentColorButton->setColor(QColor(cg.readEntry("UrgentColor", QString("#FF0000"))));
@@ -392,9 +391,15 @@ void EventApplet::configAccepted()
     m_period = m_formatConfigUi.periodBox->value();
     cg.writeEntry("Period", m_period);
 
+    int oldUrgency = m_urgency;
     m_urgency = m_colorConfigUi.urgencyBox->value();
     cg.writeEntry("UrgencyTime", m_urgency);
     
+    int oldBirthdayUrgency = m_birthdayUrgency;
+    m_birthdayUrgency = m_colorConfigUi.birthdayUrgencyBox->value();
+    cg.writeEntry("BirthdayUrgencyTime", m_birthdayUrgency);
+
+    QList<QColor> oldColors = m_colors;
     m_colors.clear();
 
     m_urgentBg = m_colorConfigUi.urgentColorButton->color();
@@ -408,94 +413,81 @@ void EventApplet::configAccepted()
     cg.writeEntry("PassedColor", m_passedFg.name());
     m_colors.insert(passedColorPos, m_passedFg);
     
-    QColor birthdayColor = m_colorConfigUi.birthdayColorButton->color();
+    m_birthdayBg = m_colorConfigUi.birthdayColorButton->color();
     int birthdayOpacity = m_colorConfigUi.birthdayOpacity->value();
-    cg.writeEntry("BirthdayColor", birthdayColor.name());
+    cg.writeEntry("BirthdayColor", m_birthdayBg.name());
     cg.writeEntry("BirthdayOpacity", birthdayOpacity);
-    birthdayColor.setAlphaF(birthdayOpacity/100.0);
-    m_colors.insert(birthdayColorPos, birthdayColor);
+    m_birthdayBg.setAlphaF(birthdayOpacity/100.0);
+    m_colors.insert(birthdayColorPos, m_birthdayBg);
 
-    QColor anniversariesColor = m_colorConfigUi.anniversariesColorButton->color();
+    m_anniversaryBg = m_colorConfigUi.anniversariesColorButton->color();
     int anniversariesOpacity = m_colorConfigUi.anniversariesOpacity->value();
-    cg.writeEntry("AnniversariesColor", anniversariesColor.name());
+    cg.writeEntry("AnniversariesColor", m_anniversaryBg.name());
     cg.writeEntry("AnniversariesOpacity", anniversariesOpacity);
-    anniversariesColor.setAlphaF(anniversariesOpacity/100.0);
-    m_colors.insert(anniversariesColorPos, anniversariesColor);
+    m_anniversaryBg.setAlphaF(anniversariesOpacity/100.0);
+    m_colors.insert(anniversariesColorPos, m_anniversaryBg);
 
-    QColor todoColor = m_colorConfigUi.todoColorButton->color();
+    m_todoBg = m_colorConfigUi.todoColorButton->color();
     int todoOpacity = m_colorConfigUi.todoOpacity->value();
-    cg.writeEntry("TodoColor", todoColor.name());
+    cg.writeEntry("TodoColor", m_todoBg.name());
     cg.writeEntry("TodoOpacity", todoOpacity);
-    todoColor.setAlphaF(todoOpacity/100.0);
-    m_colors.insert(todoColorPos, todoColor);
+    m_todoBg.setAlphaF(todoOpacity/100.0);
+    m_colors.insert(todoColorPos, m_todoBg);
 
-    m_model->settingsChanged(m_urgency, m_colors);
+    m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
 
     if (oldPeriod != m_period) {
         m_filterModel->setPeriod(m_period);
     }
 
-    colorizeBirthdayAndAnniversaries(birthdayColor, anniversariesColor);
-    colorizeUrgentAndPassed();
+    if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors) {
+        colorizeModel(FALSE);
+    }
 
     emit configNeedsSaving();
 }
 
-void EventApplet::colorizeBirthdayAndAnniversaries(QColor birthdayColor, QColor anniversariesColor)
+void EventApplet::colorizeModel(bool timerTriggered)
 {
+    QDateTime now = QDateTime::currentDateTime();
+
     int headerRows = m_model->rowCount(QModelIndex());
     for (int r = 0; r < headerRows; ++r) {
         QModelIndex headerIndex = m_model->index(r, 0, QModelIndex());
+        QDateTime headerDtTime = m_model->data(headerIndex, EventModel::SortRole).toDateTime();
+        if (timerTriggered && now.daysTo(headerDtTime) > m_birthdayUrgency) {
+            break;
+        }
         int childRows = m_model->rowCount(headerIndex);
         for (int c = 0; c < childRows; ++c) {
             QModelIndex index = m_model->index(c, 0, headerIndex);
             int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
-            if (itemRole == EventModel::BirthdayItem) {
-                m_model->setData(index, QVariant(QBrush(birthdayColor)), Qt::BackgroundRole);
+            QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
+            if (timerTriggered && now.daysTo(itemDtTime) > m_birthdayUrgency) {
+                break;
+            } else if (itemRole == EventModel::BirthdayItem) {
+                if (itemDtTime.date() >= now.date() && now.daysTo(itemDtTime) < m_birthdayUrgency) {
+                    m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
+                } else {
+                    m_model->setData(index, QVariant(QBrush(m_birthdayBg)), Qt::BackgroundRole);
+                }
             } else if (itemRole == EventModel::AnniversaryItem) {
-                m_model->setData(index, QVariant(QBrush(anniversariesColor)), Qt::BackgroundRole);
-            } else if (itemRole == EventModel::BirthdayItem || itemRole == EventModel::AnniversaryItem) {
-                m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
-            }
-        }
-    }
-}
-
-void EventApplet::colorizeUrgentAndPassed()
-{
-    QDateTime now = QDateTime::currentDateTime();
-
-    QModelIndex todayIndex = m_model->index(0, 0, QModelIndex());
-    int todayRows = m_model->rowCount(todayIndex);
-    for (int t = 0; t < todayRows; ++t) {
-        QModelIndex index = m_model->index(t, 0, todayIndex);
-        int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
-        QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
-        if (itemRole == EventModel::NormalItem) {
-            if (itemDtTime > now && now.secsTo(itemDtTime) < m_urgency * 60) {
-                m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
-            } else if (now > itemDtTime) {
-                m_model->setData(index, QVariant(QBrush(m_passedFg)), Qt::ForegroundRole);
-                m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
-            } else {
-                m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
-                QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
-                m_model->setData(index, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
-            }
-        }
-    }
-
-    QModelIndex tomorrowIndex = m_model->index(1, 0, QModelIndex());
-    int tomorrowRows = m_model->rowCount(tomorrowIndex);
-    for (int w = 0; w < tomorrowRows; ++w) {
-        QModelIndex index = m_model->index(w, 0, tomorrowIndex);
-        int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
-        QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
-        if (itemRole == EventModel::NormalItem) {
-            if (now.secsTo(itemDtTime) < m_urgency * 60) {
-                m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
-            } else {
-                m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
+                if (itemDtTime.date() >= now.date() && now.daysTo(itemDtTime) < m_birthdayUrgency) {
+                    m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
+                } else {
+                    m_model->setData(index, QVariant(QBrush(m_anniversaryBg)), Qt::BackgroundRole);
+                }
+            } else if (itemRole == EventModel::NormalItem) {
+                if (itemDtTime > now && now.secsTo(itemDtTime) < m_urgency * 60) {
+                    m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
+                } else if (now > itemDtTime) {
+                    m_model->setData(index, QVariant(QBrush(m_passedFg)), Qt::ForegroundRole);
+                    m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
+                } else {
+                    m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
+                    QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+                    m_model->setData(index, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
+                }
             }
         }
     }

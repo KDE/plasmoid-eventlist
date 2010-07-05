@@ -50,7 +50,7 @@
 #include <akonadi/kcal/incidencemimetypevisitor.h>
 #endif
 
-EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList) : QStandardItemModel(parent),
+EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList) : QStandardItemModel(parent),
     parentItem(0),
     olderItem(0),
     todayItem(0),
@@ -62,7 +62,7 @@ EventModel::EventModel(QObject *parent, int urgencyTime, QList<QColor> colorList
     m_monitor(0)
 {
     parentItem = invisibleRootItem();
-    settingsChanged(urgencyTime, colorList);
+    settingsChanged(urgencyTime, birthdayTime, colorList);
     initModel();
     initMonitor();
 }
@@ -207,9 +207,10 @@ void EventModel::resetModel()
     }
 }
 
-void EventModel::settingsChanged(int urgencyTime, QList<QColor> itemColors)
+void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors)
 {
     urgency = urgencyTime;
+    birthdayUrgency = birthdayTime;
     urgentBg = itemColors.at(urgentColorPos);
     passedFg = itemColors.at(passedColorPos);
     birthdayBg = itemColors.at(birthdayColorPos);
@@ -292,13 +293,22 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
             data["yearsSince"] = QString::number(n);
 
+            QDate itemDt = eventDtTime.toDate();
             if (values["isBirthday"].toBool()) {
                 data["itemType"] = BirthdayItem;
-                eventItem->setBackground(QBrush(birthdayBg));
+                if (itemDt >= QDate::currentDate() && QDate::currentDate().daysTo(itemDt) < birthdayUrgency) {
+                    eventItem->setBackground(QBrush(urgentBg));
+                } else {
+                    eventItem->setBackground(QBrush(birthdayBg));
+                }
                 eventItem->setData(QVariant(BirthdayItem), ItemTypeRole);
             } else if (values["isAnniversary"].toBool()) {
                 data["itemType"] = AnniversaryItem;
-                eventItem->setBackground(QBrush(anniversariesBg));
+                if (itemDt >= QDate::currentDate() && QDate::currentDate().daysTo(itemDt) < birthdayUrgency) {
+                    eventItem->setBackground(QBrush(urgentBg));
+                } else {
+                    eventItem->setBackground(QBrush(anniversariesBg));
+                }
                 eventItem->setData(QVariant(AnniversaryItem), ItemTypeRole);
             }
 
