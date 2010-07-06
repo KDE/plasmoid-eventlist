@@ -154,7 +154,6 @@ void EventApplet::setupModel()
     m_view->expandAll();
     connect(m_model, SIGNAL(modelNeedsExpanding()), m_view, SLOT(expandAll()));
 
-    setupActions();
     m_timer->start(2 * 60 * 1000);
 
     connect(Akonadi::ServerManager::self(), SIGNAL(started()), this, SLOT(akonadiStatusChanged()));
@@ -223,14 +222,14 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
-    QString uid = m_model->data(index, EventModel::UIDRole).toString();
+    QString uid = m_filterModel->data(index, EventModel::UIDRole).toString();
     if (!uid.isEmpty())
         KOrganizerAppletUtil::showEvent(uid);
 }
 
 void EventApplet::openEventFromMenu()
 {
-    slotOpenEvent(m_view->currentIndex());
+    slotOpenEvent(m_view->indexAtCursor());
 }
 
 void EventApplet::slotAddEvent()
@@ -248,26 +247,6 @@ void EventApplet::timerExpired()
 
     lastCheckTime = QDateTime::currentDateTime();
     m_timer->start(2 * 60 * 1000);
-}
-
-void EventApplet::setupActions()
-{
-    actions.clear();
-
-    QAction *openEvent = new QAction(i18n("Open current event"), this);
-    openEvent->setIcon(KIcon("document-edit"));
-    connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
-    actions.append(openEvent);
-
-    QAction *newEvent = new QAction(i18n("Add new event"), this);
-    newEvent->setIcon(KIcon("appointment-new"));
-    connect(newEvent, SIGNAL(triggered()), this, SLOT(slotAddEvent()));
-    actions.append(newEvent);
-
-    QAction *selectResources = new QAction(i18n("Select shown resources"), this);
-    selectResources->setIcon(KIcon("view-calendar-tasks"));
-    connect(selectResources, SIGNAL(triggered()), this, SLOT(setShownResources()));
-    actions.append(selectResources);
 }
 
 void EventApplet::setShownResources()
@@ -313,7 +292,35 @@ void EventApplet::setShownResources()
 
 QList<QAction *> EventApplet::contextualActions()
 {
-    return actions;
+    QList<QAction *> currentActions;
+
+    QModelIndex idx = m_view->indexAtCursor();
+    if (idx.isValid()) {
+        QVariant type = idx.data(EventModel::ItemTypeRole);
+        if (type.toInt() == EventModel::NormalItem) {
+            QAction *openEvent = new QAction(i18n("Open event"), this);
+            openEvent->setIcon(KIcon("document-edit"));
+            connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
+            currentActions.append(openEvent);
+        } else  if (type.toInt() == EventModel::TodoItem) {
+            QAction *openEvent = new QAction(i18n("Open todo"), this);
+            openEvent->setIcon(KIcon("document-edit"));
+            connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
+            currentActions.append(openEvent);
+        }
+    }
+
+    QAction *newEvent = new QAction(i18n("Add new event"), this);
+    newEvent->setIcon(KIcon("appointment-new"));
+    connect(newEvent, SIGNAL(triggered()), this, SLOT(slotAddEvent()));
+    currentActions.append(newEvent);
+
+    QAction *selectResources = new QAction(i18n("Select shown resources"), this);
+    selectResources->setIcon(KIcon("view-calendar-tasks"));
+    connect(selectResources, SIGNAL(triggered()), this, SLOT(setShownResources()));
+    currentActions.append(selectResources);
+
+    return currentActions;
 }
 
 void EventApplet::slotUpdateTooltip(QString text)

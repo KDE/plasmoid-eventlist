@@ -80,7 +80,6 @@ protected:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
-    void setupActions();
     void colorizeModel(bool timerTriggered);
     void createToolTip();
     
@@ -101,7 +100,6 @@ private:
     QColor m_urgentBg, m_passedFg, m_birthdayBg, m_anniversaryBg, m_todoBg, m_finishedTodoBg;
     QList<QColor> m_colors;
     QTimer *m_timer;
-    QList<QAction *> actions;
     Akonadi::AgentManager *m_agentManager;
     QStringList disabledResources;
     QDateTime lastCheckTime;

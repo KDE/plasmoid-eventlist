@@ -32,6 +32,8 @@ public:
     EventTreeView(QWidget* parent = 0);
     ~EventTreeView();
 
+    QModelIndex indexAtCursor();
+
 protected:
     void mouseMoveEvent(QMouseEvent *event);
 

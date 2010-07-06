@@ -46,11 +46,17 @@ EventTreeView::~EventTreeView()
 void EventTreeView::mouseMoveEvent(QMouseEvent *event)
 {
     QString tip = QString();
-    QModelIndex idx = indexAt(event->pos());
+    idx = indexAt(event->pos());
     if (idx.isValid()) {
         tip = idx.data(EventModel::TooltipRole).toString();
     }
-        emit tooltipUpdated(tip);
+    
+    emit tooltipUpdated(tip);
+}
+
+QModelIndex EventTreeView::indexAtCursor()
+{
+    return idx;
 }
 
 #include "eventtreeview.moc"
