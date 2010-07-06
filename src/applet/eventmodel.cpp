@@ -216,6 +216,7 @@ void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor
     birthdayBg = itemColors.at(birthdayColorPos);
     anniversariesBg = itemColors.at(anniversariesColorPos);
     todoBg = itemColors.at(todoColorPos);
+    finishedTodoBg = itemColors.at(finishedTodoColorPos);
 }
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
@@ -355,8 +356,12 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
     todoItem->setData(values["itemid"], ItemIDRole);
     todoItem->setData(values["resource"], ResourceRole);
     todoItem->setData(values["tooltip"], TooltipRole);
-    todoItem->setBackground(QBrush(todoBg));
-
+    if (values["completed"].toBool() == TRUE) {
+        todoItem->setBackground(QBrush(finishedTodoBg));
+    } else {
+        todoItem->setBackground(QBrush(todoBg));
+    }
+    
     addItemRow(values["dueDate"].toDate(), todoItem);
 }
 

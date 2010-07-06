@@ -98,7 +98,7 @@ private:
     Ui::EventAppletFormatConfig m_formatConfigUi;
     Ui::EventAppletColorConfig m_colorConfigUi;
     int m_urgency, m_birthdayUrgency, m_checkInterval, m_period;
-    QColor m_urgentBg, m_passedFg, m_birthdayBg, m_anniversaryBg, m_todoBg;
+    QColor m_urgentBg, m_passedFg, m_birthdayBg, m_anniversaryBg, m_todoBg, m_finishedTodoBg;
     QList<QColor> m_colors;
     QTimer *m_timer;
     QList<QAction *> actions;

@@ -111,9 +111,13 @@ void EventApplet::init()
     m_anniversaryBg = QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA")));
     m_anniversaryBg.setAlphaF(cg.readEntry("AnniversariesOpacity", 10)/100.0);
     m_colors.insert(anniversariesColorPos, m_anniversaryBg);
+    
     m_todoBg = QColor(cg.readEntry("TodoColor", QString("#FFD235")));
     m_todoBg.setAlphaF(cg.readEntry("TodoOpacity", 10)/100.0);
     m_colors.insert(todoColorPos, m_todoBg);
+    m_finishedTodoBg = QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0")));
+    m_finishedTodoBg.setAlphaF(cg.readEntry("FinishedTodoOpacity", 10)/100.0);
+    m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, dtFormat, dtString);
 
@@ -366,8 +370,11 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_colorConfigUi.birthdayOpacity->setValue(cg.readEntry("BirthdayOpacity", 10));
     m_colorConfigUi.anniversariesColorButton->setColor(QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA"))));
     m_colorConfigUi.anniversariesOpacity->setValue(cg.readEntry("AnniversariesOpacity", 10));
+    
     m_colorConfigUi.todoColorButton->setColor(QColor(cg.readEntry("TodoColor", QString("#FFD235"))));
     m_colorConfigUi.todoOpacity->setValue(cg.readEntry("TodoOpacity", 10));
+    m_colorConfigUi.finishedTodoButton->setColor(QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0"))));
+    m_colorConfigUi.finishedTodoOpacity->setValue(cg.readEntry("FinishedTodoOpacity", 10));
 }
 
 void EventApplet::configAccepted()
@@ -434,6 +441,13 @@ void EventApplet::configAccepted()
     m_todoBg.setAlphaF(todoOpacity/100.0);
     m_colors.insert(todoColorPos, m_todoBg);
 
+    m_finishedTodoBg = m_colorConfigUi.finishedTodoButton->color();
+    int finishedTodoOpacity = m_colorConfigUi.finishedTodoOpacity->value();
+    cg.writeEntry("FinishedTodoColor", m_finishedTodoBg.name());
+    cg.writeEntry("FinishedTodoOpacity", finishedTodoOpacity);
+    m_todoBg.setAlphaF(finishedTodoOpacity/100.0);
+    m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
+
     m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
 
     if (oldPeriod != m_period) {
@@ -487,6 +501,14 @@ void EventApplet::colorizeModel(bool timerTriggered)
                     m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
                     QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
                     m_model->setData(index, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
+                }
+            } else if (itemRole == EventModel::TodoItem) {
+                const QVariant v = index.data(Qt::DisplayRole);
+                QMap<QString, QVariant> values = v.toMap();
+                if (values["completed"].toBool() == TRUE) {
+                    m_model->setData(index, QVariant(QBrush(m_finishedTodoBg)), Qt::BackgroundRole);
+                } else {
+                    m_model->setData(index, QVariant(QBrush(m_todoBg)), Qt::BackgroundRole);
                 }
             }
         }

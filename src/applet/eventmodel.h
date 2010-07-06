@@ -42,6 +42,7 @@ static const int passedColorPos = 1;
 static const int birthdayColorPos = 2;
 static const int anniversariesColorPos = 3;
 static const int todoColorPos = 4;
+static const int finishedTodoColorPos = 5;
 
 /**
 * Model of the view
@@ -98,7 +99,7 @@ private:
     QStandardItem *parentItem, *olderItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem, *somedayItem;
     QList<QStandardItem *> sectionItems;
     int urgency, birthdayUrgency;
-    QColor urgentBg, passedFg, birthdayBg, anniversariesBg, todoBg;
+    QColor urgentBg, passedFg, birthdayBg, anniversariesBg, todoBg, finishedTodoBg;
     Akonadi::Monitor *m_monitor;
 
 signals:
