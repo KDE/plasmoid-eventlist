@@ -6,10 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-06-27 10:16+0200\n"
-"PO-Revision-Date: 2010-07-02 13:55+0300\n"
+"POT-Creation-Date: 2010-07-07 21:10+0300\n"
+"PO-Revision-Date: 2010-07-07 21:11+0300\n"
 "Last-Translator: Oleksandr Natalenko <pfactum@gmail.com>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,95 +18,99 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: eventapplet.cpp:206 eventapplet.cpp:325
+#: eventapplet.cpp:207 eventapplet.cpp:334
 msgid "Upcoming Events"
 msgstr "Найближчі події"
 
 #: eventapplet.cpp:255
-msgid "Open current event"
-msgstr "Відкрити поточну подію"
-
-#: eventapplet.cpp:260
-msgid "Add new event"
-msgstr "Додати нову подію"
-
-#: eventapplet.cpp:265
-msgid "Select shown resources"
-msgstr "Обрати показані ресурси"
-
-#: eventapplet.cpp:274
 msgid "Select Resources"
 msgstr "Обрати ресурси"
 
-#: eventapplet.cpp:326
+#: eventapplet.cpp:301
+msgid "Open event"
+msgstr "Відкрити подію"
+
+#: eventapplet.cpp:306
+msgid "Open todo"
+msgstr "Відкрити справу"
+
+#: eventapplet.cpp:313
+msgid "Add new event"
+msgstr "Додати нову подію"
+
+#: eventapplet.cpp:318
+msgid "Select shown resources"
+msgstr "Обрати показані ресурси"
+
+#: eventapplet.cpp:335
 msgid "Upcoming events from Akonadi resources"
 msgstr "Найближчі події із ресурсів Akonadi"
 
-#: eventapplet.cpp:348
+#: eventapplet.cpp:357
 msgid "Text Format"
 msgstr "Формат тексту"
 
-#: eventapplet.cpp:349
+#: eventapplet.cpp:358
 msgid "Colors"
 msgstr "Кольори"
 
-#: eventmodel.cpp:77
+#: eventmodel.cpp:78
 msgid "Earlier stuff"
 msgstr "Раніше"
 
-#: eventmodel.cpp:77
+#: eventmodel.cpp:78
 msgid "Unfinished todos, still ongoing earlier events etc."
 msgstr "Незавершені справи, події, які ще відбуваються і т. д."
 
-#: eventmodel.cpp:82
+#: eventmodel.cpp:83
 msgid "Today"
 msgstr "Сьогодні"
 
-#: eventmodel.cpp:82
+#: eventmodel.cpp:83
 msgid "Events of today"
 msgstr "Сьогоднішні події"
 
-#: eventmodel.cpp:87
+#: eventmodel.cpp:88
 msgid "Tomorrow"
 msgstr "Завтра"
 
-#: eventmodel.cpp:87
+#: eventmodel.cpp:88
 msgid "Events for tomorrow"
 msgstr "Завтрашні події"
 
-#: eventmodel.cpp:92
+#: eventmodel.cpp:93
 msgid "Week"
 msgstr "Тиждень"
 
-#: eventmodel.cpp:92
+#: eventmodel.cpp:93
 msgid "Events of the next week"
 msgstr "Події наступного тижня"
 
-#: eventmodel.cpp:97
+#: eventmodel.cpp:98
 msgid "Next 4 weeks"
 msgstr "Наступні 4 тижні"
 
-#: eventmodel.cpp:97
+#: eventmodel.cpp:98
 msgid "Events for the next 4 weeks"
 msgstr "Події наступних 4 тижнів"
 
-#: eventmodel.cpp:102
+#: eventmodel.cpp:103
 msgid "Later"
 msgstr "Пізніше"
 
-#: eventmodel.cpp:102
+#: eventmodel.cpp:103
 msgid "Events later than 4 weeks"
 msgstr "Події, які відбудуться пізніше, ніж через 4 тижні"
 
-#: eventmodel.cpp:107
+#: eventmodel.cpp:108
 msgid "Some day"
 msgstr "Якийсь день"
 
-#: eventmodel.cpp:107
+#: eventmodel.cpp:108
 msgid "Todos with no due date"
 msgstr "Справи без певної дати виконання"
 
-#: eventmodel.cpp:201
+#: eventmodel.cpp:202
 msgid "The Akonadi server is not running!"
 msgstr "Сервер Akonadi не працює!"
 
@@ -113,7 +118,7 @@ msgstr "Сервер Akonadi не працює!"
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
 #. i18n: file: eventappletformatconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletFormatConfig)
-#: rc.cpp:3 rc.cpp:82
+#: rc.cpp:3 rc.cpp:98
 msgid "Form"
 msgstr "Форма"
 
@@ -126,8 +131,8 @@ msgstr "Час"
 #. i18n: file: eventappletcolorconfig.ui:26
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:9
-msgid "Urgency:"
-msgstr "Терміновість:"
+msgid "Urgency for normal events:"
+msgstr "Терміновість нормальних подій:"
 
 #. i18n: file: eventappletcolorconfig.ui:33
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, urgencyBox)
@@ -141,112 +146,134 @@ msgstr "Час, що лишився до позначення події так�
 msgid "min"
 msgstr "хв"
 
-#. i18n: file: eventappletcolorconfig.ui:62
-#. i18n: ectx: property (title), widget (QGroupBox, normalEventsBox)
+#. i18n: file: eventappletcolorconfig.ui:59
+#. i18n: ectx: property (text), widget (QLabel, label_11)
 #: rc.cpp:18
+msgid "Urgency for birthdays:"
+msgstr "Терміновість днів народжень:"
+
+#. i18n: file: eventappletcolorconfig.ui:66
+#. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayUrgencyBox)
+#: rc.cpp:21
+msgid "days"
+msgstr "днів"
+
+#. i18n: file: eventappletcolorconfig.ui:79
+#. i18n: ectx: property (title), widget (QGroupBox, normalEventsBox)
+#: rc.cpp:24
 msgid "Colors for normal events"
 msgstr "Кольори нормальних подій"
 
-#. i18n: file: eventappletcolorconfig.ui:68
+#. i18n: file: eventappletcolorconfig.ui:85
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rc.cpp:21
+#: rc.cpp:27
 msgid "Backgroundcolor for near events:"
 msgstr "Фоновий колір найближчих подій:"
 
-#. i18n: file: eventappletcolorconfig.ui:81
+#. i18n: file: eventappletcolorconfig.ui:98
 #. i18n: ectx: property (toolTip), widget (KColorButton, urgentColorButton)
-#: rc.cpp:24
+#: rc.cpp:30
 msgid "The backgroundcolor for soon beginning events."
 msgstr "Фоновий колір подій, які скоро почнуться:"
 
-#. i18n: file: eventappletcolorconfig.ui:88
+#. i18n: file: eventappletcolorconfig.ui:105
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#. i18n: file: eventappletcolorconfig.ui:154
+#. i18n: file: eventappletcolorconfig.ui:171
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#. i18n: file: eventappletcolorconfig.ui:191
+#. i18n: file: eventappletcolorconfig.ui:208
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#. i18n: file: eventappletcolorconfig.ui:234
+#. i18n: file: eventappletcolorconfig.ui:251
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: rc.cpp:27 rc.cpp:49 rc.cpp:62 rc.cpp:75
+#. i18n: file: eventappletcolorconfig.ui:281
+#. i18n: ectx: property (text), widget (QLabel, label_13)
+#: rc.cpp:33 rc.cpp:55 rc.cpp:68 rc.cpp:81 rc.cpp:91
 msgid "Opacity:"
 msgstr "Прозорість:"
 
-#. i18n: file: eventappletcolorconfig.ui:95
+#. i18n: file: eventappletcolorconfig.ui:112
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, urgentOpacity)
-#. i18n: file: eventappletcolorconfig.ui:161
+#. i18n: file: eventappletcolorconfig.ui:178
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayOpacity)
-#. i18n: file: eventappletcolorconfig.ui:198
+#. i18n: file: eventappletcolorconfig.ui:215
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, anniversariesOpacity)
-#. i18n: file: eventappletcolorconfig.ui:241
+#. i18n: file: eventappletcolorconfig.ui:258
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, todoOpacity)
-#: rc.cpp:31 rc.cpp:53 rc.cpp:66 rc.cpp:79
+#. i18n: file: eventappletcolorconfig.ui:288
+#. i18n: ectx: property (suffix), widget (KIntSpinBox, finishedTodoOpacity)
+#: rc.cpp:37 rc.cpp:59 rc.cpp:72 rc.cpp:85 rc.cpp:95
 #, no-c-format
 msgid "%"
 msgstr "%"
 
-#. i18n: file: eventappletcolorconfig.ui:105
+#. i18n: file: eventappletcolorconfig.ui:122
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: rc.cpp:34
+#: rc.cpp:40
 msgid "Textcolor for started or passed events:"
 msgstr "Колір тексту для пропущених подій чи подій, які розпочалися:"
 
-#. i18n: file: eventappletcolorconfig.ui:118
+#. i18n: file: eventappletcolorconfig.ui:135
 #. i18n: ectx: property (toolTip), widget (KColorButton, startedColorButton)
-#: rc.cpp:37
+#: rc.cpp:43
 msgid "The textcolor for already started or passed events."
 msgstr "Колір тексту для пропущених подій чи подій, які уже розпочалися."
 
-#. i18n: file: eventappletcolorconfig.ui:128
+#. i18n: file: eventappletcolorconfig.ui:145
 #. i18n: ectx: property (title), widget (QGroupBox, recurringEventsBox)
-#: rc.cpp:40
+#: rc.cpp:46
 msgid "Colors for recurring events"
 msgstr "Кольори подій, що повторюються"
 
-#. i18n: file: eventappletcolorconfig.ui:134
+#. i18n: file: eventappletcolorconfig.ui:151
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rc.cpp:43
+#: rc.cpp:49
 msgid "Backgroundcolor for Birthdays:"
 msgstr "Фоновий колір днів народжень:"
 
-#. i18n: file: eventappletcolorconfig.ui:147
+#. i18n: file: eventappletcolorconfig.ui:164
 #. i18n: ectx: property (toolTip), widget (KColorButton, birthdayColorButton)
-#: rc.cpp:46
+#: rc.cpp:52
 msgid "The backgroundcolor for birthdays."
 msgstr "Фоновий колір днів народжень."
 
-#. i18n: file: eventappletcolorconfig.ui:171
+#. i18n: file: eventappletcolorconfig.ui:188
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: rc.cpp:56
+#: rc.cpp:62
 msgid "Backgroundcolor for Anniversaries:"
 msgstr "Фоновий колір для річниць:"
 
-#. i18n: file: eventappletcolorconfig.ui:184
+#. i18n: file: eventappletcolorconfig.ui:201
 #. i18n: ectx: property (toolTip), widget (KColorButton, anniversariesColorButton)
-#: rc.cpp:59
+#: rc.cpp:65
 msgid "The backgroundcolor for anniversaries."
 msgstr "Фоновий колір для річниць."
 
-#. i18n: file: eventappletcolorconfig.ui:211
+#. i18n: file: eventappletcolorconfig.ui:228
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: rc.cpp:69
+#: rc.cpp:75
 msgid "Colors for todos"
 msgstr "Колір для справ"
 
-#. i18n: file: eventappletcolorconfig.ui:217
+#. i18n: file: eventappletcolorconfig.ui:234
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: rc.cpp:72
+#: rc.cpp:78
 msgid "Backgroundcolor for todos:"
 msgstr "Фоновий колір для справ:"
 
+#. i18n: file: eventappletcolorconfig.ui:271
+#. i18n: ectx: property (text), widget (QLabel, label_12)
+#: rc.cpp:88
+msgid "Background for finished todos:"
+msgstr "Фоновий колір для завершених справ:"
+
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: rc.cpp:85
+#: rc.cpp:101
 msgid "Event text formatting"
 msgstr "Форматування тексту події"
 
 #. i18n: file: eventappletformatconfig.ui:34
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: rc.cpp:89
+#: rc.cpp:105
 #, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
@@ -272,25 +299,25 @@ msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:41
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: rc.cpp:100
+#: rc.cpp:116
 msgid "Format for normal events:"
 msgstr "Формат нормальних подій:"
 
 #. i18n: file: eventappletformatconfig.ui:51
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: rc.cpp:103
+#: rc.cpp:119
 msgid "Birthday & Anniversaries:"
 msgstr "Дні народжень та річниці:"
 
 #. i18n: file: eventappletformatconfig.ui:64
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: rc.cpp:106
+#: rc.cpp:122
 msgid "Todo text formatting"
 msgstr "Формат тексту справ"
 
 #. i18n: file: eventappletformatconfig.ui:76
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: rc.cpp:110
+#: rc.cpp:126
 #, no-c-format
 msgid ""
 "The format fot the displayed text for todos.\n"
@@ -311,72 +338,73 @@ msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:89
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: rc.cpp:119
+#: rc.cpp:135
 msgid "Date appearance settings"
 msgstr "Налаштування дати"
 
 #. i18n: file: eventappletformatconfig.ui:95
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rc.cpp:122
+#: rc.cpp:138
 msgid "Date format:"
 msgstr "Формат дати:"
 
 #. i18n: file: eventappletformatconfig.ui:102
 #. i18n: ectx: property (toolTip), widget (KComboBox, dateFormatBox)
-#: rc.cpp:125
+#: rc.cpp:141
 msgid "What date format to use."
 msgstr "Який формат дати використовувати."
 
 #. i18n: file: eventappletformatconfig.ui:106
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:128
+#: rc.cpp:144
 msgid "KDE ShortDate"
 msgstr "Коротка дата KDE"
 
 #. i18n: file: eventappletformatconfig.ui:111
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:131
+#: rc.cpp:147
 msgid "KDE LongDate"
 msgstr "Довга дата KDE"
 
 #. i18n: file: eventappletformatconfig.ui:116
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:134
+#: rc.cpp:150
 msgid "Custom"
 msgstr "Довільний"
 
 #. i18n: file: eventappletformatconfig.ui:124
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rc.cpp:137
+#: rc.cpp:153
 msgid "Custom format:"
 msgstr "Довільний формат:"
 
 #. i18n: file: eventappletformatconfig.ui:131
 #. i18n: ectx: property (toolTip), widget (KLineEdit, customFormatEdit)
-#: rc.cpp:140
+#: rc.cpp:156
 msgid "A string describing the custom format. It is using the QDate syntax."
-msgstr ""
-"Рядок, який описує довільний формат. Використовується синтаксис QDate."
+msgstr "Рядок, який описує довільний формат. Використовується синтаксис QDate."
 
 #. i18n: file: eventappletformatconfig.ui:141
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: rc.cpp:143
+#: rc.cpp:159
 msgid "Miscellenous options"
 msgstr "Додаткові налаштування"
 
 #. i18n: file: eventappletformatconfig.ui:147
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: rc.cpp:146
+#: rc.cpp:162
 msgid "Period to show events (in days):"
 msgstr "Період показу подій (у днях):"
 
-#: rc.cpp:147
+#: rc.cpp:163
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Oleksandr Natalenko"
 
-#: rc.cpp:148
+#: rc.cpp:164
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "pfactum@gmail.com"
 
+#~ msgid "Urgency:"
+#~ msgstr "Терміновість:"
