@@ -30,6 +30,7 @@ public:
     ~EventFilterModel();
     
     void setPeriod(int period);
+    void setShowFinishedTodos(bool showFinishedTodos);
     void setExcludedResources(QStringList resources);
     
 protected:
@@ -39,6 +40,7 @@ private:
     bool containsAllResources(const QStringList &) const;
 
     int m_period;
+    bool m_showFinishedTodos;
     QStringList m_excludedResources;
 };
 

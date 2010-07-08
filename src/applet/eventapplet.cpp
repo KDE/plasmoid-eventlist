@@ -115,6 +115,9 @@ void EventApplet::init()
     m_todoBg = QColor(cg.readEntry("TodoColor", QString("#FFD235")));
     m_todoBg.setAlphaF(cg.readEntry("TodoOpacity", 10)/100.0);
     m_colors.insert(todoColorPos, m_todoBg);
+
+    m_showFinishedTodos = cg.readEntry("ShowFinishedTodos", FALSE);
+    
     m_finishedTodoBg = QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0")));
     m_finishedTodoBg.setAlphaF(cg.readEntry("FinishedTodoOpacity", 10)/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
@@ -146,6 +149,7 @@ void EventApplet::setupModel()
 
     m_filterModel = new EventFilterModel(this);
     m_filterModel->setPeriod(m_period);
+    m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     m_filterModel->setExcludedResources(disabledResources);
     m_filterModel->setDynamicSortFilter(TRUE);
     m_filterModel->setSourceModel(m_model);
@@ -380,6 +384,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     
     m_colorConfigUi.todoColorButton->setColor(QColor(cg.readEntry("TodoColor", QString("#FFD235"))));
     m_colorConfigUi.todoOpacity->setValue(cg.readEntry("TodoOpacity", 10));
+    m_colorConfigUi.showFinishedTodos->setChecked(cg.readEntry("ShowFinishedTodos", FALSE));
     m_colorConfigUi.finishedTodoButton->setColor(QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0"))));
     m_colorConfigUi.finishedTodoOpacity->setValue(cg.readEntry("FinishedTodoOpacity", 10));
 }
@@ -448,6 +453,10 @@ void EventApplet::configAccepted()
     m_todoBg.setAlphaF(todoOpacity/100.0);
     m_colors.insert(todoColorPos, m_todoBg);
 
+    bool oldShowFinishedTodos = m_showFinishedTodos;
+    m_showFinishedTodos = m_colorConfigUi.showFinishedTodos->isChecked();
+    cg.writeEntry("ShowFinishedTodos", m_showFinishedTodos);
+
     m_finishedTodoBg = m_colorConfigUi.finishedTodoButton->color();
     int finishedTodoOpacity = m_colorConfigUi.finishedTodoOpacity->value();
     cg.writeEntry("FinishedTodoColor", m_finishedTodoBg.name());
@@ -461,9 +470,15 @@ void EventApplet::configAccepted()
         m_filterModel->setPeriod(m_period);
     }
 
+    if (oldShowFinishedTodos != m_showFinishedTodos) {
+        m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
+    }
+
     if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors) {
         colorizeModel(FALSE);
     }
+
+    m_view->expandAll();
 
     emit configNeedsSaving();
 }

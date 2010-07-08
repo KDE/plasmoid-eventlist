@@ -37,6 +37,12 @@ void EventFilterModel::setPeriod(int period)
     invalidateFilter();
 }
 
+void EventFilterModel::setShowFinishedTodos(bool showFinishedTodos)
+{
+    m_showFinishedTodos = showFinishedTodos;
+    invalidateFilter();
+}
+
 void EventFilterModel::setExcludedResources(QStringList resources)
 {
     m_excludedResources = resources;
@@ -46,6 +52,9 @@ void EventFilterModel::setExcludedResources(QStringList resources)
 
 bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
 {
+    // this is quite messy because of the many options and
+    // desire of a clean look, maybe it can be improved a bit
+
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
 
     const QVariant t = idx.data(EventModel::ItemTypeRole);
@@ -53,19 +62,36 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
     QDate date= d.toDate();
 
     if (date.isValid()) {
-        if (date > QDate::currentDate().addDays(365)) {
-            return TRUE; // todos with no specified due date
-        } else if (date > QDate::currentDate().addDays(m_period)) {
+        if (date > QDate::currentDate().addDays(365)) { // todos with no specified due date
+            if (m_showFinishedTodos) {
+                return TRUE;
+            } else if (t.toInt() == EventModel::HeaderItem) {
+                int rows = sourceModel()->rowCount(idx);
+                for (int row = 0; row < rows; ++ row) {
+                    QModelIndex childIdx = sourceModel()->index(row, 0, idx);
+                    const QVariant v = childIdx.data(Qt::DisplayRole);
+                    const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
+                    QMap<QString, QVariant> values = v.toMap();
+                    if (childType.toInt() != EventModel::TodoItem) {
+                        return TRUE;
+                    } else if (values["completed"].toBool() == FALSE) {
+                        return TRUE;
+                    }
+                    return FALSE;
+                }
+            }
+        } else if (date > QDate::currentDate().addDays(m_period)) { // stuff later than ...
             return FALSE;
-        } else if (date < QDate::currentDate()) {
-            if (t.toInt() == EventModel::HeaderItem) {
+        } else if (date < QDate::currentDate()) { // older stuff
+            if (t.toInt() == EventModel::HeaderItem) { // dont show empty header
                 if (sourceModel()->hasChildren(idx)) {
                     int rows = sourceModel()->rowCount(idx);
                     for (int row = 0; row < rows; ++row) {
                         QModelIndex childIdx = sourceModel()->index(row, 0, idx);
+                        const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
                         const QVariant v = childIdx.data(Qt::DisplayRole);
                         QMap<QString, QVariant> values = v.toMap();
-                        if (t.toInt() == EventModel::TodoItem) {
+                        if (childType.toInt() == EventModel::TodoItem) { // dont show old finished stuff
                             if (values["completed"].toBool() == FALSE)
                                 return TRUE;
                         } else {
@@ -85,6 +111,29 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                     if (values["endDate"].toDate() < QDate::currentDate())
                         return FALSE;
                 }
+            }
+        } else { // stuff from today to period
+            if (m_showFinishedTodos) {
+                return TRUE;
+            } else if (t.toInt() == EventModel::HeaderItem) {
+                int rows = sourceModel()->rowCount(idx);
+                for (int row = 0; row < rows; ++ row) {
+                    QModelIndex childIdx = sourceModel()->index(row, 0, idx);
+                    const QVariant v = childIdx.data(Qt::DisplayRole);
+                    const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
+                    QMap<QString, QVariant> values = v.toMap();
+                    if (childType.toInt() != EventModel::TodoItem) {
+                        return TRUE;
+                    } else if (values["completed"].toBool() == FALSE) {
+                        return TRUE;
+                    }
+                    return FALSE;
+                }
+            } else if (t.toInt() == EventModel::TodoItem) {
+                const QVariant v = idx.data(Qt::DisplayRole);
+                QMap<QString, QVariant> values = v.toMap();
+                if (values["completed"].toBool() == TRUE)
+                    return FALSE;
             }
         }
     }

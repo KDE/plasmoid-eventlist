@@ -103,6 +103,7 @@ private:
     Akonadi::AgentManager *m_agentManager;
     QStringList disabledResources;
     QDateTime lastCheckTime;
+    bool m_showFinishedTodos;
 };
 
 #endif
