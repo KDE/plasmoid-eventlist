@@ -243,7 +243,7 @@ void EventApplet::slotAddEvent()
 
 void EventApplet::timerExpired()
 {
-    if (lastCheckTime.date().daysTo(QDate::currentDate()) < 0) {
+    if (lastCheckTime.date() != QDate::currentDate()) {
         m_model->resetModel();
     } else {
         colorizeModel(TRUE);
