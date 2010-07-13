@@ -86,7 +86,7 @@ QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> dat
     dataHash.insert("startTime", KGlobal::locale()->formatTime(data["startDate"].toTime()));
     dataHash.insert("endTime", KGlobal::locale()->formatTime(data["endDate"].toTime()));
     s = data["startDate"].toDateTime().secsTo(data["endDate"].toDateTime());
-    dataHash.insert("duration", QString::number(s / 3600));
+    dataHash.insert("duration", KGlobal::locale()->prettyFormatDuration(s * 1000));
     dataHash.insert("summary", data["summary"].toString());
     dataHash.insert("description", data["description"].toString());
     dataHash.insert("location", data["location"].toString());
