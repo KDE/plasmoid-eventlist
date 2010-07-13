@@ -92,6 +92,7 @@ void EventApplet::init()
     QString normalEventFormat = cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}"));
     QString recurringEventFormat = cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}"));
     QString todoFormat = cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}"));
+    QString noDueDateFormat = cg.readEntry("NoDueDateFormat", QString("%{summary}"));
     int dtFormat = cg.readEntry("DateFormat", ShortDateFormat);
     QString dtString = cg.readEntry("CustomDateFormat", QString("dd.MM."));
     m_period = cg.readEntry("Period", 365);
@@ -122,7 +123,7 @@ void EventApplet::init()
     m_finishedTodoBg.setAlphaF(cg.readEntry("FinishedTodoOpacity", 10)/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
-    m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, dtFormat, dtString);
+    m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
 
     graphicsWidget();
 
@@ -366,6 +367,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_formatConfigUi.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
     m_formatConfigUi.recurringEventsEdit->setText(cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}")));
     m_formatConfigUi.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
+    m_formatConfigUi.noDueDateEdit->setText(cg.readEntry("NoDueDateFormat", QString("%{summary}")));
     m_formatConfigUi.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
     m_formatConfigUi.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
     m_formatConfigUi.periodBox->setValue(cg.readEntry("Period", 365));
@@ -399,12 +401,14 @@ void EventApplet::configAccepted()
     cg.writeEntry("RecurringEventsFormat", recurringEventsFormat);
     QString todoFormat = m_formatConfigUi.todoEdit->text();
     cg.writeEntry("TodoFormat", todoFormat);
+    QString noDueDateFormat = m_formatConfigUi.noDueDateEdit->text();
+    cg.writeEntry("NoDueDateFormat", noDueDateFormat);
     int dateFormat = m_formatConfigUi.dateFormatBox->currentIndex();
     cg.writeEntry("DateFormat", dateFormat);
     QString customString = m_formatConfigUi.customFormatEdit->text();
     cg.writeEntry("CustomDateFormat", customString);
 
-    m_delegate->settingsChanged(normalEventFormat, recurringEventsFormat, todoFormat, dateFormat, customString);
+    m_delegate->settingsChanged(normalEventFormat, recurringEventsFormat, todoFormat, noDueDateFormat, dateFormat, customString);
 
     int oldPeriod = cg.readEntry("Period", 365);
     m_period = m_formatConfigUi.periodBox->value();
