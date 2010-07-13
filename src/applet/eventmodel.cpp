@@ -410,15 +410,15 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     QMap <QString, QVariant> values;
     values["resource"] = collection.resource();
     values["resourceName"] = collection.name();
+    values["uid"] = event->uid();
+    values["itemid"] = item.remoteId();
     values["summary"] = event->summary();
-    values["categories"] = event->categories();
+    values["description"] = event->description();
+    values["location"] = event->location();
+    values["categories"] = event->categoriesStr();
     values["status"] = event->status();
     values["startDate"] = event->dtStart().dateTime().toLocalTime();
     values["endDate"] = event->dtEnd().dateTime().toLocalTime();
-    values["uid"] = event->uid();
-    values["itemid"] = item.remoteId();
-    values["description"] = event->description();
-    values["location"] = event->location();
     bool recurs = event->recurs();
     values["recurs"] = recurs;
     QList<QVariant> recurDates;
@@ -450,8 +450,18 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["uid"] = todo->uid();
     values["itemid"] = item.remoteId();
     values["summary"] = todo->summary();
+    values["description"] = todo->description();
+    values["location"] = todo->location();
+    values["categories"] = todo->categoriesStr();
     values["completed"] = todo->isCompleted();
     values["percent"] = todo->percentComplete();
+    if (todo->hasStartDate()) {
+        values["startDate"] = todo->dtStart(FALSE).dateTime().toLocalTime();
+        values["hasStartDate"] = TRUE;
+    } else {
+        values["startDate"] = QDateTime();
+        values["hasStartDate"] = FALSE;
+    }
     values["completedDate"] = todo->completed().dateTime().toLocalTime();
 #if KDE_IS_VERSION(4,4,0)
     values["inProgress"] = todo->isInProgress(FALSE);

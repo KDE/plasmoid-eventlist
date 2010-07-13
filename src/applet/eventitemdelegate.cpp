@@ -99,8 +99,13 @@ QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> dat
 QHash<QString, QString> EventItemDelegate::todoHash(QMap<QString, QVariant> data) const
 {
     QHash<QString,QString> dataHash;
+    dataHash.insert("startDate", formattedDate(data["startDate"]));
+    dataHash.insert("startTime", KGlobal::locale()->formatTime(data["startDate"].toTime()));
     dataHash.insert("dueDate", formattedDate(data["dueDate"]));
+    dataHash.insert("dueTime", KGlobal::locale()->formatTime(data["dueDate"].toTime()));
     dataHash.insert("summary", data["summary"].toString());
+    dataHash.insert("description", data["description"].toString());
+    dataHash.insert("location", data["location"].toString());
     dataHash.insert("resourceName", data["resourceName"].toString());
     dataHash.insert("percent", QString::number(data["percent"].toInt()));
     dataHash.insert("tab", "\t");
