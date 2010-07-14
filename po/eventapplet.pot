@@ -8,48 +8,47 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-07 21:10+0300\n"
+"POT-Creation-Date: 2010-07-14 17:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: eventapplet.cpp:207 eventapplet.cpp:334
+#: eventapplet.cpp:212 eventapplet.cpp:339
 msgid "Upcoming Events"
 msgstr ""
 
-#: eventapplet.cpp:255
+#: eventapplet.cpp:260
 msgid "Select Resources"
 msgstr ""
 
-#: eventapplet.cpp:301
+#: eventapplet.cpp:306
 msgid "Open event"
 msgstr ""
 
-#: eventapplet.cpp:306
+#: eventapplet.cpp:311
 msgid "Open todo"
 msgstr ""
 
-#: eventapplet.cpp:313
+#: eventapplet.cpp:318
 msgid "Add new event"
 msgstr ""
 
-#: eventapplet.cpp:318
+#: eventapplet.cpp:323
 msgid "Select shown resources"
 msgstr ""
 
-#: eventapplet.cpp:335
+#: eventapplet.cpp:340
 msgid "Upcoming events from Akonadi resources"
 msgstr ""
 
-#: eventapplet.cpp:357
+#: eventapplet.cpp:362
 msgid "Text Format"
 msgstr ""
 
-#: eventapplet.cpp:358
+#: eventapplet.cpp:363
 msgid "Colors"
 msgstr ""
 
@@ -117,7 +116,7 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
 #. i18n: file: eventappletformatconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletFormatConfig)
-#: rc.cpp:3 rc.cpp:98
+#: rc.cpp:3 rc.cpp:113
 msgid "Form"
 msgstr ""
 
@@ -136,7 +135,7 @@ msgstr ""
 #. i18n: file: eventappletcolorconfig.ui:33
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, urgencyBox)
 #: rc.cpp:12
-msgid "The time left until a event is marked as soon beginning."
+msgid "The time left until an event is marked as soon beginning."
 msgstr ""
 
 #. i18n: file: eventappletcolorconfig.ui:36
@@ -152,127 +151,157 @@ msgid "Urgency for birthdays:"
 msgstr ""
 
 #. i18n: file: eventappletcolorconfig.ui:66
-#. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayUrgencyBox)
+#. i18n: ectx: property (toolTip), widget (KIntSpinBox, birthdayUrgencyBox)
 #: rc.cpp:21
+msgid "The days left until a birthday or anniversary is marked as being soon."
+msgstr ""
+
+#. i18n: file: eventappletcolorconfig.ui:69
+#. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayUrgencyBox)
+#: rc.cpp:24
 msgid "days"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:79
+#. i18n: file: eventappletcolorconfig.ui:82
 #. i18n: ectx: property (title), widget (QGroupBox, normalEventsBox)
-#: rc.cpp:24
+#: rc.cpp:27
 msgid "Colors for normal events"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:85
+#. i18n: file: eventappletcolorconfig.ui:88
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rc.cpp:27
+#: rc.cpp:30
 msgid "Backgroundcolor for near events:"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:98
+#. i18n: file: eventappletcolorconfig.ui:101
 #. i18n: ectx: property (toolTip), widget (KColorButton, urgentColorButton)
-#: rc.cpp:30
+#: rc.cpp:33
 msgid "The backgroundcolor for soon beginning events."
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:105
+#. i18n: file: eventappletcolorconfig.ui:108
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#. i18n: file: eventappletcolorconfig.ui:171
+#. i18n: file: eventappletcolorconfig.ui:174
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#. i18n: file: eventappletcolorconfig.ui:208
+#. i18n: file: eventappletcolorconfig.ui:211
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#. i18n: file: eventappletcolorconfig.ui:251
+#. i18n: file: eventappletcolorconfig.ui:257
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#. i18n: file: eventappletcolorconfig.ui:281
+#. i18n: file: eventappletcolorconfig.ui:314
 #. i18n: ectx: property (text), widget (QLabel, label_13)
-#: rc.cpp:33 rc.cpp:55 rc.cpp:68 rc.cpp:81 rc.cpp:91
+#: rc.cpp:36 rc.cpp:58 rc.cpp:71 rc.cpp:87 rc.cpp:106
 msgid "Opacity:"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:112
+#. i18n: file: eventappletcolorconfig.ui:115
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, urgentOpacity)
-#. i18n: file: eventappletcolorconfig.ui:178
+#. i18n: file: eventappletcolorconfig.ui:181
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayOpacity)
-#. i18n: file: eventappletcolorconfig.ui:215
+#. i18n: file: eventappletcolorconfig.ui:218
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, anniversariesOpacity)
-#. i18n: file: eventappletcolorconfig.ui:258
+#. i18n: file: eventappletcolorconfig.ui:264
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, todoOpacity)
-#. i18n: file: eventappletcolorconfig.ui:288
+#. i18n: file: eventappletcolorconfig.ui:321
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, finishedTodoOpacity)
-#: rc.cpp:37 rc.cpp:59 rc.cpp:72 rc.cpp:85 rc.cpp:95
+#: rc.cpp:40 rc.cpp:62 rc.cpp:75 rc.cpp:91 rc.cpp:110
 #, no-c-format
 msgid "%"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:122
+#. i18n: file: eventappletcolorconfig.ui:125
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: rc.cpp:40
+#: rc.cpp:43
 msgid "Textcolor for started or passed events:"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:135
+#. i18n: file: eventappletcolorconfig.ui:138
 #. i18n: ectx: property (toolTip), widget (KColorButton, startedColorButton)
-#: rc.cpp:43
+#: rc.cpp:46
 msgid "The textcolor for already started or passed events."
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:145
+#. i18n: file: eventappletcolorconfig.ui:148
 #. i18n: ectx: property (title), widget (QGroupBox, recurringEventsBox)
-#: rc.cpp:46
+#: rc.cpp:49
 msgid "Colors for recurring events"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:151
+#. i18n: file: eventappletcolorconfig.ui:154
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rc.cpp:49
+#: rc.cpp:52
 msgid "Backgroundcolor for Birthdays:"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:164
+#. i18n: file: eventappletcolorconfig.ui:167
 #. i18n: ectx: property (toolTip), widget (KColorButton, birthdayColorButton)
-#: rc.cpp:52
+#: rc.cpp:55
 msgid "The backgroundcolor for birthdays."
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:188
+#. i18n: file: eventappletcolorconfig.ui:191
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: rc.cpp:62
+#: rc.cpp:65
 msgid "Backgroundcolor for Anniversaries:"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:201
+#. i18n: file: eventappletcolorconfig.ui:204
 #. i18n: ectx: property (toolTip), widget (KColorButton, anniversariesColorButton)
-#: rc.cpp:65
+#: rc.cpp:68
 msgid "The backgroundcolor for anniversaries."
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:228
+#. i18n: file: eventappletcolorconfig.ui:231
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: rc.cpp:75
+#: rc.cpp:78
 msgid "Colors for todos"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:234
+#. i18n: file: eventappletcolorconfig.ui:237
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: rc.cpp:78
+#: rc.cpp:81
 msgid "Backgroundcolor for todos:"
 msgstr ""
 
-#. i18n: file: eventappletcolorconfig.ui:271
+#. i18n: file: eventappletcolorconfig.ui:250
+#. i18n: ectx: property (toolTip), widget (KColorButton, todoColorButton)
+#: rc.cpp:84
+msgid "The backgroundcolor for common todos."
+msgstr ""
+
+#. i18n: file: eventappletcolorconfig.ui:277
+#. i18n: ectx: property (toolTip), widget (QCheckBox, showFinishedTodos)
+#: rc.cpp:94
+msgid "Show or hide already finished todos."
+msgstr ""
+
+#. i18n: file: eventappletcolorconfig.ui:280
+#. i18n: ectx: property (text), widget (QCheckBox, showFinishedTodos)
+#: rc.cpp:97
+msgid "Show finished todos"
+msgstr ""
+
+#. i18n: file: eventappletcolorconfig.ui:300
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#: rc.cpp:88
+#: rc.cpp:100
 msgid "Background for finished todos:"
+msgstr ""
+
+#. i18n: file: eventappletcolorconfig.ui:307
+#. i18n: ectx: property (toolTip), widget (KColorButton, finishedTodoButton)
+#: rc.cpp:103
+msgid "The backgroundcolor for already finished todos."
 msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: rc.cpp:101
+#: rc.cpp:116
 msgid "Event text formatting"
 msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:34
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: rc.cpp:105
+#: rc.cpp:120
 #, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
@@ -288,102 +317,145 @@ msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:41
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: rc.cpp:116
+#: rc.cpp:131
 msgid "Format for normal events:"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:51
+#. i18n: file: eventappletformatconfig.ui:48
+#. i18n: ectx: property (toolTip), widget (KLineEdit, normalEventEdit)
+#: rc.cpp:134
+msgid "The text displayed for common events."
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:55
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: rc.cpp:119
+#: rc.cpp:137
 msgid "Birthday & Anniversaries:"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:64
+#. i18n: file: eventappletformatconfig.ui:62
+#. i18n: ectx: property (toolTip), widget (KLineEdit, recurringEventsEdit)
+#: rc.cpp:140
+msgid "The text displayed for birthdays or anniversaries."
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:72
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: rc.cpp:122
+#: rc.cpp:143
 msgid "Todo text formatting"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:76
+#. i18n: file: eventappletformatconfig.ui:85
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: rc.cpp:126
+#: rc.cpp:147
 #, no-c-format
 msgid ""
 "The format fot the displayed text for todos.\n"
 "Substutions are:\n"
-"%{dueDate} - the date due,\n"
-"%{summary} - summary,\n"
-"%{percent} - percent completed,\n"
+"%{dueDate} - the date due, %{dueTime} - the time due,\n"
+"%{startDate} - the start date, %{startTime} - the start time,\n"
+"%{summary} - summary, %{description} - description,\n"
+"%{percent} - percent completed, %{location} - location,\n"
 "%{resourceName} - the i18n name of the Akonadi resource,\n"
 "%{tab} - a tabulator"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:89
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: rc.cpp:135
-msgid "Date appearance settings"
+#. i18n: file: eventappletformatconfig.ui:92
+#. i18n: ectx: property (text), widget (QLabel, label_8)
+#: rc.cpp:157
+msgid "Format for todos:"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:95
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: rc.cpp:138
-msgid "Date format:"
+#. i18n: file: eventappletformatconfig.ui:99
+#. i18n: ectx: property (toolTip), widget (KLineEdit, todoEdit)
+#: rc.cpp:160
+msgid "The text displayed for common todos."
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:102
-#. i18n: ectx: property (toolTip), widget (KComboBox, dateFormatBox)
-#: rc.cpp:141
-msgid "What date format to use."
-msgstr ""
-
-#. i18n: file: eventappletformatconfig.ui:106
-#. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:144
-msgid "KDE ShortDate"
-msgstr ""
-
-#. i18n: file: eventappletformatconfig.ui:111
-#. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:147
-msgid "KDE LongDate"
+#. i18n: file: eventappletformatconfig.ui:109
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: rc.cpp:163
+msgid "Todos with no due date:"
 msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:116
+#. i18n: ectx: property (toolTip), widget (KLineEdit, noDueDateEdit)
+#: rc.cpp:166
+msgid "The text displayed for todos with no due date."
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:126
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rc.cpp:169
+msgid "Date appearance settings"
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:132
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:172
+msgid "Date format:"
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:139
+#. i18n: ectx: property (toolTip), widget (KComboBox, dateFormatBox)
+#: rc.cpp:175
+msgid "What date format to use."
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:143
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:150
+#: rc.cpp:178
+msgid "KDE ShortDate"
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:148
+#. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
+#: rc.cpp:181
+msgid "KDE LongDate"
+msgstr ""
+
+#. i18n: file: eventappletformatconfig.ui:153
+#. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
+#: rc.cpp:184
 msgid "Custom"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:124
+#. i18n: file: eventappletformatconfig.ui:161
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rc.cpp:153
+#: rc.cpp:187
 msgid "Custom format:"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:131
+#. i18n: file: eventappletformatconfig.ui:168
 #. i18n: ectx: property (toolTip), widget (KLineEdit, customFormatEdit)
-#: rc.cpp:156
+#: rc.cpp:190
 msgid "A string describing the custom format. It is using the QDate syntax."
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:141
+#. i18n: file: eventappletformatconfig.ui:178
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: rc.cpp:159
+#: rc.cpp:193
 msgid "Miscellenous options"
 msgstr ""
 
-#. i18n: file: eventappletformatconfig.ui:147
+#. i18n: file: eventappletformatconfig.ui:184
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: rc.cpp:162
-msgid "Period to show events (in days):"
+#: rc.cpp:196
+msgid "Period to show incidences (in days):"
 msgstr ""
 
-#: rc.cpp:163
+#. i18n: file: eventappletformatconfig.ui:191
+#. i18n: ectx: property (toolTip), widget (KIntSpinBox, periodBox)
+#: rc.cpp:199
+msgid "The time frame to show incidences."
+msgstr ""
+
+#: rc.cpp:200
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 
-#: rc.cpp:164
+#: rc.cpp:201
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr ""
