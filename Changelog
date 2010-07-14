@@ -1,3 +1,14 @@
+0.3
+- fetch items directly in the model, no data engine anymore
+- support for todos
+- filter items in a proxyfiltermodel
+- open event/todo under mouse on rightclick, not active one
+- special urgency for birthdays
+- add Ukrainian translation (big thanks to pfactum)
+- add French translation (big thanks to cedric)
+- code cleanup
+- bugfixes
+
 0.2.6
 - remember disabled resources
 
