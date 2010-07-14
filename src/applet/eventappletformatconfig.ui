@@ -43,7 +43,11 @@ Substitutions are:
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="normalEventEdit"/>
+       <widget class="KLineEdit" name="normalEventEdit">
+        <property name="toolTip">
+         <string>The text displayed for common events.</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
@@ -53,7 +57,11 @@ Substitutions are:
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KLineEdit" name="recurringEventsEdit"/>
+       <widget class="KLineEdit" name="recurringEventsEdit">
+        <property name="toolTip">
+         <string>The text displayed for birthdays or anniversaries.</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -69,9 +77,10 @@ Substitutions are:
         <property name="text">
          <string>The format fot the displayed text for todos.
 Substutions are:
-%{dueDate} - the date due,
-%{summary} - summary,
-%{percent} - percent completed,
+%{dueDate} - the date due, %{dueTime} - the time due,
+%{startDate} - the start date, %{startTime} - the start time,
+%{summary} - summary, %{description} - description,
+%{percent} - percent completed, %{location} - location,
 %{resourceName} - the i18n name of the Akonadi resource,
 %{tab} - a tabulator</string>
         </property>
@@ -85,7 +94,14 @@ Substutions are:
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="todoEdit"/>
+       <widget class="KLineEdit" name="todoEdit">
+        <property name="toolTip">
+         <string>The text displayed for common todos.</string>
+        </property>
+        <property name="statusTip">
+         <string/>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_9">
@@ -95,7 +111,11 @@ Substutions are:
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KLineEdit" name="noDueDateEdit"/>
+       <widget class="KLineEdit" name="noDueDateEdit">
+        <property name="toolTip">
+         <string>The text displayed for todos with no due date.</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -161,12 +181,15 @@ Substutions are:
       <item>
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Period to show events (in days):</string>
+         <string>Period to show incidences (in days):</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="KIntSpinBox" name="periodBox">
+        <property name="toolTip">
+         <string>The time frame to show incidences.</string>
+        </property>
         <property name="minimum">
          <number>1</number>
         </property>

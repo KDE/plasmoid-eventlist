@@ -30,7 +30,7 @@
       <item row="0" column="1">
        <widget class="KIntSpinBox" name="urgencyBox">
         <property name="toolTip">
-         <string>The time left until a event is marked as soon beginning.</string>
+         <string>The time left until an event is marked as soon beginning.</string>
         </property>
         <property name="suffix">
          <string>min</string>
@@ -62,6 +62,9 @@
       </item>
       <item row="1" column="1">
        <widget class="KIntSpinBox" name="birthdayUrgencyBox">
+        <property name="toolTip">
+         <string>The days left until a birthday or anniversary is marked as being soon.</string>
+        </property>
         <property name="suffix">
          <string>days</string>
         </property>
@@ -243,6 +246,9 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="toolTip">
+         <string>The backgroundcolor for common todos.</string>
+        </property>
        </widget>
       </item>
       <item row="0" column="2">
@@ -267,6 +273,9 @@
       </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="showFinishedTodos">
+        <property name="toolTip">
+         <string>Show or hide already finished todos.</string>
+        </property>
         <property name="text">
          <string>Show finished todos</string>
         </property>
@@ -293,7 +302,11 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KColorButton" name="finishedTodoButton"/>
+       <widget class="KColorButton" name="finishedTodoButton">
+        <property name="toolTip">
+         <string>The backgroundcolor for already finished todos.</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="2">
        <widget class="QLabel" name="label_13">
