@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2010-07-14 17:35+0200\n"
-"PO-Revision-Date: 2010-07-07 21:11+0300\n"
+"PO-Revision-Date: 2010-07-15 12:14+0300\n"
 "Last-Translator: Oleksandr Natalenko <pfactum@gmail.com>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 "X-Generator: Lokalize 1.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: eventapplet.cpp:212 eventapplet.cpp:339
 msgid "Upcoming Events"
@@ -137,9 +137,8 @@ msgstr "Терміновість нормальних подій:"
 #. i18n: file: eventappletcolorconfig.ui:33
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, urgencyBox)
 #: rc.cpp:12
-#, fuzzy
 msgid "The time left until an event is marked as soon beginning."
-msgstr "Час, що лишився до позначення події такою, яка почалася."
+msgstr "Час, що лишився до позначення події такою, яка скоро починається."
 
 #. i18n: file: eventappletcolorconfig.ui:36
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, urgencyBox)
@@ -156,9 +155,10 @@ msgstr "Терміновість днів народжень:"
 #. i18n: file: eventappletcolorconfig.ui:66
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, birthdayUrgencyBox)
 #: rc.cpp:21
-#, fuzzy
 msgid "The days left until a birthday or anniversary is marked as being soon."
-msgstr "Час, що лишився до позначення події такою, яка почалася."
+msgstr ""
+"Час, що лишився до позначення дня народження або річниці такою, яка скоро "
+"почнеться."
 
 #. i18n: file: eventappletcolorconfig.ui:69
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayUrgencyBox)
@@ -270,22 +270,20 @@ msgstr "Фоновий колір для справ:"
 #. i18n: file: eventappletcolorconfig.ui:250
 #. i18n: ectx: property (toolTip), widget (KColorButton, todoColorButton)
 #: rc.cpp:84
-#, fuzzy
 msgid "The backgroundcolor for common todos."
-msgstr "Фоновий колір днів народжень."
+msgstr "Фоновий колір загальних справ."
 
 #. i18n: file: eventappletcolorconfig.ui:277
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showFinishedTodos)
 #: rc.cpp:94
 msgid "Show or hide already finished todos."
-msgstr ""
+msgstr "Показати чи сховати вже зроблені справи."
 
 #. i18n: file: eventappletcolorconfig.ui:280
 #. i18n: ectx: property (text), widget (QCheckBox, showFinishedTodos)
 #: rc.cpp:97
-#, fuzzy
 msgid "Show finished todos"
-msgstr "Фоновий колір для завершених справ:"
+msgstr "Показати зроблені справи"
 
 #. i18n: file: eventappletcolorconfig.ui:300
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -296,9 +294,8 @@ msgstr "Фоновий колір для завершених справ:"
 #. i18n: file: eventappletcolorconfig.ui:307
 #. i18n: ectx: property (toolTip), widget (KColorButton, finishedTodoButton)
 #: rc.cpp:103
-#, fuzzy
 msgid "The backgroundcolor for already finished todos."
-msgstr "Фоновий колір для річниць."
+msgstr "Фоновий колір уже зроблених справ."
 
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -342,7 +339,7 @@ msgstr "Формат нормальних подій:"
 #. i18n: ectx: property (toolTip), widget (KLineEdit, normalEventEdit)
 #: rc.cpp:134
 msgid "The text displayed for common events."
-msgstr ""
+msgstr "Текст, який показується для загальних подій."
 
 #. i18n: file: eventappletformatconfig.ui:55
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -354,7 +351,7 @@ msgstr "Дні народжень та річниці:"
 #. i18n: ectx: property (toolTip), widget (KLineEdit, recurringEventsEdit)
 #: rc.cpp:140
 msgid "The text displayed for birthdays or anniversaries."
-msgstr ""
+msgstr "Текст, який показується для днів народжень чи річниць."
 
 #. i18n: file: eventappletformatconfig.ui:72
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
@@ -365,7 +362,7 @@ msgstr "Формат тексту справ"
 #. i18n: file: eventappletformatconfig.ui:85
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: rc.cpp:147
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format fot the displayed text for todos.\n"
 "Substutions are:\n"
@@ -378,38 +375,36 @@ msgid ""
 msgstr ""
 "Формат тексту справ.\n"
 "Підстановками є:\n"
-"%{dueDate} — дата виконання,\n"
-"%{summary} — резюме,\n"
-"%{percent} — відсоток завершення,\n"
+"%{dueDate} — дата виконання, %{dueTime} — час виконання,\n"
+"%{startDate} — дата початку, %{startTime} — час початку,\n"
+"%{summary} — резюме, %{description} — опис,\n"
+"%{percent} — відсоток завершення, %{location} — розміщення,\n"
 "%{resourceName} — інтернаціоналізована назва ресурсу Akonadi,\n"
 "%{tab} — табулятор"
 
 #. i18n: file: eventappletformatconfig.ui:92
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:157
-#, fuzzy
 msgid "Format for todos:"
-msgstr "Колір для справ"
+msgstr "Формат для справ:"
 
 #. i18n: file: eventappletformatconfig.ui:99
 #. i18n: ectx: property (toolTip), widget (KLineEdit, todoEdit)
 #: rc.cpp:160
 msgid "The text displayed for common todos."
-msgstr ""
+msgstr "Текст, який показується для загальних справ."
 
 #. i18n: file: eventappletformatconfig.ui:109
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: rc.cpp:163
-#, fuzzy
 msgid "Todos with no due date:"
-msgstr "Справи без певної дати виконання"
+msgstr "Справи без певної дати виконання:"
 
 #. i18n: file: eventappletformatconfig.ui:116
 #. i18n: ectx: property (toolTip), widget (KLineEdit, noDueDateEdit)
 #: rc.cpp:166
-#, fuzzy
 msgid "The text displayed for todos with no due date."
-msgstr "Справи без певної дати виконання"
+msgstr "Текст, який показується для справ без певної дати виконання."
 
 #. i18n: file: eventappletformatconfig.ui:126
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -468,7 +463,6 @@ msgstr "Додаткові налаштування"
 #. i18n: file: eventappletformatconfig.ui:184
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: rc.cpp:196
-#, fuzzy
 msgid "Period to show incidences (in days):"
 msgstr "Період показу подій (у днях):"
 
@@ -476,7 +470,7 @@ msgstr "Період показу подій (у днях):"
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, periodBox)
 #: rc.cpp:199
 msgid "The time frame to show incidences."
-msgstr ""
+msgstr "Часовий кадр показу подій."
 
 #: rc.cpp:200
 msgctxt "NAME OF TRANSLATORS"
