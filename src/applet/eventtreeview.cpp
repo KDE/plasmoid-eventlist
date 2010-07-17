@@ -54,6 +54,17 @@ void EventTreeView::mouseMoveEvent(QMouseEvent *event)
     emit tooltipUpdated(tip);
 }
 
+void EventTreeView::mousePressEvent(QMouseEvent *event)
+{
+    QString tip = QString();
+    idx = indexAt(event->pos());
+    if (idx.isValid()) {
+        tip = idx.data(EventModel::TooltipRole).toString();
+    }
+
+    emit tooltipUpdated(tip);
+}
+
 QModelIndex EventTreeView::indexAtCursor()
 {
     return idx;

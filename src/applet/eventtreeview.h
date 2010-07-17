@@ -37,6 +37,7 @@ public:
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
 
 signals:
     void tooltipUpdated(QString);
