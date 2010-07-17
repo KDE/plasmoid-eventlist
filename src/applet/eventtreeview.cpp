@@ -59,4 +59,11 @@ QModelIndex EventTreeView::indexAtCursor()
     return idx;
 }
 
+QString EventTreeView::summaryAtCursor()
+{
+    const QVariant v = idx.data(Qt::DisplayRole);
+    QMap<QString, QVariant> values = v.toMap();
+    return values["summary"].toString();
+}
+
 #include "eventtreeview.moc"

@@ -302,13 +302,13 @@ QList<QAction *> EventApplet::contextualActions()
     QModelIndex idx = m_view->indexAtCursor();
     if (idx.isValid()) {
         QVariant type = idx.data(EventModel::ItemTypeRole);
-        if (type.toInt() == EventModel::NormalItem) {
-            QAction *openEvent = new QAction(i18n("Open event"), this);
-            openEvent->setIcon(KIcon("document-edit"));
-            connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
-            currentActions.append(openEvent);
-        } else  if (type.toInt() == EventModel::TodoItem) {
-            QAction *openEvent = new QAction(i18n("Open todo"), this);
+        if (type.toInt() == EventModel::NormalItem || type.toInt() == EventModel::TodoItem) {
+            QString actionTitle = m_view->summaryAtCursor();
+            if (actionTitle.length() > 24) {
+                actionTitle.truncate(24);
+                actionTitle.append("...");
+            }
+            QAction *openEvent = new QAction(i18n("Open \"%1\"").arg(actionTitle), this);
             openEvent->setIcon(KIcon("document-edit"));
             connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
             currentActions.append(openEvent);

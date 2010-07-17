@@ -33,6 +33,7 @@ public:
     ~EventTreeView();
 
     QModelIndex indexAtCursor();
+    QString summaryAtCursor();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);
