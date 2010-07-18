@@ -242,6 +242,11 @@ void EventApplet::slotAddEvent()
     KOrganizerAppletUtil::showAddEvent();
 }
 
+void EventApplet::slotAddTodo()
+{
+    KOrganizerAppletUtil::showAddTodo();
+}
+
 void EventApplet::timerExpired()
 {
     if (lastCheckTime.date() != QDate::currentDate()) {
@@ -319,6 +324,11 @@ QList<QAction *> EventApplet::contextualActions()
     newEvent->setIcon(KIcon("appointment-new"));
     connect(newEvent, SIGNAL(triggered()), this, SLOT(slotAddEvent()));
     currentActions.append(newEvent);
+
+    QAction *newTodo = new QAction(i18n("Add new todo"), this);
+    newTodo->setIcon(KIcon("view-task-add"));
+    connect(newTodo, SIGNAL(triggered()), this, SLOT(slotAddTodo()));
+    currentActions.append(newTodo);
 
     QAction *selectResources = new QAction(i18n("Select shown resources"), this);
     selectResources->setIcon(KIcon("view-calendar-tasks"));

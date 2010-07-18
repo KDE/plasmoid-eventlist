@@ -26,6 +26,7 @@ class KOrganizerAppletUtil : public QObject
 public:
     static void showEvent(const QString &uid);
     static void showAddEvent();
+    static void showAddTodo();
 
 private:
     static void checkAndLaunchKontact();

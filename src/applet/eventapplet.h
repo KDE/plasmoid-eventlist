@@ -67,6 +67,7 @@ private slots:
     void slotUpdateTooltip(QString);
     void openEventFromMenu();
     void slotAddEvent();
+    void slotAddTodo();
     void timerExpired();
     void setShownResources();
     void setupModel();

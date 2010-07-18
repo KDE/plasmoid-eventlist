@@ -55,6 +55,16 @@ void KOrganizerAppletUtil::showAddEvent()
     KOrganizerAppletUtil::showMainWindow();
 }
 
+void KOrganizerAppletUtil::showAddTodo()
+{
+    checkAndLaunchKontact();
+
+    OrgKdeKorganizerCalendarInterface interface("org.kde.korganizer",
+                                                  "/Calendar",
+                                                  QDBusConnection::sessionBus());
+    interface.openTodoEditor(QString());
+    KOrganizerAppletUtil::showMainWindow();
+}
 
 void KOrganizerAppletUtil::showMainWindow()
 {
