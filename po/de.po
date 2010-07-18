@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 0.2.4\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2010-07-18 12:25+0200\n"
-"PO-Revision-Date: 2010-07-18 12:26+0200\n"
+"PO-Revision-Date: 2010-07-18 12:28+0200\n"
 "Last-Translator: Gerd Fleischer <GerdFleischer@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgstr "Neuer Termin"
 
 #: eventapplet.cpp:328
 msgid "Add new todo"
-msgstr "Neuer Aufgabe"
+msgstr "Neue Aufgabe"
 
 #: eventapplet.cpp:333
 msgid "Select shown resources"
