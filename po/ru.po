@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-14 17:35+0200\n"
+"POT-Creation-Date: 2010-07-18 11:53+0200\n"
 "PO-Revision-Date: 2010-07-15 12:56+0300\n"
 "Last-Translator: Oleksandr Natalenko <pfactum@gmail.com>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 "X-Generator: Lokalize 1.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: eventapplet.cpp:212 eventapplet.cpp:339
 msgid "Upcoming Events"
@@ -26,13 +26,9 @@ msgstr "Ближайшие события"
 msgid "Select Resources"
 msgstr "Выбрать ресурсы"
 
-#: eventapplet.cpp:306
-msgid "Open event"
-msgstr "Открыть событие"
-
 #: eventapplet.cpp:311
-msgid "Open todo"
-msgstr "Открыть дело"
+msgid "Open \"%1\""
+msgstr ""
 
 #: eventapplet.cpp:318
 msgid "Add new event"
@@ -482,6 +478,12 @@ msgstr "Oleksandr Natalenko"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "pfactum@gmail.com"
+
+#~ msgid "Open event"
+#~ msgstr "Открыть событие"
+
+#~ msgid "Open todo"
+#~ msgstr "Открыть дело"
 
 #~ msgid "Urgency:"
 #~ msgstr "Терміновість:"

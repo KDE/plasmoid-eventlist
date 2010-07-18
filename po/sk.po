@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-14 17:35+0200\n"
+"POT-Creation-Date: 2010-07-18 11:53+0200\n"
 "PO-Revision-Date: 2010-04-09 22:57+0200\n"
 "Last-Translator: Karol Slanina <karol.slanina@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -25,13 +25,8 @@ msgstr "Prichádzajúce udalosti"
 msgid "Select Resources"
 msgstr "Vybrať zdroje"
 
-#: eventapplet.cpp:306
-#, fuzzy
-msgid "Open event"
-msgstr "Otvoriť aktuálnu udalosť"
-
 #: eventapplet.cpp:311
-msgid "Open todo"
+msgid "Open \"%1\""
 msgstr ""
 
 #: eventapplet.cpp:318
@@ -494,6 +489,10 @@ msgstr "Karol Slanina"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "karol.slanina@gmail.com"
+
+#, fuzzy
+#~ msgid "Open event"
+#~ msgstr "Otvoriť aktuálnu udalosť"
 
 #~ msgid "Urgency:"
 #~ msgstr "Upozornenie:"

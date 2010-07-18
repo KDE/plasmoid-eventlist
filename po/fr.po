@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-14 17:35+0200\n"
+"POT-Creation-Date: 2010-07-18 11:53+0200\n"
 "PO-Revision-Date: 2010-06-22 13:55+0200\n"
 "Last-Translator: Cédric Bellegarde <gnumdk@gmail.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
@@ -25,13 +25,8 @@ msgstr "Evénements à venirs"
 msgid "Select Resources"
 msgstr "Sélectionner les ressources"
 
-#: eventapplet.cpp:306
-#, fuzzy
-msgid "Open event"
-msgstr "Ouvrir l'événement courant"
-
 #: eventapplet.cpp:311
-msgid "Open todo"
+msgid "Open \"%1\""
 msgstr ""
 
 #: eventapplet.cpp:318
@@ -498,6 +493,10 @@ msgstr "Cédric Bellegarde"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "gnumdk@gmail.com"
+
+#, fuzzy
+#~ msgid "Open event"
+#~ msgstr "Ouvrir l'événement courant"
 
 #~ msgid "Urgency:"
 #~ msgstr "Urgence"

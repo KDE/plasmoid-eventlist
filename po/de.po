@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.2.4\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-14 17:35+0200\n"
-"PO-Revision-Date: 2010-07-14 17:54+0200\n"
+"POT-Creation-Date: 2010-07-18 11:53+0200\n"
+"PO-Revision-Date: 2010-07-18 12:01+0200\n"
 "Last-Translator: Gerd Fleischer <GerdFleischer@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,13 +25,9 @@ msgstr "Anstehende Termine"
 msgid "Select Resources"
 msgstr "Ressourcen auswählen"
 
-#: eventapplet.cpp:306
-msgid "Open event"
-msgstr "Termin öffnen"
-
 #: eventapplet.cpp:311
-msgid "Open todo"
-msgstr "Aufgabe öffnen"
+msgid "Open \"%1\""
+msgstr "\"%1\" öffnen"
 
 #: eventapplet.cpp:318
 msgid "Add new event"
@@ -482,6 +478,12 @@ msgstr "Gerd Fleischer"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "gerdfleischer@web.de"
+
+#~ msgid "Open event"
+#~ msgstr "Termin öffnen"
+
+#~ msgid "Open todo"
+#~ msgstr "Aufgabe öffnen"
 
 #~ msgid "Urgency:"
 #~ msgstr "Dringlichkeit:"
