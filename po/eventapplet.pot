@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-18 11:53+0200\n"
+"POT-Creation-Date: 2010-07-18 12:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,35 +16,39 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: eventapplet.cpp:212 eventapplet.cpp:339
+#: eventapplet.cpp:212 eventapplet.cpp:349
 msgid "Upcoming Events"
 msgstr ""
 
-#: eventapplet.cpp:260
+#: eventapplet.cpp:265
 msgid "Select Resources"
 msgstr ""
 
-#: eventapplet.cpp:311
+#: eventapplet.cpp:316
 msgid "Open \"%1\""
 msgstr ""
 
-#: eventapplet.cpp:318
+#: eventapplet.cpp:323
 msgid "Add new event"
 msgstr ""
 
-#: eventapplet.cpp:323
+#: eventapplet.cpp:328
+msgid "Add new todo"
+msgstr ""
+
+#: eventapplet.cpp:333
 msgid "Select shown resources"
 msgstr ""
 
-#: eventapplet.cpp:340
+#: eventapplet.cpp:350
 msgid "Upcoming events from Akonadi resources"
 msgstr ""
 
-#: eventapplet.cpp:362
+#: eventapplet.cpp:372
 msgid "Text Format"
 msgstr ""
 
-#: eventapplet.cpp:363
+#: eventapplet.cpp:373
 msgid "Colors"
 msgstr ""
 

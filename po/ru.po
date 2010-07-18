@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-18 11:53+0200\n"
+"POT-Creation-Date: 2010-07-18 12:25+0200\n"
 "PO-Revision-Date: 2010-07-15 12:56+0300\n"
 "Last-Translator: Oleksandr Natalenko <pfactum@gmail.com>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -18,35 +18,40 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: eventapplet.cpp:212 eventapplet.cpp:339
+#: eventapplet.cpp:212 eventapplet.cpp:349
 msgid "Upcoming Events"
 msgstr "Ближайшие события"
 
-#: eventapplet.cpp:260
+#: eventapplet.cpp:265
 msgid "Select Resources"
 msgstr "Выбрать ресурсы"
 
-#: eventapplet.cpp:311
+#: eventapplet.cpp:316
 msgid "Open \"%1\""
 msgstr ""
 
-#: eventapplet.cpp:318
+#: eventapplet.cpp:323
 msgid "Add new event"
 msgstr "Добавить новое событие"
 
-#: eventapplet.cpp:323
+#: eventapplet.cpp:328
+#, fuzzy
+msgid "Add new todo"
+msgstr "Добавить новое событие"
+
+#: eventapplet.cpp:333
 msgid "Select shown resources"
 msgstr "Показать выбранные ресурсы"
 
-#: eventapplet.cpp:340
+#: eventapplet.cpp:350
 msgid "Upcoming events from Akonadi resources"
 msgstr "Ближайшие события с ресурсов Akonadi"
 
-#: eventapplet.cpp:362
+#: eventapplet.cpp:372
 msgid "Text Format"
 msgstr "Формат текста"
 
-#: eventapplet.cpp:363
+#: eventapplet.cpp:373
 msgid "Colors"
 msgstr "Цвета"
 

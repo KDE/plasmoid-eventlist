@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.2.4\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-18 11:53+0200\n"
-"PO-Revision-Date: 2010-07-18 12:01+0200\n"
+"POT-Creation-Date: 2010-07-18 12:25+0200\n"
+"PO-Revision-Date: 2010-07-18 12:26+0200\n"
 "Last-Translator: Gerd Fleischer <GerdFleischer@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,35 +17,39 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: eventapplet.cpp:212 eventapplet.cpp:339
+#: eventapplet.cpp:212 eventapplet.cpp:349
 msgid "Upcoming Events"
 msgstr "Anstehende Termine"
 
-#: eventapplet.cpp:260
+#: eventapplet.cpp:265
 msgid "Select Resources"
 msgstr "Ressourcen auswählen"
 
-#: eventapplet.cpp:311
+#: eventapplet.cpp:316
 msgid "Open \"%1\""
 msgstr "\"%1\" öffnen"
 
-#: eventapplet.cpp:318
+#: eventapplet.cpp:323
 msgid "Add new event"
 msgstr "Neuer Termin"
 
-#: eventapplet.cpp:323
+#: eventapplet.cpp:328
+msgid "Add new todo"
+msgstr "Neuer Aufgabe"
+
+#: eventapplet.cpp:333
 msgid "Select shown resources"
 msgstr "Angezeigte Ressourcen auswählen"
 
-#: eventapplet.cpp:340
+#: eventapplet.cpp:350
 msgid "Upcoming events from Akonadi resources"
 msgstr "Anstehende Termine von Akonadi Ressourcen"
 
-#: eventapplet.cpp:362
+#: eventapplet.cpp:372
 msgid "Text Format"
 msgstr "Textformat"
 
-#: eventapplet.cpp:363
+#: eventapplet.cpp:373
 msgid "Colors"
 msgstr "Farben"
 
