@@ -227,7 +227,9 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
+    kDebug() << index;
     QString uid = m_filterModel->data(index, EventModel::UIDRole).toString();
+    kDebug() << uid;
     if (!uid.isEmpty())
         KOrganizerAppletUtil::showEvent(uid);
 }

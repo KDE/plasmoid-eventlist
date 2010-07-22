@@ -58,27 +58,35 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
     const QModelIndex idx = sourceModel()->index( sourceRow, 0, sourceParent );
 
     const QVariant t = idx.data(EventModel::ItemTypeRole);
+    const QVariant r = idx.data(EventModel::ResourceRole);
+
     const QVariant d = idx.data(EventModel::SortRole);
     QDate date= d.toDate();
 
     if (date.isValid()) {
         if (date > QDate::currentDate().addDays(365)) { // todos with no specified due date
-            if (m_showFinishedTodos) {
-                return TRUE;
-            } else if (t.toInt() == EventModel::HeaderItem) {
+            if (t.toInt() == EventModel::HeaderItem) {
                 int rows = sourceModel()->rowCount(idx);
-                for (int row = 0; row < rows; ++ row) {
+                for (int row = 0; row < rows; ++ row) { // if the header would be empty dont show it
                     QModelIndex childIdx = sourceModel()->index(row, 0, idx);
-                    const QVariant v = childIdx.data(Qt::DisplayRole);
-                    const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
+                    const QVariant cr = childIdx.data(EventModel::ResourceRole);
+                    if (!m_excludedResources.contains(cr.toString())) {
+                        const QVariant v = childIdx.data(Qt::DisplayRole);
+                        QMap<QString, QVariant> values = v.toMap();
+                        if (m_showFinishedTodos || values["completed"].toBool() == FALSE)
+                            return TRUE;
+                    }
+                }
+                return FALSE;
+            } else {
+                if (!m_excludedResources.contains(r.toString())) {
+                    const QVariant v = idx.data(Qt::DisplayRole);
                     QMap<QString, QVariant> values = v.toMap();
-                    if (childType.toInt() != EventModel::TodoItem) {
-                        return TRUE;
-                    } else if (values["completed"].toBool() == FALSE) {
+                    if (m_showFinishedTodos || values["completed"].toBool() == FALSE) {
                         return TRUE;
                     }
-                    return FALSE;
                 }
+                return FALSE;
             }
         } else if (date > QDate::currentDate().addDays(m_period)) { // stuff later than ...
             return FALSE;
@@ -88,61 +96,63 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                     int rows = sourceModel()->rowCount(idx);
                     for (int row = 0; row < rows; ++row) {
                         QModelIndex childIdx = sourceModel()->index(row, 0, idx);
-                        const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
-                        const QVariant v = childIdx.data(Qt::DisplayRole);
-                        QMap<QString, QVariant> values = v.toMap();
-                        if (childType.toInt() == EventModel::TodoItem) { // dont show old finished stuff
-                            if (values["completed"].toBool() == FALSE)
-                                return TRUE;
-                        } else {
-                            if (values["endDate"].toDate() >= QDate::currentDate())
-                                return TRUE;
+                        const QVariant cr = childIdx.data(EventModel::ResourceRole);
+                        if (!m_excludedResources.contains(cr.toString())) {
+                            const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
+                            const QVariant v = childIdx.data(Qt::DisplayRole);
+                            QMap<QString, QVariant> values = v.toMap();
+                            if (childType.toInt() == EventModel::TodoItem) { // dont show old finished stuff
+                                if (values["completed"].toBool() == FALSE)
+                                    return TRUE;
+                            } else {
+                                if (values["endDate"].toDate() >= QDate::currentDate())
+                                    return TRUE;
+                            }
                         }
                     }
                 }
                 return FALSE;
             } else {
+                if (m_excludedResources.contains(r.toString()))
+                    return FALSE;
+                
                 const QVariant v = idx.data(Qt::DisplayRole);
                 QMap<QString, QVariant> values = v.toMap();
                 if (t.toInt() == EventModel::TodoItem) {
                     if (values["completed"].toBool() == TRUE)
                         return FALSE;
-                } else {
-                    if (values["endDate"].toDate() < QDate::currentDate())
-                        return FALSE;
+                } else if (values["endDate"].toDate() < QDate::currentDate()) {
+                    return FALSE;
                 }
             }
         } else { // stuff from today to period
-            if (m_showFinishedTodos) {
-                return TRUE;
-            } else if (t.toInt() == EventModel::HeaderItem) {
+            if (t.toInt() == EventModel::HeaderItem) { // dont show empty header
                 int rows = sourceModel()->rowCount(idx);
                 for (int row = 0; row < rows; ++ row) {
                     QModelIndex childIdx = sourceModel()->index(row, 0, idx);
-                    const QVariant v = childIdx.data(Qt::DisplayRole);
-                    const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
-                    QMap<QString, QVariant> values = v.toMap();
-                    if (childType.toInt() != EventModel::TodoItem) {
-                        return TRUE;
-                    } else if (values["completed"].toBool() == FALSE) {
-                        return TRUE;
+                    const QVariant cr = childIdx.data(EventModel::ResourceRole);
+                    if (!m_excludedResources.contains(cr.toString())) {
+                        const QVariant v = childIdx.data(Qt::DisplayRole);
+                        const QVariant childType = childIdx.data(EventModel::ItemTypeRole);
+                        QMap<QString, QVariant> values = v.toMap();
+                        if (childType.toInt() != EventModel::TodoItem) {
+                            return TRUE;
+                        } else if (m_showFinishedTodos || values["completed"].toBool() == FALSE) {
+                            return TRUE;
+                        }
                     }
-                    return FALSE;
                 }
+                return FALSE;
+            } else if (m_excludedResources.contains(r.toString())) {
+                return FALSE;
             } else if (t.toInt() == EventModel::TodoItem) {
                 const QVariant v = idx.data(Qt::DisplayRole);
                 QMap<QString, QVariant> values = v.toMap();
-                if (values["completed"].toBool() == TRUE)
+                if (!m_showFinishedTodos && values["completed"].toBool() == TRUE)
                     return FALSE;
             }
         }
-    }
-
-    const QVariant r = idx.data(EventModel::ResourceRole);
-    
-    if (t.toInt() == EventModel::HeaderItem) {
-        return !containsAllResources(r.toStringList());
-    } else if (m_excludedResources.contains(r.toString())) {
+    } else { // no valid date
         return FALSE;
     }
 
