@@ -203,8 +203,6 @@ QGraphicsWidget *EventApplet::graphicsWidget()
         m_view->viewport()->setAutoFillBackground(false);
         m_view->viewport()->setPalette( p );
 
-        connect(m_view, SIGNAL(doubleClicked(const QModelIndex &)),
-                SLOT(slotOpenEvent(const QModelIndex &)));
         connect(m_view, SIGNAL(tooltipUpdated(QString)),
                 SLOT(slotUpdateTooltip(QString)));
 
@@ -227,9 +225,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
-    kDebug() << index;
     QString uid = m_filterModel->data(index, EventModel::UIDRole).toString();
-    kDebug() << uid;
     if (!uid.isEmpty())
         KOrganizerAppletUtil::showEvent(uid);
 }
