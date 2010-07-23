@@ -37,8 +37,6 @@ EventTreeView::EventTreeView(QWidget* parent)
     setSelectionMode(QAbstractItemView::NoSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    connect(this, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(test()));
 }
 
 EventTreeView::~EventTreeView()
@@ -54,7 +52,6 @@ void EventTreeView::mouseMoveEvent(QMouseEvent *event)
     }
     
     emit tooltipUpdated(tip);
-    event->accept();
 }
 
 void EventTreeView::mousePressEvent(QMouseEvent *event)
@@ -66,22 +63,11 @@ void EventTreeView::mousePressEvent(QMouseEvent *event)
     }
 
     emit tooltipUpdated(tip);
-    event->accept();
-}
-
-void EventTreeView::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    kDebug() << "click";
 }
 
 QModelIndex EventTreeView::indexAtCursor()
 {
     return idx;
-}
-
-void EventTreeView::test()
-{
-    kDebug() << "test";
 }
 
 QString EventTreeView::summaryAtCursor()

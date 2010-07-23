@@ -38,14 +38,11 @@ public:
 protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
 
 signals:
     void tooltipUpdated(QString);
 
-private slots:
-    void test();
-    private:
+private:
     QModelIndex idx;
 };
 
