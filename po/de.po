@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 0.2.4\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2010-07-18 12:25+0200\n"
-"PO-Revision-Date: 2010-07-18 12:28+0200\n"
+"PO-Revision-Date: 2010-07-23 18:13+0200\n"
 "Last-Translator: Gerd Fleischer <GerdFleischer@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -55,7 +55,7 @@ msgstr "Farben"
 
 #: eventmodel.cpp:78
 msgid "Earlier stuff"
-msgstr "Ältere Dinge "
+msgstr "Ältere Sachen "
 
 #: eventmodel.cpp:78
 msgid "Unfinished todos, still ongoing earlier events etc."
@@ -131,7 +131,7 @@ msgstr "Zeiten"
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:9
 msgid "Urgency for normal events:"
-msgstr "Format für normale Ereignisse:"
+msgstr "Dringlichkeit für normale Ereignisse:"
 
 #. i18n: file: eventappletcolorconfig.ui:33
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, urgencyBox)
@@ -149,7 +149,7 @@ msgstr "min"
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: rc.cpp:18
 msgid "Urgency for birthdays:"
-msgstr "Hintergrundfarbe für Geburtstage:"
+msgstr "Dringlichkeit für Geburtstage:"
 
 #. i18n: file: eventappletcolorconfig.ui:66
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, birthdayUrgencyBox)
@@ -385,7 +385,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:157
 msgid "Format for todos:"
-msgstr "Format für Aufgaben"
+msgstr "Format für Aufgaben:"
 
 #. i18n: file: eventappletformatconfig.ui:99
 #. i18n: ectx: property (toolTip), widget (KLineEdit, todoEdit)
