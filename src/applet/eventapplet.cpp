@@ -477,7 +477,7 @@ void EventApplet::configAccepted()
     int finishedTodoOpacity = m_colorConfigUi.finishedTodoOpacity->value();
     cg.writeEntry("FinishedTodoColor", m_finishedTodoBg.name());
     cg.writeEntry("FinishedTodoOpacity", finishedTodoOpacity);
-    m_todoBg.setAlphaF(finishedTodoOpacity/100.0);
+    m_finishedTodoBg.setAlphaF(finishedTodoOpacity/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
     m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
