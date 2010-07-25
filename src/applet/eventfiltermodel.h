@@ -37,8 +37,6 @@ protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
 private:
-    bool containsAllResources(const QStringList &) const;
-
     int m_period;
     bool m_showFinishedTodos;
     QStringList m_excludedResources;

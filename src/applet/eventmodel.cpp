@@ -174,7 +174,7 @@ void EventModel::initHeaderItem(QStandardItem *item, QString title, QString tool
     item->setData(data, Qt::DisplayRole);
     item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), SortRole);
     item->setData(QVariant(HeaderItem), ItemTypeRole);
-    item->setData(QVariant(QStringList()), ResourceRole);
+    item->setData(QVariant(QString()), ResourceRole);
     item->setData(QVariant(QString()), UIDRole);
     item->setData(QVariant("<qt><b>" + toolTip + "</b></qt>"), TooltipRole);
     QFont bold = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
@@ -379,10 +379,6 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
     if (headerItem) {
         headerItem->appendRow(incidenceItem);
         headerItem->sortChildren(0, Qt::AscendingOrder);
-        QStringList resources = headerItem->data(ResourceRole).toStringList();
-        resources.append(incidenceItem->data(ResourceRole).toString());
-        resources.removeDuplicates();
-        headerItem->setData(resources, ResourceRole);
         if (headerItem->row() == -1) {
             parentItem->insertRow(figureRow(headerItem), headerItem);
         }

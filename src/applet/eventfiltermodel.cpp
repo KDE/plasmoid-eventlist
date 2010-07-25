@@ -158,17 +158,3 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
 
     return TRUE;
 }
-
-bool EventFilterModel::containsAllResources(const QStringList &resList) const
-{
-    bool hasAll = true;
-
-    foreach (QString res, resList) {
-        if (!m_excludedResources.contains(res)) {
-            hasAll = false;
-            break;
-        }
-    }
-
-    return hasAll;
-}
