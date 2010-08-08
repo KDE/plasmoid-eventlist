@@ -2,8 +2,10 @@
 Encoding=UTF-8
 Name=Eventlist
 Name[de]=Ereignisliste
+Name[sk]=Zoznam udalostí
 Comment=Shows a list with the events from Akonadi resources
 Comment[de]=Zeigt eine Liste mit den Ereignissen etc. von Akonadi Ressourcen
+Comment[sk]=Zobrazuje zoznam udalostí z Akonadi zdrojov
 Icon=view-pim-tasks
 Type=Service
 ServiceTypes=Plasma/Applet
