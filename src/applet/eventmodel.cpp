@@ -295,6 +295,9 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             eventItem = new QStandardItem();
             data["startDate"] = eventDtTime;
 
+            int d = values["startDate"].toDateTime().daysTo(values["endDate"].toDateTime());
+            data["endDate"] = eventDtTime.toDateTime().addDays(d);
+
             QDate itemDt = eventDtTime.toDate();
             if (values["isBirthday"].toBool() || values["categories"].toStringList().contains(i18n("Birthday"))) {
                 data["itemType"] = BirthdayItem;
