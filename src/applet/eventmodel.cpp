@@ -291,12 +291,12 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             QStandardItem *eventItem;
             eventItem = new QStandardItem();
             data["startDate"] = eventDtTime;
-            int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
-            data["yearsSince"] = QString::number(n);
 
             QDate itemDt = eventDtTime.toDate();
             if (values["isBirthday"].toBool()) {
                 data["itemType"] = BirthdayItem;
+                int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
+                data["yearsSince"] = QString::number(n);
                 if (itemDt >= QDate::currentDate() && QDate::currentDate().daysTo(itemDt) < birthdayUrgency) {
                     eventItem->setBackground(QBrush(urgentBg));
                 } else {
@@ -305,12 +305,23 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
                 eventItem->setData(QVariant(BirthdayItem), ItemTypeRole);
             } else if (values["isAnniversary"].toBool()) {
                 data["itemType"] = AnniversaryItem;
+                int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
+                data["yearsSince"] = QString::number(n);
                 if (itemDt >= QDate::currentDate() && QDate::currentDate().daysTo(itemDt) < birthdayUrgency) {
                     eventItem->setBackground(QBrush(urgentBg));
                 } else {
                     eventItem->setBackground(QBrush(anniversariesBg));
                 }
                 eventItem->setData(QVariant(AnniversaryItem), ItemTypeRole);
+            } else {
+                data["itemType"] = NormalItem;
+                eventItem->setData(QVariant(NormalItem), ItemTypeRole);
+                QDateTime itemDtTime = data["startDate"].toDateTime();
+                if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
+                    eventItem->setBackground(QBrush(urgentBg));
+                } else if (QDateTime::currentDateTime() > itemDtTime) {
+                    eventItem->setForeground(QBrush(passedFg));
+                }
             }
 
             eventItem->setData(data, Qt::DisplayRole);
