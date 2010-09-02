@@ -361,22 +361,45 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
 {
     QMap<QString, QVariant> data = values;
-    QStandardItem *todoItem = new QStandardItem();
-    data["itemType"] = TodoItem;
-    todoItem->setData(QVariant(TodoItem), ItemTypeRole);
-    todoItem->setData(data, Qt::DisplayRole);
-    todoItem->setData(values["dueDate"].toDateTime(), SortRole);
-    todoItem->setData(values["uid"], EventModel::UIDRole);
-    todoItem->setData(values["itemid"], ItemIDRole);
-    todoItem->setData(values["resource"], ResourceRole);
-    todoItem->setData(values["tooltip"], TooltipRole);
-    if (values["completed"].toBool() == TRUE) {
-        todoItem->setBackground(QBrush(finishedTodoBg));
+    if (values["recurs"].toBool()) {
+        QList<QVariant> dtTimes = values["recurDates"].toList();
+        foreach (QVariant eventDtTime, dtTimes) {
+            QStandardItem *todoItem = new QStandardItem();
+            data["dueDate"] = eventDtTime;
+            data["itemType"] = TodoItem;
+            todoItem->setData(QVariant(TodoItem), ItemTypeRole);
+            todoItem->setData(data, Qt::DisplayRole);
+            todoItem->setData(eventDtTime, SortRole);
+            todoItem->setData(values["uid"], EventModel::UIDRole);
+            todoItem->setData(values["itemid"], ItemIDRole);
+            todoItem->setData(values["resource"], ResourceRole);
+            todoItem->setData(values["tooltip"], TooltipRole);
+            if (values["completed"].toBool() == TRUE) {
+                todoItem->setBackground(QBrush(finishedTodoBg));
+            } else {
+                todoItem->setBackground(QBrush(todoBg));
+            }
+
+            addItemRow(eventDtTime.toDate(), todoItem);
+        }
     } else {
-        todoItem->setBackground(QBrush(todoBg));
+        QStandardItem *todoItem = new QStandardItem();
+        data["itemType"] = TodoItem;
+        todoItem->setData(QVariant(TodoItem), ItemTypeRole);
+        todoItem->setData(data, Qt::DisplayRole);
+        todoItem->setData(values["dueDate"].toDateTime(), SortRole);
+        todoItem->setData(values["uid"], EventModel::UIDRole);
+        todoItem->setData(values["itemid"], ItemIDRole);
+        todoItem->setData(values["resource"], ResourceRole);
+        todoItem->setData(values["tooltip"], TooltipRole);
+        if (values["completed"].toBool() == TRUE) {
+            todoItem->setBackground(QBrush(finishedTodoBg));
+        } else {
+            todoItem->setBackground(QBrush(todoBg));
+        }
+
+        addItemRow(values["dueDate"].toDate(), todoItem);
     }
-    
-    addItemRow(values["dueDate"].toDate(), todoItem);
 }
 
 void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
@@ -429,6 +452,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["status"] = event->status();
     values["startDate"] = event->dtStart().dateTime().toLocalTime();
     values["endDate"] = event->dtEnd().dateTime().toLocalTime();
+
     bool recurs = event->recurs();
     values["recurs"] = recurs;
     QList<QVariant> recurDates;
@@ -441,6 +465,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
         }
     }
     values["recurDates"] = recurDates;
+
     event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
 #if KDE_IS_VERSION(4,4,60)
@@ -484,6 +509,20 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
         values["dueDate"] = QDateTime::currentDateTime().addDays(366);
         values["hasDueDate"] = FALSE;
     }
+
+    bool recurs = todo->recurs();
+    values["recurs"] = recurs;
+    QList<QVariant> recurDates;
+    if (recurs) {
+        KCal::Recurrence *r = todo->recurrence();
+        KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
+        dtTimes.sortUnique();
+        foreach (KDateTime t, dtTimes) {
+            recurDates << QVariant(t.dateTime().toLocalTime());
+        }
+    }
+    values["recurDates"] = recurDates;
+
 #if KDE_IS_VERSION(4,4,60)
     values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 #else
