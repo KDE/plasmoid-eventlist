@@ -234,8 +234,11 @@ void EventModel::removeItem(const Akonadi::Item &item)
         QModelIndexList l;
         if (i->hasChildren())
             l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.remoteId());
-        if (!l.isEmpty())
+        while (!l.isEmpty()) {
             i->removeRow(l[0].row());
+            if (!i->hasChildren()) break;
+            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.remoteId());
+        }
         int r = i->row();
         if (r != -1 && !i->hasChildren()) {
             takeItem(r);
