@@ -221,7 +221,7 @@ void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
-#if KDE_IS_VERSION(4,5,1)
+#if KDE_IS_VERSION(4,5,3)
     kDebug() << "item added" << item.remoteId();
 #else
     addItem(item, collection);
@@ -248,7 +248,7 @@ void EventModel::removeItem(const Akonadi::Item &item)
 void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &)
 {
     kDebug() << "item changed";
-#if KDE_IS_VERSION(4,5,1)
+#if KDE_IS_VERSION(4,5,3)
     removeItem(item);
     addItem(item, item.parentCollection());
 #else
@@ -259,7 +259,7 @@ void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &
 void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection &, const Akonadi::Collection &)
 {
     kDebug() << "item moved";
-#if KDE_IS_VERSION(4,5,1)
+#if KDE_IS_VERSION(4,5,3)
     removeItem(item);
     addItem(item, item.parentCollection());
 #else
