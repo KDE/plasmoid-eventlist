@@ -293,7 +293,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             data["startDate"] = eventDtTime;
 
             QDate itemDt = eventDtTime.toDate();
-            if (values["isBirthday"].toBool()) {
+            if (values["isBirthday"].toBool() || values["categories"].toStringList().contains(i18n("Birthday"))) {
                 data["itemType"] = BirthdayItem;
                 int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
                 data["yearsSince"] = QString::number(n);
