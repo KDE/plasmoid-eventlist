@@ -342,7 +342,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
         data["itemType"] = NormalItem;
         eventItem->setData(QVariant(NormalItem), ItemTypeRole);
         eventItem->setData(data, Qt::DisplayRole);
-        eventItem->setData(values["startDate"].toDateTime(), SortRole);
+        eventItem->setData(values["startDate"], SortRole);
         eventItem->setData(values["uid"], EventModel::UIDRole);
         eventItem->setData(values["itemid"], ItemIDRole);
         eventItem->setData(values["resource"], ResourceRole);
@@ -387,7 +387,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
         data["itemType"] = TodoItem;
         todoItem->setData(QVariant(TodoItem), ItemTypeRole);
         todoItem->setData(data, Qt::DisplayRole);
-        todoItem->setData(values["dueDate"].toDateTime(), SortRole);
+        todoItem->setData(values["dueDate"], SortRole);
         todoItem->setData(values["uid"], EventModel::UIDRole);
         todoItem->setData(values["itemid"], ItemIDRole);
         todoItem->setData(values["resource"], ResourceRole);
