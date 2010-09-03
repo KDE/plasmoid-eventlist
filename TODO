@@ -1,5 +1,2 @@
-use a proxy model for filtering categories, maybe
-look more Plasmalike, how to style the treeview tooltips?
 honour secrecy (how?)
-maybe make use of the lots of new akonadi model in 4.4/4.5
- (entitytreemodel and proxymodels could work)
+maybe use colors of korganizer for categories?

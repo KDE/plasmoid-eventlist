@@ -30,7 +30,8 @@ Then you can add resources.
 For 4.3 I suggest setting all resources to read only and keep the standard resources for e.g. korganizer.
 Who is using 4.4 should know what he is doing. ;-)
 
-With 4.4 is a problem with signals from the monitor
-if an item is added we receive a "item added" signal for all already existing item?
-this may lead to strange behavior with 4.4
-(tested on opensuse 11.2 + factory, kubuntu 10.04, mandriva)
+Some time ago it was planned that pim 4.5 will be released with KDE SC 4.5.1,
+unfortunately that didn't happen, currently no release date is known.
+As the behavior with signal for added/removed items is different between 4.4 and 4.5
+I added some ifdefs in eventmodel.cpp (line 224, 254, 265). Maybe you need to adjust the kdeversion.
+I think I dont release 0.3 as stable until pim 4.5 is out.

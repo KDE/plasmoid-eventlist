@@ -1,3 +1,9 @@
+0.2.92 (0.3 beta)
+- support for recurring normal events
+- support for recurring todos
+- update translations (see AUTHORS for credits)
+- push expected KDE with pim 4.5 to SC 4.5.3 (may not be final)
+
 0.2.91 (0.3 beta)
 - add context option for new todo
 - update translations (should be complete for 0.3 now,
