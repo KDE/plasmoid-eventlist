@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-07-18 12:25+0200\n"
+"POT-Creation-Date: 2010-09-25 09:53+0200\n"
 "PO-Revision-Date: 2010-09-17 16:00+0200\n"
 "Last-Translator: jacopo\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
@@ -18,39 +18,39 @@ msgstr ""
 "X-Generator: Lokalize 1.1\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: eventapplet.cpp:212 eventapplet.cpp:349
+#: eventapplet.cpp:210 eventapplet.cpp:347
 msgid "Upcoming Events"
 msgstr "Prossimi eventi"
 
-#: eventapplet.cpp:265
+#: eventapplet.cpp:263
 msgid "Select Resources"
 msgstr "Seleziona la risorsa"
 
-#: eventapplet.cpp:316
+#: eventapplet.cpp:314
 msgid "Open \"%1\""
 msgstr "Apri \"%1\""
 
-#: eventapplet.cpp:323
+#: eventapplet.cpp:321
 msgid "Add new event"
 msgstr "Aggiungi un nuovo evento "
 
-#: eventapplet.cpp:328
+#: eventapplet.cpp:326
 msgid "Add new todo"
 msgstr "Aggiungi una nuova cosa-da-fare"
 
-#: eventapplet.cpp:333
+#: eventapplet.cpp:331
 msgid "Select shown resources"
 msgstr "Risorse per la visualizzazione"
 
-#: eventapplet.cpp:350
+#: eventapplet.cpp:348
 msgid "Upcoming events from Akonadi resources"
 msgstr "Prossimi eventi (risorse di Akonadi)"
 
-#: eventapplet.cpp:372
+#: eventapplet.cpp:370
 msgid "Text Format"
 msgstr "Formato del testo "
 
-#: eventapplet.cpp:373
+#: eventapplet.cpp:371
 msgid "Colors"
 msgstr "Colori"
 
@@ -113,6 +113,10 @@ msgstr "Cose-da-fare senza scadenza"
 #: eventmodel.cpp:202
 msgid "The Akonadi server is not running!"
 msgstr "Il server Akonadi non è in esecuzione!"
+
+#: eventmodel.cpp:302
+msgid "Birthday"
+msgstr ""
 
 #. i18n: file: eventappletcolorconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)

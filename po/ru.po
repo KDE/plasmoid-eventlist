@@ -6,51 +6,51 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-08-17 15:52+0300\n"
+"POT-Creation-Date: 2010-09-25 09:53+0200\n"
 "PO-Revision-Date: 2010-08-17 15:54+0300\n"
 "Last-Translator: Oleksandr Natalenko <pfactum@gmail.com>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
-"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
 "X-Generator: Lokalize 1.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: eventapplet.cpp:212 eventapplet.cpp:349
+#: eventapplet.cpp:210 eventapplet.cpp:347
 msgid "Upcoming Events"
 msgstr "Ближайшие события"
 
-#: eventapplet.cpp:265
+#: eventapplet.cpp:263
 msgid "Select Resources"
 msgstr "Выбрать ресурсы"
 
-#: eventapplet.cpp:316
+#: eventapplet.cpp:314
 msgid "Open \"%1\""
 msgstr "Открыть «%1»"
 
-#: eventapplet.cpp:323
+#: eventapplet.cpp:321
 msgid "Add new event"
 msgstr "Добавить новое событие"
 
-#: eventapplet.cpp:328
+#: eventapplet.cpp:326
 msgid "Add new todo"
 msgstr "Добавить новое дело"
 
-#: eventapplet.cpp:333
+#: eventapplet.cpp:331
 msgid "Select shown resources"
 msgstr "Показать выбранные ресурсы"
 
-#: eventapplet.cpp:350
+#: eventapplet.cpp:348
 msgid "Upcoming events from Akonadi resources"
 msgstr "Ближайшие события с ресурсов Akonadi"
 
-#: eventapplet.cpp:372
+#: eventapplet.cpp:370
 msgid "Text Format"
 msgstr "Формат текста"
 
-#: eventapplet.cpp:373
+#: eventapplet.cpp:371
 msgid "Colors"
 msgstr "Цвета"
 
@@ -113,6 +113,10 @@ msgstr "Дела без даты выполнения"
 #: eventmodel.cpp:202
 msgid "The Akonadi server is not running!"
 msgstr "Сервер Akonadi не работает!"
+
+#: eventmodel.cpp:302
+msgid "Birthday"
+msgstr ""
 
 #. i18n: file: eventappletcolorconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
