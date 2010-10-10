@@ -27,11 +27,8 @@ mysql_upgrade --socket=$HOME/.local/share/akonadi/db_misc/mysql.socket
 Then stop and restart the server.
 
 Then you can add resources.
-For 4.3 I suggest setting all resources to read only and keep the standard resources for e.g. korganizer.
-Who is using 4.4 should know what he is doing. ;-)
 
 Some time ago it was planned that pim 4.5 will be released with KDE SC 4.5.1,
-unfortunately that didn't happen, currently no release date is known.
+unfortunately that didn't happen, currently no release date is known, afaik.
 As the behavior with signal for added/removed items is different between 4.4 and 4.5
-I added some ifdefs in eventmodel.cpp (line 224, 254, 265). Maybe you need to adjust the kdeversion.
-I think I dont release 0.3 as stable until pim 4.5 is out.
+I added some ifdefs in eventmodel.cpp (around line 224, 254, 265). Maybe you need to adjust the kdeversion.
