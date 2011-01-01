@@ -1,122 +1,123 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Cédric Bellegarde <gnumdk@gmail.com>, 2010.
-# Gerd Fleischer <gerdfleischer@gmx.de>, 2011.
+# Karol Slanina <karol.slanina@gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2010-09-28 20:34+0200\n"
-"PO-Revision-Date: 2011-01-01 12:22+0100\n"
-"Last-Translator: Gerd Fleischer <gerdfleischer@gmx.de>\n"
-"Language-Team: French <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2010-12-02 14:21+0100\n"
+"PO-Revision-Date: 2010-08-07 23:48+0200\n"
+"Last-Translator: Karol Slanina <karol.slanina@gmail.com>\n"
+"Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
+"Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
-"X-Generator: Lokalize 1.1\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Language: cs_CZ\n"
+"X-Source-Language: C\n"
 
 #: eventapplet.cpp:210 eventapplet.cpp:347
 msgid "Upcoming Events"
-msgstr "Evénements à venir"
+msgstr "Nadcházející události"
 
 #: eventapplet.cpp:263
 msgid "Select Resources"
-msgstr "Sélectionner les ressources"
+msgstr "Vybrat zdroje"
 
 #: eventapplet.cpp:314
 msgid "Open \"%1\""
-msgstr "Ouvrir \"%1\""
+msgstr "Otevřít \"%1\""
 
 #: eventapplet.cpp:321
 msgid "Add new event"
-msgstr "Ajouter un événement"
+msgstr "Přidat novou událost"
 
 #: eventapplet.cpp:326
 msgid "Add new todo"
-msgstr "Ajouter une nouvelle tâche"
+msgstr "Přidat nový úkol"
 
 #: eventapplet.cpp:331
 msgid "Select shown resources"
-msgstr "Ressources à afficher"
+msgstr "Vybrat zobrazované zdroje"
 
 #: eventapplet.cpp:348
 msgid "Upcoming events from Akonadi resources"
-msgstr "Evénements à venirs (ressources Akonadi)"
+msgstr "Nadcházející události ze zdrojů Akonadi"
 
 #: eventapplet.cpp:370
 msgid "Text Format"
-msgstr "Format du texte"
+msgstr "Formát textu"
 
 #: eventapplet.cpp:371
 msgid "Colors"
-msgstr "Couleurs"
+msgstr "Barvy"
 
 #: eventmodel.cpp:78
 msgid "Earlier stuff"
-msgstr "Evénements précédents"
+msgstr "Dřívější položky"
 
 #: eventmodel.cpp:78
 msgid "Unfinished todos, still ongoing earlier events etc."
-msgstr "Tâches non terminées, événements passés encore en cours à venir etc"
+msgstr "Nedokončené úkoly, probíhající dřívější události atd."
 
 #: eventmodel.cpp:83
 msgid "Today"
-msgstr "Aujourd'hui"
+msgstr "Dnes"
 
 #: eventmodel.cpp:83
 msgid "Events of today"
-msgstr "Evénements pour aujourd'hui"
+msgstr "Dnešní udalosti"
 
 #: eventmodel.cpp:88
 msgid "Tomorrow"
-msgstr "Demain"
+msgstr "Zítra"
 
 #: eventmodel.cpp:88
 msgid "Events for tomorrow"
-msgstr "Evénement pour demain"
+msgstr "Úlohy na zítra"
 
 #: eventmodel.cpp:93
 msgid "Week"
-msgstr "Semaine à venir"
+msgstr "Týden"
 
 #: eventmodel.cpp:93
 msgid "Events of the next week"
-msgstr "Evénements pour la semaine prochaine"
+msgstr "Události následujícího týdne"
 
 #: eventmodel.cpp:98
 msgid "Next 4 weeks"
-msgstr "Quatre prochaines semaines"
+msgstr "Další 4 týdny"
 
 #: eventmodel.cpp:98
 msgid "Events for the next 4 weeks"
-msgstr "Evénements pour les quatre prochaines semaines"
+msgstr "Události v následujících 4 týdnech"
 
 #: eventmodel.cpp:103
 msgid "Later"
-msgstr "Plus tard"
+msgstr "Později"
 
 #: eventmodel.cpp:103
 msgid "Events later than 4 weeks"
-msgstr "Evénements dans plus de 4 semaines"
+msgstr "Události za více než 4 týdny"
 
 #: eventmodel.cpp:108
 msgid "Some day"
-msgstr "Un jour ou l'autre"
+msgstr "Někdy"
 
 #: eventmodel.cpp:108
 msgid "Todos with no due date"
-msgstr "Tâches sans date de fin"
+msgstr "Úkoly bez termínu"
 
 #: eventmodel.cpp:202
 msgid "The Akonadi server is not running!"
-msgstr "Le serveur Akonadi ne fonctionne pas!"
+msgstr "Server Akonadi neběží!"
 
 #: eventmodel.cpp:302
 msgid "Birthday"
-msgstr "Anniversaires"
+msgstr "Narozeniny"
 
 #. i18n: file: eventappletcolorconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
@@ -124,25 +125,25 @@ msgstr "Anniversaires"
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletFormatConfig)
 #: rc.cpp:3 rc.cpp:113
 msgid "Form"
-msgstr "Formulaire"
+msgstr "Formulář"
 
 #. i18n: file: eventappletcolorconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, timeBox)
 #: rc.cpp:6
 msgid "Times"
-msgstr "Heure"
+msgstr "Časy"
 
 #. i18n: file: eventappletcolorconfig.ui:26
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:9
 msgid "Urgency for normal events:"
-msgstr "Priorité des événement normaux:"
+msgstr "Priorita běžných událostí:"
 
 #. i18n: file: eventappletcolorconfig.ui:33
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, urgencyBox)
 #: rc.cpp:12
 msgid "The time left until an event is marked as soon beginning."
-msgstr "Temps restant avant qu'un événement soit marqué comme proche."
+msgstr "Čas, od kterého jsou události zvýrazněné jako blízké."
 
 #. i18n: file: eventappletcolorconfig.ui:36
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, urgencyBox)
@@ -154,37 +155,37 @@ msgstr "min"
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: rc.cpp:18
 msgid "Urgency for birthdays:"
-msgstr "Priorité pour les anniversaires:"
+msgstr "Priorita narozenin:"
 
 #. i18n: file: eventappletcolorconfig.ui:66
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, birthdayUrgencyBox)
 #: rc.cpp:21
 msgid "The days left until a birthday or anniversary is marked as being soon."
-msgstr "Temps restant avant qu'un événement soit marqué comme proche."
+msgstr "Čas, od ktorého sú narodeniny alebo výročia zvýraznené ako blízke."
 
 #. i18n: file: eventappletcolorconfig.ui:69
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, birthdayUrgencyBox)
 #: rc.cpp:24
 msgid "days"
-msgstr "jours"
+msgstr "dní"
 
 #. i18n: file: eventappletcolorconfig.ui:82
 #. i18n: ectx: property (title), widget (QGroupBox, normalEventsBox)
 #: rc.cpp:27
 msgid "Colors for normal events"
-msgstr "Couleur des événement normaux"
+msgstr "Barva pro běžné události"
 
 #. i18n: file: eventappletcolorconfig.ui:88
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rc.cpp:30
 msgid "Backgroundcolor for near events:"
-msgstr "Couleur de fond pour les événements proches"
+msgstr "Barva pozadí pro blízké události:"
 
 #. i18n: file: eventappletcolorconfig.ui:101
 #. i18n: ectx: property (toolTip), widget (KColorButton, urgentColorButton)
 #: rc.cpp:33
 msgid "The backgroundcolor for soon beginning events."
-msgstr "Couleur de fond pour les événements débutant prochainnement"
+msgstr "Barva pozadí pro blízké události."
 
 #. i18n: file: eventappletcolorconfig.ui:108
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -198,7 +199,7 @@ msgstr "Couleur de fond pour les événements débutant prochainnement"
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: rc.cpp:36 rc.cpp:58 rc.cpp:71 rc.cpp:87 rc.cpp:106
 msgid "Opacity:"
-msgstr "Opacité:"
+msgstr "Neprůhlednost:"
 
 #. i18n: file: eventappletcolorconfig.ui:115
 #. i18n: ectx: property (suffix), widget (KIntSpinBox, urgentOpacity)
@@ -219,91 +220,91 @@ msgstr "%"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: rc.cpp:43
 msgid "Textcolor for started or passed events:"
-msgstr "Couleur du texte pour les événements en cours ou passés"
+msgstr "Barva textu pro běžící, nebo uplynulé události:"
 
 #. i18n: file: eventappletcolorconfig.ui:138
 #. i18n: ectx: property (toolTip), widget (KColorButton, startedColorButton)
 #: rc.cpp:46
 msgid "The textcolor for already started or passed events."
-msgstr "La couleur du texte pour les événements en cours ou passés"
+msgstr "Barva textu pro běžící, nebo uplynulé události."
 
 #. i18n: file: eventappletcolorconfig.ui:148
 #. i18n: ectx: property (title), widget (QGroupBox, recurringEventsBox)
 #: rc.cpp:49
 msgid "Colors for recurring events"
-msgstr "Couleur pour les événements récurrents"
+msgstr "Barvy pro opakující se události"
 
 #. i18n: file: eventappletcolorconfig.ui:154
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: rc.cpp:52
 msgid "Backgroundcolor for Birthdays:"
-msgstr "Couleur de fond pour les anniversaires:"
+msgstr "Barva pozadí pro narozeniny:"
 
 #. i18n: file: eventappletcolorconfig.ui:167
 #. i18n: ectx: property (toolTip), widget (KColorButton, birthdayColorButton)
 #: rc.cpp:55
 msgid "The backgroundcolor for birthdays."
-msgstr "La couleur de fond pour les anniversaires."
+msgstr "Barva pozadí pro narozeniny."
 
 #. i18n: file: eventappletcolorconfig.ui:191
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: rc.cpp:65
 msgid "Backgroundcolor for Anniversaries:"
-msgstr "Couleur de fond des commémorations:"
+msgstr "Barva pozadí pro výročí:"
 
 #. i18n: file: eventappletcolorconfig.ui:204
 #. i18n: ectx: property (toolTip), widget (KColorButton, anniversariesColorButton)
 #: rc.cpp:68
 msgid "The backgroundcolor for anniversaries."
-msgstr "La couleur de fond des commémorations."
+msgstr "Barva pozadí pro výročí."
 
 #. i18n: file: eventappletcolorconfig.ui:231
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: rc.cpp:78
 msgid "Colors for todos"
-msgstr "Couleur des tâches"
+msgstr "Barvy pro úkoly"
 
 #. i18n: file: eventappletcolorconfig.ui:237
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: rc.cpp:81
 msgid "Backgroundcolor for todos:"
-msgstr "Couleur de fond pour les tâches:"
+msgstr "Barva pozadí pro úkoly:"
 
 #. i18n: file: eventappletcolorconfig.ui:250
 #. i18n: ectx: property (toolTip), widget (KColorButton, todoColorButton)
 #: rc.cpp:84
 msgid "The backgroundcolor for common todos."
-msgstr "La couleur de fond pour les tâches."
+msgstr "Barva pozadí pro běžné úkoly."
 
 #. i18n: file: eventappletcolorconfig.ui:277
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showFinishedTodos)
 #: rc.cpp:94
 msgid "Show or hide already finished todos."
-msgstr "Montrer ou cacher les tâches terminées"
+msgstr "Ukázat, nebo skrýt dokončené úkoly."
 
 #. i18n: file: eventappletcolorconfig.ui:280
 #. i18n: ectx: property (text), widget (QCheckBox, showFinishedTodos)
 #: rc.cpp:97
 msgid "Show finished todos"
-msgstr "Montrer les tâches terminées:"
+msgstr "Ukázat dokončené úkoly"
 
 #. i18n: file: eventappletcolorconfig.ui:300
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: rc.cpp:100
 msgid "Background for finished todos:"
-msgstr "Couleur de fond pour les tâches terminées:"
+msgstr "Barva pozadí pro dokončené úkoly:"
 
 #. i18n: file: eventappletcolorconfig.ui:307
 #. i18n: ectx: property (toolTip), widget (KColorButton, finishedTodoButton)
 #: rc.cpp:103
 msgid "The backgroundcolor for already finished todos."
-msgstr "La couleur de fond des des tâches déjà terminées."
+msgstr "Barva pozadí pro dokončené úkoly."
 
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rc.cpp:116
 msgid "Event text formatting"
-msgstr "Format des événements"
+msgstr "Formátování textu událostí"
 
 #. i18n: file: eventappletformatconfig.ui:34
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -320,51 +321,50 @@ msgid ""
 "%{resourceName} - the i18n name of the Akonadi resource,\n"
 "%{tab} - a tabulator"
 msgstr ""
-"Format du texte des événements.\n"
-"Les substitutions sont:\n"
-"%{startDate} - Date de départ, %{endDate} - Date de fin,\n"
-"%{startTime} - Heure de départ, %{endTime} - Heure de fin,\n"
-"%{summary} - Résumé, %{description} - Description,\n"
-"%{location} - Emplacement, %{duration} - Durée en, heure,\n"
-"%{yearsSince} - Années depuis la première fois (utile pour les "
-"anniversaires),\n"
-"%{resourceName} - Le nom de la ressource Akonadi,\n"
-"%{tab} - Tabulation"
+"Formát zobrazovaného textu pro události.\n"
+"Nahrazuje se:\n"
+"%{startDate} - datum začátku, %{endDate} - datum konce,\n"
+"%{startTime} - čas začátku, %{endTime} - čas konce,\n"
+"%{summary} - shrnutí, %{description} - popis,\n"
+"%{location} - místo, %{duration} - trvání v hodinách,\n"
+"%{yearsSince} - počet roků od prvního opakovaní (užitečné pro narozeniny),\n"
+"%{resourceName} - i18n jméno Akonadi zdroje,\n"
+"%{tab} - tabulátor"
 
 #. i18n: file: eventappletformatconfig.ui:41
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: rc.cpp:131
 msgid "Format for normal events:"
-msgstr "Format des événement normaux:"
+msgstr "Formát bežných událostí:"
 
 #. i18n: file: eventappletformatconfig.ui:48
 #. i18n: ectx: property (toolTip), widget (KLineEdit, normalEventEdit)
 #: rc.cpp:134
 msgid "The text displayed for common events."
-msgstr "Texte affiché des événements normaux"
+msgstr "Text, který bude zobrazený pro běžné události."
 
 #. i18n: file: eventappletformatconfig.ui:55
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: rc.cpp:137
 msgid "Birthday & Anniversaries:"
-msgstr "Anniversaires et commémorations:"
+msgstr "Narozeniny a výročí:"
 
 #. i18n: file: eventappletformatconfig.ui:62
 #. i18n: ectx: property (toolTip), widget (KLineEdit, recurringEventsEdit)
 #: rc.cpp:140
 msgid "The text displayed for birthdays or anniversaries."
-msgstr "Texte affiché pour les commémorations"
+msgstr "Text, který bude zobrazený pro narozeniny a výročí."
 
 #. i18n: file: eventappletformatconfig.ui:72
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: rc.cpp:143
 msgid "Todo text formatting"
-msgstr "Format des tâches"
+msgstr "Formátování textu úkolů"
 
 #. i18n: file: eventappletformatconfig.ui:85
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: rc.cpp:147
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format fot the displayed text for todos.\n"
 "Substutions are:\n"
@@ -375,126 +375,111 @@ msgid ""
 "%{resourceName} - the i18n name of the Akonadi resource,\n"
 "%{tab} - a tabulator"
 msgstr ""
-"Format du texte des événements.\n"
-"Les substitutions sont:\n"
-"%{startDate} - Date de départ, %{endDate} - Date de fin,\n"
-"%{startTime} - Heure de départ, %{endTime} - Heure de fin,\n"
-"%{summary} - Résumé, %{description} - Description,\n"
-"%{location} - Emplacement, %{duration} - Durée en, heure,\n"
-"%{yearsSince} - Années depuis la première fois (utile pour les "
-"anniversaires),\n"
-"%{resourceName} - Le nom de la ressource Akonadi,\n"
-"%{tab} - Tabulation"
+"Formát zobrazovaného textu pro úkoly.\n"
+"Nahrazuje se:\n"
+"%{dueDate} - termín (den), %{dueTime} - termín (čas),\n"
+"%{startDate} - datum začátku, %{startTime} - čas začátku,\n"
+"%{summary} - shrnutí, %{description} - popis,\n"
+"%{percent} - postup v procentech, %{location} - místo,\n"
+"%{resourceName} - i18n jméno Akonadi zdroje,\n"
+"%{tab} - tabulátor"
 
 #. i18n: file: eventappletformatconfig.ui:92
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:157
 msgid "Format for todos:"
-msgstr "Format des tâches:"
+msgstr "Formát úkolů:"
 
 #. i18n: file: eventappletformatconfig.ui:99
 #. i18n: ectx: property (toolTip), widget (KLineEdit, todoEdit)
 #: rc.cpp:160
 msgid "The text displayed for common todos."
-msgstr "Texte affiché pour les tâches"
+msgstr "Text, který bude zobrazený pro běžné úkoly."
 
 #. i18n: file: eventappletformatconfig.ui:109
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: rc.cpp:163
 msgid "Todos with no due date:"
-msgstr "Tâches sans date de fin"
+msgstr "Úkoly bez termínu:"
 
 #. i18n: file: eventappletformatconfig.ui:116
 #. i18n: ectx: property (toolTip), widget (KLineEdit, noDueDateEdit)
 #: rc.cpp:166
 msgid "The text displayed for todos with no due date."
-msgstr "Texte affiché pour les tâches sans date de fin"
+msgstr "Text, který bude zobrazený pro úkoly bez termínu."
 
 #. i18n: file: eventappletformatconfig.ui:126
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: rc.cpp:169
 msgid "Date appearance settings"
-msgstr "Apparance des dates"
+msgstr "Nastavení zobrazení data"
 
 #. i18n: file: eventappletformatconfig.ui:132
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: rc.cpp:172
 msgid "Date format:"
-msgstr "Format des dates:"
+msgstr "Formát data:"
 
 #. i18n: file: eventappletformatconfig.ui:139
 #. i18n: ectx: property (toolTip), widget (KComboBox, dateFormatBox)
 #: rc.cpp:175
 msgid "What date format to use."
-msgstr "Quel format de date utilisé"
+msgstr "Jaký formát datumu bude použitý."
 
 #. i18n: file: eventappletformatconfig.ui:143
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
 #: rc.cpp:178
 msgid "KDE ShortDate"
-msgstr "Dates KDE courtes"
+msgstr "KDE krátký formát"
 
 #. i18n: file: eventappletformatconfig.ui:148
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
 #: rc.cpp:181
 msgid "KDE LongDate"
-msgstr "Dates KDE longues"
+msgstr "KDE dlouhý formát"
 
 #. i18n: file: eventappletformatconfig.ui:153
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
 #: rc.cpp:184
 msgid "Custom"
-msgstr "Personnalisé"
+msgstr "Vlastní"
 
 #. i18n: file: eventappletformatconfig.ui:161
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: rc.cpp:187
 msgid "Custom format:"
-msgstr "Format personnalisé:"
+msgstr "Vlastní formát:"
 
 #. i18n: file: eventappletformatconfig.ui:168
 #. i18n: ectx: property (toolTip), widget (KLineEdit, customFormatEdit)
 #: rc.cpp:190
 msgid "A string describing the custom format. It is using the QDate syntax."
-msgstr "Une chaîne décrivant le format personnalisé (utilisation de la syntaxe QDate)"
+msgstr "Text popisující vlastní formát. Je třeba použít syntaxi QDate."
 
 #. i18n: file: eventappletformatconfig.ui:178
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: rc.cpp:193
 msgid "Miscellenous options"
-msgstr "Options diverses"
+msgstr "Ostatní nastavení"
 
 #. i18n: file: eventappletformatconfig.ui:184
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: rc.cpp:196
 msgid "Period to show incidences (in days):"
-msgstr "Durée d'affichage d'un événement (en jours):"
+msgstr "Zobrazený časový úsek (ve dnech):"
 
 #. i18n: file: eventappletformatconfig.ui:191
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, periodBox)
 #: rc.cpp:199
 msgid "The time frame to show incidences."
-msgstr "Intervalle de temps pour l'affichage"
+msgstr "Pro jaký časový úsek budou zobrazené události."
 
 #: rc.cpp:200
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Lannehoa Yves"
+msgstr "Aleš Nejdr"
 
 #: rc.cpp:201
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "lannehoa.yves@tourellerie.fr"
-
-#, fuzzy
-#~ msgid "Open event"
-#~ msgstr "Ouvrir l'événement courant"
-
-#~ msgid "Urgency:"
-#~ msgstr "Urgence"
-
-#~ msgid "%1 retries to start/connect to the Akonadi server"
-#~ msgstr "%1 essais de connexion au serveur Akonadi"
-
-#~ msgid "Could not connect to the Akonadi server"
-#~ msgstr "Ne peut se connecter au serveur Akonadi"
+msgstr "ales.nejdr@gmail.com"
