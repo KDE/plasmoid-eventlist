@@ -74,6 +74,7 @@ public:
 
 public:
     void setDateFormat(int format, QString string);
+    void setCategoryColors(bool useKoColors, const QHash<QString, QColor>);
     void initModel();
     void initMonitor();
     void resetModel();
@@ -100,6 +101,8 @@ private:
     QList<QStandardItem *> sectionItems;
     int urgency, birthdayUrgency;
     QColor urgentBg, passedFg, birthdayBg, anniversariesBg, todoBg, finishedTodoBg;
+	bool m_useKoColors;
+    QHash<QString, QColor> m_categoryColors;
     Akonadi::Monitor *m_monitor;
 
 signals:

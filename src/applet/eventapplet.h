@@ -24,7 +24,7 @@
 #include "ui_eventappletcolorconfig.h"
 
 // Qt headers
-#include <QMap>
+#include <QHash>
 #include <QGraphicsSceneHoverEvent>
 
 
@@ -81,6 +81,7 @@ protected:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
+    void setupCategoryColors();
     void colorizeModel(bool timerTriggered);
     void createToolTip();
     
@@ -99,12 +100,14 @@ private:
     Ui::EventAppletColorConfig m_colorConfigUi;
     int m_urgency, m_birthdayUrgency, m_checkInterval, m_period;
     QColor m_urgentBg, m_passedFg, m_birthdayBg, m_anniversaryBg, m_todoBg, m_finishedTodoBg;
+    QHash<QString, QColor> m_categoryColors;
     QList<QColor> m_colors;
     QTimer *m_timer;
     Akonadi::AgentManager *m_agentManager;
     QStringList disabledResources;
     QDateTime lastCheckTime;
     bool m_showFinishedTodos;
+    bool m_useKoColors;
 };
 
 #endif

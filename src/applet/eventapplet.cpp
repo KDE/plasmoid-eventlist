@@ -123,6 +123,10 @@ void EventApplet::init()
     m_finishedTodoBg.setAlphaF(cg.readEntry("FinishedTodoOpacity", 10)/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
+    setupCategoryColors();
+
+    m_useKoColors = true;
+
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
 
     graphicsWidget();
@@ -145,6 +149,9 @@ void EventApplet::setupModel()
     m_agentManager = Akonadi::AgentManager::self();
 
     m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors);
+	m_model->setCategoryColors(m_useKoColors, m_categoryColors);
+	m_model->initModel();
+	m_model->initMonitor();
     m_model->setSortRole(EventModel::SortRole);
     m_model->sort(0, Qt::AscendingOrder);
 
@@ -162,6 +169,26 @@ void EventApplet::setupModel()
     m_timer->start(2 * 60 * 1000);
 
     connect(Akonadi::ServerManager::self(), SIGNAL(started()), this, SLOT(akonadiStatusChanged()));
+}
+
+void EventApplet::setupCategoryColors()
+{
+    m_categoryColors.clear();
+
+    KConfig *koConfig = new KConfig("korganizerrc");
+
+    KConfigGroup general(koConfig, "General");
+    QStringList categories = general.readEntry("Custom Categories", QStringList());
+
+    KConfigGroup categoryColors(koConfig, "Category Colors2");
+    foreach(const QString &category, categories) {
+        QColor cColor = categoryColors.readEntry(category, QColor());
+        if (cColor.isValid())
+		    cColor.setAlphaF(0.1);
+			m_categoryColors.insert(category, cColor);
+    }
+        kDebug() << m_categoryColors;
+
 }
 
 void EventApplet::akonadiStatusChanged()
@@ -532,7 +559,19 @@ void EventApplet::colorizeModel(bool timerTriggered)
                     m_model->setData(index, QVariant(QBrush(m_passedFg)), Qt::ForegroundRole);
                     m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
                 } else {
-                    m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
+					if (m_useKoColors) {
+						const QVariant v = index.data(Qt::DisplayRole);
+						QMap<QString, QVariant> values = v.toMap();
+						if (!values["categories"].toStringList().isEmpty()) {
+							QString category = values["categories"].toStringList().first();
+							if (m_categoryColors.contains(category)) {
+								m_model->setData(index, QVariant(QBrush(m_categoryColors.value(category))), Qt::BackgroundRole);
+							}
+						}
+					} else {
+						m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
+					}
+
                     QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
                     m_model->setData(index, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
                 }

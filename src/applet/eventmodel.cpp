@@ -63,8 +63,8 @@ EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList
 {
     parentItem = invisibleRootItem();
     settingsChanged(urgencyTime, birthdayTime, colorList);
-    initModel();
-    initMonitor();
+//     initModel();
+//     initMonitor();
 }
 
 EventModel::~EventModel()
@@ -219,6 +219,13 @@ void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor
     finishedTodoBg = itemColors.at(finishedTodoColorPos);
 }
 
+void EventModel::setCategoryColors(bool useKoColors, QHash<QString, QColor> categoryColors)
+{
+    m_useKoColors = useKoColors;
+    m_categoryColors = categoryColors;
+	kDebug() << m_categoryColors;
+}
+
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
 #if KDE_IS_VERSION(4,5,3)
@@ -355,7 +362,14 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             eventItem->setBackground(QBrush(urgentBg));
         } else if (QDateTime::currentDateTime() > itemDtTime) {
             eventItem->setForeground(QBrush(passedFg));
-        }
+        } else if (m_useKoColors) {
+			if (!values["categories"].toStringList().isEmpty()) {
+				QString category = values["categories"].toStringList().first();
+				if (m_categoryColors.contains(category)) {
+ 				    eventItem->setBackground(QBrush(m_categoryColors.value(category)));
+				}
+			}
+		}
 
         addItemRow(values["startDate"].toDate(), eventItem);
     }
@@ -452,6 +466,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["description"] = event->description();
     values["location"] = event->location();
     values["categories"] = event->categoriesStr();
+    kDebug() << values["categories"];
     values["status"] = event->status();
     values["startDate"] = event->dtStart().dateTime().toLocalTime();
     values["endDate"] = event->dtEnd().dateTime().toLocalTime();
