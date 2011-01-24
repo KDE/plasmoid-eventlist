@@ -29,7 +29,7 @@
 #include <akonadi/itemfetchscope.h>
 #include <akonadi/entitydisplayattribute.h>
 #include <akonadi/servermanager.h>
-
+#include <akonadi/kcal/incidencemimetypevisitor.h>
 
 // qt headers
 #include <QDate>
@@ -45,10 +45,6 @@
 #include <Plasma/Theme>
 
 #include <KDebug>
-
-#if KDE_IS_VERSION(4,4,0)
-#include <akonadi/kcal/incidencemimetypevisitor.h>
-#endif
 
 EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList) : QStandardItemModel(parent),
     parentItem(0),
@@ -148,13 +144,8 @@ void EventModel::initMonitor()
     m_monitor->fetchCollection(true);
     m_monitor->setItemFetchScope(scope);
     m_monitor->setCollectionMonitored(Akonadi::Collection::root());
-#if KDE_IS_VERSION(4,4,0)
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::todoMimeType(), true);
-#else
-    m_monitor->setMimeTypeMonitored("application/x-vnd.akonadi.calendar.event", true);
-    m_monitor->setMimeTypeMonitored("application/x-vnd.akonadi.calendar.todo", true);
-#endif
 
     connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
                        SLOT(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)));
@@ -228,7 +219,7 @@ void EventModel::setCategoryColors(bool useKoColors, QHash<QString, QColor> cate
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
-#if KDE_IS_VERSION(4,5,3)
+#if KDE_IS_VERSION(4,6,1)
     kDebug() << "item added" << item.remoteId();
 #else
     addItem(item, collection);
@@ -258,7 +249,7 @@ void EventModel::removeItem(const Akonadi::Item &item)
 void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &)
 {
     kDebug() << "item changed";
-#if KDE_IS_VERSION(4,5,3)
+#if KDE_IS_VERSION(4,6,1)
     removeItem(item);
     addItem(item, item.parentCollection());
 #else
@@ -269,7 +260,7 @@ void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &
 void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection &, const Akonadi::Collection &)
 {
     kDebug() << "item moved";
-#if KDE_IS_VERSION(4,5,3)
+#if KDE_IS_VERSION(4,6,1)
     removeItem(item);
     addItem(item, item.parentCollection());
 #else
@@ -516,9 +507,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
         values["hasStartDate"] = FALSE;
     }
     values["completedDate"] = todo->completed().dateTime().toLocalTime();
-#if KDE_IS_VERSION(4,4,0)
     values["inProgress"] = todo->isInProgress(FALSE);
-#endif
     values["isOverdue"] = todo->isOverdue();
     if (todo->hasDueDate()) {
         values["dueDate"] = todo->dtDue().dateTime().toLocalTime();
