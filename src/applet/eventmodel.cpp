@@ -214,7 +214,6 @@ void EventModel::setCategoryColors(bool useKoColors, QHash<QString, QColor> cate
 {
     m_useKoColors = useKoColors;
     m_categoryColors = categoryColors;
-	kDebug() << m_categoryColors;
 }
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
@@ -457,7 +456,6 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["description"] = event->description();
     values["location"] = event->location();
     values["categories"] = event->categoriesStr();
-    kDebug() << values["categories"];
     values["status"] = event->status();
     values["startDate"] = event->dtStart().dateTime().toLocalTime();
     values["endDate"] = event->dtEnd().dateTime().toLocalTime();

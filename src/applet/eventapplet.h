@@ -81,7 +81,7 @@ protected:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 
 private:
-    void setupCategoryColors();
+    void setupCategoryColors(int opacity);
     void colorizeModel(bool timerTriggered);
     void createToolTip();
     

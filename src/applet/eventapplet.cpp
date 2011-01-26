@@ -123,9 +123,9 @@ void EventApplet::init()
     m_finishedTodoBg.setAlphaF(cg.readEntry("FinishedTodoOpacity", 10)/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
-    setupCategoryColors();
-
-    m_useKoColors = true;
+    m_useKoColors = cg.readEntry("UseKoColors", TRUE);
+	int opacity = cg.readEntry("KOOpacity", 10);
+    setupCategoryColors(opacity);
 
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
 
@@ -171,7 +171,7 @@ void EventApplet::setupModel()
     connect(Akonadi::ServerManager::self(), SIGNAL(started()), this, SLOT(akonadiStatusChanged()));
 }
 
-void EventApplet::setupCategoryColors()
+void EventApplet::setupCategoryColors(int opacity)
 {
     m_categoryColors.clear();
 
@@ -184,11 +184,9 @@ void EventApplet::setupCategoryColors()
     foreach(const QString &category, categories) {
         QColor cColor = categoryColors.readEntry(category, QColor());
         if (cColor.isValid())
-		    cColor.setAlphaF(0.1);
+		    cColor.setAlphaF(opacity/100.0);
 			m_categoryColors.insert(category, cColor);
     }
-        kDebug() << m_categoryColors;
-
 }
 
 void EventApplet::akonadiStatusChanged()
@@ -424,6 +422,9 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_colorConfigUi.showFinishedTodos->setChecked(cg.readEntry("ShowFinishedTodos", FALSE));
     m_colorConfigUi.finishedTodoButton->setColor(QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0"))));
     m_colorConfigUi.finishedTodoOpacity->setValue(cg.readEntry("FinishedTodoOpacity", 10));
+
+	m_colorConfigUi.useKOrganizerColors->setChecked(cg.readEntry("UseKoColors", TRUE));
+	m_colorConfigUi.korganizerOpacity->setValue(cg.readEntry("KOOpacity", 10));
 }
 
 void EventApplet::configAccepted()
@@ -503,7 +504,16 @@ void EventApplet::configAccepted()
     m_finishedTodoBg.setAlphaF(finishedTodoOpacity/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
+	bool oldUseKoColors = m_useKoColors;
+    m_useKoColors = m_colorConfigUi.useKOrganizerColors->isChecked();
+	cg.writeEntry("UseKoColors", m_useKoColors);
+	QHash<QString, QColor> oldColorHash = m_categoryColors;
+	int opacity = m_colorConfigUi.korganizerOpacity->value();
+	cg.writeEntry("KOOpacity", opacity);
+	setupCategoryColors(opacity);
+
     m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
+	m_model->setCategoryColors(m_useKoColors, m_categoryColors);
 
     if (oldPeriod != m_period) {
         m_filterModel->setPeriod(m_period);
@@ -513,7 +523,8 @@ void EventApplet::configAccepted()
         m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     }
 
-    if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors) {
+    if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
+		oldUseKoColors != m_useKoColors || oldColorHash != m_categoryColors) {
         colorizeModel(FALSE);
     }
 
