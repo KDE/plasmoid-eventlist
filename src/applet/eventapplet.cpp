@@ -183,9 +183,10 @@ void EventApplet::setupCategoryColors(int opacity)
     KConfigGroup categoryColors(koConfig, "Category Colors2");
     foreach(const QString &category, categories) {
         QColor cColor = categoryColors.readEntry(category, QColor());
-        if (cColor.isValid())
+        if (cColor.isValid()) {
 		    cColor.setAlphaF(opacity/100.0);
 			m_categoryColors.insert(category, cColor);
+		}
     }
 }
 
