@@ -301,10 +301,9 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 			if (!values["categories"].toStringList().isEmpty()) {
 				category = values["categories"].toStringList().first();
 
-			kDebug() << category;
 
             QDate itemDt = eventDtTime.toDate();
-            if (values["isBirthday"].toBool() || values["categories"].toStringList().contains(i18n("Birthday")) || values["categories"].toStringList().contains("Birthday")) {
+            if (values["isBirthday"].toBool()) {
                 data["itemType"] = BirthdayItem;
                 int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
                 data["yearsSince"] = QString::number(n);
@@ -479,7 +478,8 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["summary"] = event->summary();
     values["description"] = event->description();
     values["location"] = event->location();
-    values["categories"] = event->categoriesStr();
+	QStringList categories = event->categories();
+    values["categories"] = categories;
     values["status"] = event->status();
     values["startDate"] = event->dtStart().dateTime().toLocalTime();
     values["endDate"] = event->dtEnd().dateTime().toLocalTime();
@@ -497,7 +497,12 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     }
     values["recurDates"] = recurDates;
 
-    event->customProperty("KABC", "BIRTHDAY") == QString("YES") ? values ["isBirthday"] = QVariant(TRUE) : QVariant(FALSE);
+    if (event->customProperty("KABC", "BIRTHDAY") == QString("YES") || categories.contains(i18n("Birthday")) || categories.contains("Birthday")) {
+		values["isBirthday"] = QVariant(TRUE);
+	} else {
+		values["isBirthday"] = QVariant(FALSE);
+	}
+
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
 #if KDE_IS_VERSION(4,4,60)
     values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());

@@ -56,14 +56,12 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
             return data["title"].toString();
             break;
         case EventModel::NormalItem:
+            return KMacroExpander::expandMacros(m_normal, eventHash(data));
+            break;
         case EventModel::BirthdayItem:
         case EventModel::AnniversaryItem:
-            if (data["isBirthday"].toBool() == TRUE || data["isAnniversary"].toBool() == TRUE) {
-                return KMacroExpander::expandMacros(m_birthdayOrAnniversary, eventHash(data));
-            } else {
-                return KMacroExpander::expandMacros(m_normal, eventHash(data));
-            }
-            break;
+            return KMacroExpander::expandMacros(m_birthdayOrAnniversary, eventHash(data));
+			break;
         case EventModel::TodoItem:
             if (data["hasDueDate"].toBool() == FALSE)
                 return KMacroExpander::expandMacros(m_noDueDate, todoHash(data));
