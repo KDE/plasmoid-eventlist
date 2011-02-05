@@ -49,6 +49,7 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
 {
     Q_UNUSED(locale);
     QMap<QString, QVariant> data = value.toMap();
+	QString mainCategory = data["mainCategory"].toString();
 
     int itemType = data["itemType"].toInt();
     switch (itemType) {
@@ -56,7 +57,10 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
             return data["title"].toString();
             break;
         case EventModel::NormalItem:
-            return KMacroExpander::expandMacros(m_normal, eventHash(data));
+			if (m_categoryFormats.contains(mainCategory))
+				return KMacroExpander::expandMacros(m_categoryFormats.value(mainCategory).toString(), eventHash(data));
+			else
+				return KMacroExpander::expandMacros(m_normal, eventHash(data));
             break;
         case EventModel::BirthdayItem:
         case EventModel::AnniversaryItem:
@@ -110,6 +114,11 @@ QHash<QString, QString> EventItemDelegate::todoHash(QMap<QString, QVariant> data
     dataHash.insert("tab", "\t");
 
     return dataHash;
+}
+
+void EventItemDelegate::setCategoryFormats(QMap<QString, QVariant> formats)
+{
+	m_categoryFormats = formats;
 }
 
 QString EventItemDelegate::formattedDate(const QVariant &dtTime) const

@@ -480,7 +480,12 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["location"] = event->location();
 	QStringList categories = event->categories();
     values["categories"] = categories;
-    values["status"] = event->status();
+	if (categories.isEmpty())
+		values["mainCategory"] = i18n("Unspecified");
+	else
+		values["mainCategory"] = categories.first();
+
+	values["status"] = event->status();
     values["startDate"] = event->dtStart().dateTime().toLocalTime();
     values["endDate"] = event->dtEnd().dateTime().toLocalTime();
 

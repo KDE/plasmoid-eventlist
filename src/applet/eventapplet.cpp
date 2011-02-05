@@ -39,6 +39,10 @@
 #include <QDateTime>
 #include <QPoint>
 #include <QCursor>
+#include <QMap>
+#include <QVariant>
+#include <QTreeWidgetItem>
+#include <QTreeWidgetItemIterator>
 
 // kde headers
 #include <KColorScheme>
@@ -62,7 +66,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_graphicsWidget(0),
     m_view(0),
     m_delegate(0),
-    m_formatConfigUi(),
+    m_formatConfig(),
     m_colorConfigUi(),
     m_timer(0),
     m_agentManager(0)
@@ -127,7 +131,13 @@ void EventApplet::init()
 	int opacity = cg.readEntry("KOOpacity", 10);
     setupCategoryColors(opacity);
 
+	QMap<QString, QVariant> categoryFormats;
+	categoryFormats["Geburtstag"] = QString("%{startDate} %{yearsSince}. %{summary}");
+	categoryFormats["Urlaub"] = QString("%{startDate} %{summary} bis %{endDate}");
+	m_categoryFormat = (cg.readEntry("CategoryFormats", QVariant(categoryFormats))).toMap();
+
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
+	m_delegate->setCategoryFormats(m_categoryFormat);
 
     graphicsWidget();
 
@@ -385,7 +395,8 @@ void EventApplet::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     QWidget *formatWidget = new QWidget();
-    m_formatConfigUi.setupUi(formatWidget);
+    m_formatConfig.setupUi(formatWidget);
+	m_formatConfig.setupConnections();
     QWidget *colorWidget = new QWidget();
     m_colorConfigUi.setupUi(colorWidget);
     parent->setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
@@ -398,13 +409,23 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 
     KConfigGroup cg = config();
 
-    m_formatConfigUi.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
-    m_formatConfigUi.recurringEventsEdit->setText(cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}")));
-    m_formatConfigUi.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
-    m_formatConfigUi.noDueDateEdit->setText(cg.readEntry("NoDueDateFormat", QString("%{summary}")));
-    m_formatConfigUi.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
-    m_formatConfigUi.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
-    m_formatConfigUi.periodBox->setValue(cg.readEntry("Period", 365));
+    m_formatConfig.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
+    m_formatConfig.recurringEventsEdit->setText(cg.readEntry("RecurringEventsFormat", QString("%{startDate} %{yearsSince}. %{summary}")));
+    m_formatConfig.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
+    m_formatConfig.noDueDateEdit->setText(cg.readEntry("NoDueDateFormat", QString("%{summary}")));
+    m_formatConfig.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
+    m_formatConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
+    m_formatConfig.periodBox->setValue(cg.readEntry("Period", 365));
+
+	QMap<QString, QVariant>::const_iterator i = m_categoryFormat.constBegin();
+    while (i != m_categoryFormat.constEnd()) {
+        QStringList itemText;
+		itemText << i.key() << i.value().toString();
+		QTreeWidgetItem *categoryItem = new QTreeWidgetItem(itemText);
+		categoryItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+		m_formatConfig.categoryFormatWidget->addTopLevelItem(categoryItem);
+        ++i;
+    }
 
     m_colorConfigUi.urgencyBox->setValue(cg.readEntry("UrgencyTime", 15));
     m_colorConfigUi.birthdayUrgencyBox->setValue(cg.readEntry("BirthdayUrgencyTime", 14));
@@ -432,23 +453,23 @@ void EventApplet::configAccepted()
 {
     KConfigGroup cg = config();
 
-    QString normalEventFormat = m_formatConfigUi.normalEventEdit->text();
+    QString normalEventFormat = m_formatConfig.normalEventEdit->text();
     cg.writeEntry("NormalEventFormat", normalEventFormat);
-    QString recurringEventsFormat = m_formatConfigUi.recurringEventsEdit->text();
+    QString recurringEventsFormat = m_formatConfig.recurringEventsEdit->text();
     cg.writeEntry("RecurringEventsFormat", recurringEventsFormat);
-    QString todoFormat = m_formatConfigUi.todoEdit->text();
+    QString todoFormat = m_formatConfig.todoEdit->text();
     cg.writeEntry("TodoFormat", todoFormat);
-    QString noDueDateFormat = m_formatConfigUi.noDueDateEdit->text();
+    QString noDueDateFormat = m_formatConfig.noDueDateEdit->text();
     cg.writeEntry("NoDueDateFormat", noDueDateFormat);
-    int dateFormat = m_formatConfigUi.dateFormatBox->currentIndex();
+    int dateFormat = m_formatConfig.dateFormatBox->currentIndex();
     cg.writeEntry("DateFormat", dateFormat);
-    QString customString = m_formatConfigUi.customFormatEdit->text();
+    QString customString = m_formatConfig.customFormatEdit->text();
     cg.writeEntry("CustomDateFormat", customString);
 
     m_delegate->settingsChanged(normalEventFormat, recurringEventsFormat, todoFormat, noDueDateFormat, dateFormat, customString);
 
     int oldPeriod = cg.readEntry("Period", 365);
-    m_period = m_formatConfigUi.periodBox->value();
+    m_period = m_formatConfig.periodBox->value();
     cg.writeEntry("Period", m_period);
 
     int oldUrgency = m_urgency;
@@ -512,6 +533,14 @@ void EventApplet::configAccepted()
 	int opacity = m_colorConfigUi.korganizerOpacity->value();
 	cg.writeEntry("KOOpacity", opacity);
 	setupCategoryColors(opacity);
+
+	m_categoryFormat.clear();
+	QTreeWidgetItemIterator it(m_formatConfig.categoryFormatWidget);
+    while (*it) {
+        m_categoryFormat[(*it)->text(0)] = (*it)->text(1);
+         ++it;
+     }
+	m_delegate->setCategoryFormats(m_categoryFormat);
 
     m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
 	m_model->setCategoryColors(m_useKoColors, m_categoryColors);

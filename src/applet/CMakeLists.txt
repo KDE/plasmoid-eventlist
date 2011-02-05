@@ -9,6 +9,7 @@ set(eventapplet_SRCS
     eventtreeview.cpp
     eventitemdelegate.cpp
     korganizerappletutil.cpp
+    formatconfig.cpp
 )
 
 qt4_add_dbus_interface(eventapplet_SRCS org.kde.korganizer.Korganizer.xml korganizer_interface)

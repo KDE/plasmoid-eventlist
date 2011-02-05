@@ -30,10 +30,12 @@ public:
 
     QString displayText(const QVariant &value, const QLocale &locale)  const;
     void settingsChanged(QString normal, QString birthdayOrAnniversary, QString todo, QString noDueDate, int format, QString customString);
+	void setCategoryFormats(QMap<QString, QVariant>);
 
 private:
     QHash<QString, QString> eventHash(QMap<QString, QVariant>) const;
     QHash<QString, QString> todoHash(QMap<QString, QVariant>) const;
+	QMap<QString, QVariant> m_categoryFormats;
     QString formattedDate(const QVariant &dtTime) const;
 
     QString m_normal, m_birthdayOrAnniversary, m_todo, m_noDueDate, m_dateString;
