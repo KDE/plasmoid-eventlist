@@ -101,7 +101,7 @@ private:
     int m_urgency, m_birthdayUrgency, m_checkInterval, m_period;
     QColor m_urgentBg, m_passedFg, m_birthdayBg, m_anniversaryBg, m_todoBg, m_finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;
-	QMap<QString, QVariant> m_categoryFormat;
+	QMap<QString, QString> m_categoryFormat;
     QList<QColor> m_colors;
     QTimer *m_timer;
     Akonadi::AgentManager *m_agentManager;

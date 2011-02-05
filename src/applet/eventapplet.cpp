@@ -131,10 +131,15 @@ void EventApplet::init()
 	int opacity = cg.readEntry("KOOpacity", 10);
     setupCategoryColors(opacity);
 
-	QMap<QString, QVariant> categoryFormats;
-	categoryFormats["Geburtstag"] = QString("%{startDate} %{yearsSince}. %{summary}");
-	categoryFormats["Urlaub"] = QString("%{startDate} %{summary} bis %{endDate}");
-	m_categoryFormat = (cg.readEntry("CategoryFormats", QVariant(categoryFormats))).toMap();
+	QStringList keys, values;
+	keys << i18n("Birthday") << i18n("Holiday");
+	values << QString("%{startDate} %{yearsSince}. %{summary}") << QString("%{startDate} %{summary} to %{endDate}");
+	keys = cg.readEntry("CategoryFormatsKeys", keys);
+	values = cg.readEntry("CategoryFormatsValues", values);
+
+	for (int i = 0; i < keys.size(); ++i) {
+		m_categoryFormat.insert(keys.at(i), values.at(i));
+	}
 
     m_delegate = new EventItemDelegate(this, normalEventFormat, recurringEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
 	m_delegate->setCategoryFormats(m_categoryFormat);
@@ -417,10 +422,10 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_formatConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
     m_formatConfig.periodBox->setValue(cg.readEntry("Period", 365));
 
-	QMap<QString, QVariant>::const_iterator i = m_categoryFormat.constBegin();
+	QMap<QString, QString>::const_iterator i = m_categoryFormat.constBegin();
     while (i != m_categoryFormat.constEnd()) {
         QStringList itemText;
-		itemText << i.key() << i.value().toString();
+		itemText << i.key() << i.value();
 		QTreeWidgetItem *categoryItem = new QTreeWidgetItem(itemText);
 		categoryItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
 		m_formatConfig.categoryFormatWidget->addTopLevelItem(categoryItem);
@@ -535,11 +540,17 @@ void EventApplet::configAccepted()
 	setupCategoryColors(opacity);
 
 	m_categoryFormat.clear();
+	QStringList keys, values;
 	QTreeWidgetItemIterator it(m_formatConfig.categoryFormatWidget);
     while (*it) {
         m_categoryFormat[(*it)->text(0)] = (*it)->text(1);
+		keys << (*it)->text(0);
+		values << (*it)->text(1);
          ++it;
      }
+
+	cg.writeEntry("CategoryFormatsKeys", keys);
+	cg.writeEntry("CategoryFormatsValues", values);
 	m_delegate->setCategoryFormats(m_categoryFormat);
 
     m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);

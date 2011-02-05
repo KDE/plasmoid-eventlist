@@ -58,7 +58,7 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
             break;
         case EventModel::NormalItem:
 			if (m_categoryFormats.contains(mainCategory))
-				return KMacroExpander::expandMacros(m_categoryFormats.value(mainCategory).toString(), eventHash(data));
+				return KMacroExpander::expandMacros(m_categoryFormats.value(mainCategory), eventHash(data));
 			else
 				return KMacroExpander::expandMacros(m_normal, eventHash(data));
             break;
@@ -94,6 +94,7 @@ QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> dat
     dataHash.insert("location", data["location"].toString());
     dataHash.insert("yearsSince", data["yearsSince"].toString());
     dataHash.insert("resourceName", data["resourceName"].toString());
+	dataHash.insert("mainCategory", data["mainCategory"].toString());
     dataHash.insert("tab", "\t");
 
     return dataHash;
@@ -116,7 +117,7 @@ QHash<QString, QString> EventItemDelegate::todoHash(QMap<QString, QVariant> data
     return dataHash;
 }
 
-void EventItemDelegate::setCategoryFormats(QMap<QString, QVariant> formats)
+void EventItemDelegate::setCategoryFormats(QMap<QString, QString> formats)
 {
 	m_categoryFormats = formats;
 }

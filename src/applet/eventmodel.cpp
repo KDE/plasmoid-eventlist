@@ -297,9 +297,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 
 			// assume first category is most important
 			// we can have only one color anyway
-			QString category;
-			if (!values["categories"].toStringList().isEmpty()) {
-				category = values["categories"].toStringList().first();
+			QString category = values["mainCategory"].toString();
 
 
             QDate itemDt = eventDtTime.toDate();
@@ -343,12 +341,11 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
                 } else if (QDateTime::currentDateTime() > itemDtTime) {
                     eventItem->setForeground(QBrush(passedFg));
 				} else if (m_useKoColors) {
-						if (m_categoryColors.contains(category)) {
-							eventItem->setBackground(QBrush(m_categoryColors.value(category)));
-						}
+					if (m_categoryColors.contains(category)) {
+						eventItem->setBackground(QBrush(m_categoryColors.value(category)));
 					}
 				}
-            }
+			}
 
             eventItem->setData(data, Qt::DisplayRole);
             eventItem->setData(eventDtTime, SortRole);
