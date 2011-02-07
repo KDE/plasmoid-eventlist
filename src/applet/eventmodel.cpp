@@ -285,6 +285,8 @@ void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &c
 void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 {
     QMap<QString, QVariant> data = values;
+	QString category = values["mainCategory"].toString();
+
     if (values["recurs"].toBool()) {
         QList<QVariant> dtTimes = values["recurDates"].toList();
         foreach (QVariant eventDtTime, dtTimes) {
@@ -294,11 +296,6 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 
             int d = values["startDate"].toDateTime().daysTo(values["endDate"].toDateTime());
             data["endDate"] = eventDtTime.toDateTime().addDays(d);
-
-			// assume first category is most important
-			// we can have only one color anyway
-			QString category = values["mainCategory"].toString();
-
 
             QDate itemDt = eventDtTime.toDate();
             if (values["isBirthday"].toBool()) {
@@ -373,11 +370,8 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
         } else if (QDateTime::currentDateTime() > itemDtTime) {
             eventItem->setForeground(QBrush(passedFg));
         } else if (m_useKoColors) {
-			if (!values["categories"].toStringList().isEmpty()) {
-				QString category = values["categories"].toStringList().first();
-				if (m_categoryColors.contains(category)) {
+			if (m_categoryColors.contains(category)) {
  				    eventItem->setBackground(QBrush(m_categoryColors.value(category)));
-				}
 			}
 		}
 
