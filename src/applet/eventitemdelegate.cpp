@@ -30,10 +30,9 @@
 // #include <QRectF>
 // #include <QStyleOptionViewItem>
 
-EventItemDelegate::EventItemDelegate(QObject* parent, QString normal, QString birthdayOrAnniversay, QString todo, QString noDueDate, int dtFormat, QString dtString)
+EventItemDelegate::EventItemDelegate(QObject* parent, QString normal, QString todo, QString noDueDate, int dtFormat, QString dtString)
     : QStyledItemDelegate(parent),
     m_normal(normal),
-    m_birthdayOrAnniversary(birthdayOrAnniversay),
     m_todo(todo),
     m_noDueDate(noDueDate),
     m_dateString(dtString),
@@ -57,15 +56,13 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
             return data["title"].toString();
             break;
         case EventModel::NormalItem:
+        case EventModel::BirthdayItem:
+        case EventModel::AnniversaryItem:
 			if (m_categoryFormats.contains(mainCategory))
 				return KMacroExpander::expandMacros(m_categoryFormats.value(mainCategory), eventHash(data));
 			else
 				return KMacroExpander::expandMacros(m_normal, eventHash(data));
             break;
-        case EventModel::BirthdayItem:
-        case EventModel::AnniversaryItem:
-            return KMacroExpander::expandMacros(m_birthdayOrAnniversary, eventHash(data));
-			break;
         case EventModel::TodoItem:
             if (data["hasDueDate"].toBool() == FALSE)
                 return KMacroExpander::expandMacros(m_noDueDate, todoHash(data));
@@ -142,10 +139,9 @@ QString EventItemDelegate::formattedDate(const QVariant &dtTime) const
     return date;
 }
 
-void EventItemDelegate::settingsChanged(QString normal, QString birthdayOrAnniversary, QString todo, QString noDueDate, int format, QString customString)
+void EventItemDelegate::settingsChanged(QString normal, QString todo, QString noDueDate, int format, QString customString)
 {
     m_normal = normal;
-    m_birthdayOrAnniversary = birthdayOrAnniversary;
     m_todo= todo;
     m_noDueDate = noDueDate;
     m_dateFormat = format;

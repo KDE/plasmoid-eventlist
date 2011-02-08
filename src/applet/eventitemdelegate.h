@@ -25,11 +25,11 @@ class EventItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    EventItemDelegate(QObject* parent, QString normal, QString birthdayOrAnniversary, QString todo, QString noDueDate, int dtFormat, QString dtString);
+    EventItemDelegate(QObject* parent, QString normal, QString todo, QString noDueDate, int dtFormat, QString dtString);
     ~EventItemDelegate();
 
     QString displayText(const QVariant &value, const QLocale &locale)  const;
-    void settingsChanged(QString normal, QString birthdayOrAnniversary, QString todo, QString noDueDate, int format, QString customString);
+    void settingsChanged(QString normal, QString todo, QString noDueDate, int format, QString customString);
 	void setCategoryFormats(QMap<QString, QString>);
 
 private:
@@ -38,7 +38,7 @@ private:
 	QMap<QString, QString> m_categoryFormats;
     QString formattedDate(const QVariant &dtTime) const;
 
-    QString m_normal, m_birthdayOrAnniversary, m_todo, m_noDueDate, m_dateString;
+    QString m_normal, m_todo, m_noDueDate, m_dateString;
     int m_dateFormat;
 };
 
