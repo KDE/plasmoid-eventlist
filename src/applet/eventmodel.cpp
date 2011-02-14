@@ -46,6 +46,10 @@
 
 #include <KDebug>
 
+#define HAS_REAL_AKONADI_PIM_MAJOR 4
+#define HAS_REAL_AKONADI_PIM_MINOR 6
+#define HAS_REAL_AKONADI_PIM_PATCH 1
+
 EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList) : QStandardItemModel(parent),
     parentItem(0),
     olderItem(0),
@@ -218,7 +222,7 @@ void EventModel::setCategoryColors(bool useKoColors, QHash<QString, QColor> cate
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
-#if KDE_IS_VERSION(4,6,1)
+#if KDE_IS_VERSION(HAS_REAL_AKONADI_PIM_MAJOR,HAS_REAL_AKONADI_PIM_MINOR,HAS_REAL_AKONADI_PIM_PATCH)
     kDebug() << "item added" << item.remoteId();
 #else
     addItem(item, collection);
@@ -248,7 +252,7 @@ void EventModel::removeItem(const Akonadi::Item &item)
 void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &)
 {
     kDebug() << "item changed";
-#if KDE_IS_VERSION(4,6,1)
+#if KDE_IS_VERSION(HAS_REAL_AKONADI_PIM_MAJOR,HAS_REAL_AKONADI_PIM_MINOR,HAS_REAL_AKONADI_PIM_PATCH)
     removeItem(item);
     addItem(item, item.parentCollection());
 #else
@@ -259,7 +263,7 @@ void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &
 void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection &, const Akonadi::Collection &)
 {
     kDebug() << "item moved";
-#if KDE_IS_VERSION(4,6,1)
+#if KDE_IS_VERSION(HAS_REAL_AKONADI_PIM_MAJOR,HAS_REAL_AKONADI_PIM_MINOR,HAS_REAL_AKONADI_PIM_PATCH)
     removeItem(item);
     addItem(item, item.parentCollection());
 #else
