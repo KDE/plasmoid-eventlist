@@ -230,11 +230,11 @@ void EventModel::removeItem(const Akonadi::Item &item)
     foreach (QStandardItem *i, sectionItems) {
         QModelIndexList l;
         if (i->hasChildren())
-            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.remoteId());
+            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.id());
         while (!l.isEmpty()) {
             i->removeRow(l[0].row());
             if (!i->hasChildren()) break;
-            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.remoteId());
+            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.id());
         }
         int r = i->row();
         if (r != -1 && !i->hasChildren()) {
@@ -465,7 +465,8 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["resource"] = collection.resource();
     values["resourceName"] = collection.name();
     values["uid"] = event->uid();
-    values["itemid"] = item.remoteId();
+    values["itemid"] = item.id();
+    values["remoteid"] = item.remoteId();
     values["summary"] = event->summary();
     values["description"] = event->description();
     values["location"] = event->location();
@@ -515,7 +516,8 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["resource"] = collection.resource();
     values["resourceName"] = collection.name();
     values["uid"] = todo->uid();
-    values["itemid"] = item.remoteId();
+    values["itemid"] = item.id();
+    values["remoteid"] = item.remoteId();
     values["summary"] = todo->summary();
     values["description"] = todo->description();
     values["location"] = todo->location();
