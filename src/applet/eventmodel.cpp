@@ -467,6 +467,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["uid"] = event->uid();
     values["itemid"] = item.id();
     values["remoteid"] = item.remoteId();
+	values["itemUrl"] = item.url().url();
     values["summary"] = event->summary();
     values["description"] = event->description();
     values["location"] = event->location();
@@ -518,6 +519,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["uid"] = todo->uid();
     values["itemid"] = item.id();
     values["remoteid"] = item.remoteId();
+	values["itemUrl"] = item.url().url();
     values["summary"] = todo->summary();
     values["description"] = todo->description();
     values["location"] = todo->location();
