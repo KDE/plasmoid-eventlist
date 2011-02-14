@@ -222,11 +222,7 @@ void EventModel::setCategoryColors(bool useKoColors, QHash<QString, QColor> cate
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
-#if KDE_IS_VERSION(HAS_REAL_AKONADI_PIM_MAJOR,HAS_REAL_AKONADI_PIM_MINOR,HAS_REAL_AKONADI_PIM_PATCH)
-    kDebug() << "item added" << item.remoteId();
-#else
     addItem(item, collection);
-#endif
 }
 
 void EventModel::removeItem(const Akonadi::Item &item)
