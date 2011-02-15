@@ -44,6 +44,10 @@ static const int anniversariesColorPos = 3;
 static const int todoColorPos = 4;
 static const int finishedTodoColorPos = 5;
 
+#define HAS_REAL_AKONADI_PIM_MAJOR 4
+#define HAS_REAL_AKONADI_PIM_MINOR 6
+#define HAS_REAL_AKONADI_PIM_PATCH 1
+
 /**
 * Model of the view
 * Categorizes the events using the startDate property

@@ -46,10 +46,6 @@
 
 #include <KDebug>
 
-#define HAS_REAL_AKONADI_PIM_MAJOR 4
-#define HAS_REAL_AKONADI_PIM_MINOR 6
-#define HAS_REAL_AKONADI_PIM_PATCH 1
-
 EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList) : QStandardItemModel(parent),
     parentItem(0),
     olderItem(0),

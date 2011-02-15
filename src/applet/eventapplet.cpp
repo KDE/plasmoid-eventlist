@@ -265,7 +265,11 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
+#if KDE_IS_VERSION(HAS_REAL_AKONADI_PIM_MAJOR,HAS_REAL_AKONADI_PIM_MINOR,HAS_REAL_AKONADI_PIM_PATCH)
+    QString uid = m_filterModel->data(index, EventModel::ItemIDRole).toString();
+#else
     QString uid = m_filterModel->data(index, EventModel::UIDRole).toString();
+#endif
     if (!uid.isEmpty())
         KOrganizerAppletUtil::showEvent(uid);
 }
