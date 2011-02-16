@@ -375,7 +375,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 					eventItem->setData(QBrush(m_categoryColors.value(category)), Qt::BackgroundRole);
 			}
 		}
-eventItem->setData(urgentBg.name(), EventModel::BgRole);
+
         addItemRow(values["startDate"].toDate(), eventItem);
     }
 }
