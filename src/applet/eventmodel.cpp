@@ -306,7 +306,6 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 						if (m_categoryColors.contains(i18n("Birthday")))
 							b = i18n("Birthday");
 						eventItem->setBackground(QBrush(m_categoryColors.value(b)));
-						eventItem->setData(QBrush(m_categoryColors.value(category)), Qt::BackgroundRole);
 					} else {
 						eventItem->setBackground(QBrush(birthdayBg));
 					}
@@ -321,10 +320,8 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
                 } else {
 					if (m_useKoColors && m_categoryColors.contains(category)) {
 						eventItem->setBackground(QBrush(m_categoryColors.value(category)));
-						eventItem->setData(QBrush(m_categoryColors.value(category)), Qt::BackgroundRole);
 					} else {
 						eventItem->setBackground(QBrush(anniversariesBg));
-						eventItem->setData(QBrush(anniversariesBg), Qt::BackgroundRole);
 					}
                 }
                 eventItem->setData(QVariant(AnniversaryItem), ItemTypeRole);
@@ -366,13 +363,11 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
         QDateTime itemDtTime = values["startDate"].toDateTime();
         if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
             eventItem->setBackground(QBrush(urgentBg));
-			eventItem->setData(QBrush(urgentBg), Qt::BackgroundRole);
         } else if (QDateTime::currentDateTime() > itemDtTime) {
             eventItem->setForeground(QBrush(passedFg));
         } else if (m_useKoColors) {
 			if (m_categoryColors.contains(category)) {
  				    eventItem->setBackground(QBrush(m_categoryColors.value(category)));
-					eventItem->setData(QBrush(m_categoryColors.value(category)), Qt::BackgroundRole);
 			}
 		}
 

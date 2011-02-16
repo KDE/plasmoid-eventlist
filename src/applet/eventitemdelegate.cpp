@@ -87,9 +87,8 @@ void EventItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
 	initStyleOption(&opt, index);
 
 	QVariant value = index.data();
-	QTextDocument doc;
  	QBrush bgBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
-	
+ 	QBrush fgBrush = qvariant_cast<QBrush>(index.data(Qt::ForegroundRole));
 	painter->setClipRect( opt.rect );
  	painter->setBackgroundMode(Qt::OpaqueMode);
  	painter->setBackground(Qt::transparent);
@@ -104,12 +103,13 @@ void EventItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
 		painter->drawRoundedRect(opt.rect.x(), opt.rect.y(), opt.rect.width() - bgPen.width(), opt.rect.height() - bgPen.width(), 3.0, 3.0);
 	}
 
+	QTextDocument doc;
+	doc.setDefaultStyleSheet("* {color: " + fgBrush.color().name() + ";}");
 	doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
 	QAbstractTextDocumentLayout::PaintContext context;
 	doc.setPageSize( opt.rect.size());
 	painter->translate(opt.rect.x(), opt.rect.y());
  	doc.documentLayout()->draw(painter, context);
-
 	painter->restore();
 }
 
