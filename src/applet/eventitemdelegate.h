@@ -29,7 +29,9 @@ public:
     ~EventItemDelegate();
 
     QString displayText(const QVariant &value, const QLocale &locale)  const;
-    void settingsChanged(QString normal, QString todo, QString noDueDate, int format, QString customString);
+	void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	void settingsChanged(QString normal, QString todo, QString noDueDate, int format, QString customString);
 	void setCategoryFormats(QMap<QString, QString>);
 
 private:

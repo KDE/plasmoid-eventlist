@@ -27,6 +27,9 @@
 
 #include <QDateTime>
 #include <QHash>
+#include <QTextDocument>
+#include <QPainter>
+#include <QAbstractTextDocumentLayout>
 // #include <QRectF>
 // #include <QStyleOptionViewItem>
 
@@ -53,7 +56,7 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
     int itemType = data["itemType"].toInt();
     switch (itemType) {
         case EventModel::HeaderItem:
-            return data["title"].toString();
+            return  "<b>" + data["title"].toString() + "</b>";
             break;
         case EventModel::NormalItem:
         case EventModel::BirthdayItem:
@@ -74,6 +77,49 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
     }
 
     return QString();
+}
+
+void EventItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+	painter->save();
+
+	QStyleOptionViewItemV4 opt = option;
+	initStyleOption(&opt, index);
+
+	QVariant value = index.data();
+	QTextDocument doc;
+ 	QBrush bgBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
+	
+	painter->setClipRect( opt.rect );
+ 	painter->setBackgroundMode(Qt::OpaqueMode);
+ 	painter->setBackground(Qt::transparent);
+ 	painter->setBrush(bgBrush);
+
+	if (bgBrush.style() != Qt::NoBrush) {
+		QPen bgPen;
+		bgPen.setColor(bgBrush.color().darker(250));
+		bgPen.setStyle(Qt::SolidLine);
+		bgPen.setWidth(1);
+		painter->setPen(bgPen);
+		painter->drawRoundedRect(opt.rect.x(), opt.rect.y(), opt.rect.width() - bgPen.width(), opt.rect.height() - bgPen.width(), 3.0, 3.0);
+	}
+
+	doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
+	QAbstractTextDocumentLayout::PaintContext context;
+	doc.setPageSize( opt.rect.size());
+	painter->translate(opt.rect.x(), opt.rect.y());
+ 	doc.documentLayout()->draw(painter, context);
+
+	painter->restore();
+}
+
+QSize EventItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+	QVariant value = index.data();
+    QTextDocument doc;
+	doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
+    doc.setTextWidth(option.rect.width());
+    return doc.size().toSize();
 }
 
 QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> data) const

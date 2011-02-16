@@ -63,7 +63,7 @@ public:
         TooltipRole,
         ItemIDRole,
         ResourceRole
-    };
+	};
 
     enum ItemType {
         HeaderItem = 0,
