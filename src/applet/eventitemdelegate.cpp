@@ -104,6 +104,7 @@ void EventItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
 	}
 
 	QTextDocument doc;
+	doc.setDocumentMargin(3);
 	doc.setDefaultStyleSheet("* {color: " + fgBrush.color().name() + ";}");
 	doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
 	QAbstractTextDocumentLayout::PaintContext context;
@@ -117,6 +118,7 @@ QSize EventItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
 {
 	QVariant value = index.data();
     QTextDocument doc;
+	doc.setDocumentMargin(3);
 	doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
     doc.setTextWidth(option.rect.width());
     return doc.size().toSize();
