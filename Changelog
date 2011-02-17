@@ -1,3 +1,7 @@
+0.3.91 (0.4 beta)
+- ability to use richtext in format strings
+- some changes to make it work better with pim 4.6
+
 0.3.90 (0.4 beta)
 - option to use korganizer category colors
 - ability to use different formats for categories
