@@ -161,16 +161,15 @@ void EventModel::initHeaderItem(QStandardItem *item, QString title, QString tool
 {
     QMap<QString, QVariant> data;
     data["itemType"] = HeaderItem;
-    data["title"] = title;
+    data["title"] = "<b>" + title + "</b>";
     item->setData(data, Qt::DisplayRole);
+    QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+    item->setForeground(QBrush(textColor));
     item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), SortRole);
     item->setData(QVariant(HeaderItem), ItemTypeRole);
     item->setData(QVariant(QString()), ResourceRole);
     item->setData(QVariant(QString()), UIDRole);
     item->setData(QVariant("<qt><b>" + toolTip + "</b></qt>"), TooltipRole);
-    QFont bold = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
-    bold.setBold(true);
-    item->setFont(bold);
 }
 
 void EventModel::resetModel()
@@ -281,13 +280,14 @@ void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &c
 void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 {
     QMap<QString, QVariant> data = values;
-	QString category = values["mainCategory"].toString();
+    QString category = values["mainCategory"].toString();
+    QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
 
     if (values["recurs"].toBool()) {
         QList<QVariant> dtTimes = values["recurDates"].toList();
         foreach (QVariant eventDtTime, dtTimes) {
-            QStandardItem *eventItem;
-            eventItem = new QStandardItem();
+            QStandardItem *eventItem = new QStandardItem();
+            eventItem->setForeground(QBrush(textColor));
             data["startDate"] = eventDtTime;
 
             int d = values["startDate"].toDateTime().daysTo(values["endDate"].toDateTime());
@@ -354,6 +354,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
         eventItem = new QStandardItem();
         data["itemType"] = NormalItem;
         eventItem->setData(QVariant(NormalItem), ItemTypeRole);
+        eventItem->setForeground(QBrush(textColor));
         eventItem->setData(data, Qt::DisplayRole);
         eventItem->setData(values["startDate"], SortRole);
         eventItem->setData(values["uid"], EventModel::UIDRole);
@@ -377,6 +378,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
 
 void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
 {
+    QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     QMap<QString, QVariant> data = values;
     if (values["recurs"].toBool()) {
         QList<QVariant> dtTimes = values["recurDates"].toList();
@@ -385,6 +387,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
             data["dueDate"] = eventDtTime;
             data["itemType"] = TodoItem;
             todoItem->setData(QVariant(TodoItem), ItemTypeRole);
+            todoItem->setForeground(QBrush(textColor));
             todoItem->setData(data, Qt::DisplayRole);
             todoItem->setData(eventDtTime, SortRole);
             todoItem->setData(values["uid"], EventModel::UIDRole);
@@ -403,6 +406,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
         QStandardItem *todoItem = new QStandardItem();
         data["itemType"] = TodoItem;
         todoItem->setData(QVariant(TodoItem), ItemTypeRole);
+        todoItem->setForeground(QBrush(textColor));
         todoItem->setData(data, Qt::DisplayRole);
         todoItem->setData(values["dueDate"], SortRole);
         todoItem->setData(values["uid"], EventModel::UIDRole);

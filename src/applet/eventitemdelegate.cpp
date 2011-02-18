@@ -56,7 +56,7 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
     int itemType = data["itemType"].toInt();
     switch (itemType) {
         case EventModel::HeaderItem:
-            return  "<b>" + data["title"].toString() + "</b>";
+            return  data["title"].toString();
             break;
         case EventModel::NormalItem:
         case EventModel::BirthdayItem:
