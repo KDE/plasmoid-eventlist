@@ -370,6 +370,8 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
 {
     QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     QMap<QString, QVariant> data = values;
+    QString category = values["mainCategory"].toString();
+
     if (values["recurs"].toBool()) {
         QList<QVariant> dtTimes = values["recurDates"].toList();
         foreach (QVariant eventDtTime, dtTimes) {
@@ -386,6 +388,8 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
             todoItem->setData(values["tooltip"], TooltipRole);
             if (values["completed"].toBool() == TRUE) {
                 todoItem->setBackground(QBrush(finishedTodoBg));
+            } else if (m_categoryColors.contains(category)) {
+                todoItem->setBackground(QBrush(m_categoryColors.value(category)));
             } else {
                 todoItem->setBackground(QBrush(todoBg));
             }
@@ -405,6 +409,8 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
         todoItem->setData(values["tooltip"], TooltipRole);
         if (values["completed"].toBool() == TRUE) {
             todoItem->setBackground(QBrush(finishedTodoBg));
+        } else if (m_categoryColors.contains(category)) {
+            todoItem->setBackground(QBrush(m_categoryColors.value(category)));
         } else {
             todoItem->setBackground(QBrush(todoBg));
         }

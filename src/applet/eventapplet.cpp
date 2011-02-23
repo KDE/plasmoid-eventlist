@@ -588,10 +588,10 @@ void EventApplet::colorizeModel(bool timerTriggered)
                     m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
                 }
             } else if (itemRole == EventModel::TodoItem) {
-                const QVariant v = index.data(Qt::DisplayRole);
-                QMap<QString, QVariant> values = v.toMap();
                 if (values["completed"].toBool() == TRUE) {
                     m_model->setData(index, QVariant(QBrush(m_finishedTodoBg)), Qt::BackgroundRole);
+                } else if (m_categoryColors.contains(category)) {
+                    m_model->setData(index, QVariant(QBrush(m_categoryColors.value(category))), Qt::BackgroundRole);
                 } else {
                     m_model->setData(index, QVariant(QBrush(m_todoBg)), Qt::BackgroundRole);
                 }
