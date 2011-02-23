@@ -39,10 +39,8 @@ static const int CustomDateFormat = 2;
 
 static const int urgentColorPos = 0;
 static const int passedColorPos = 1;
-static const int birthdayColorPos = 2;
-static const int anniversariesColorPos = 3;
-static const int todoColorPos = 4;
-static const int finishedTodoColorPos = 5;
+static const int todoColorPos = 2;
+static const int finishedTodoColorPos = 3;
 
 #define HAS_REAL_AKONADI_PIM_MAJOR 4
 #define HAS_REAL_AKONADI_PIM_MINOR 6
