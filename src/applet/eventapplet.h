@@ -49,6 +49,7 @@ class QGraphicsLinearLayout;
 class QGraphicsProxyWidget;
 class QTreeView;
 class EventTreeView;
+class KDirWatch;
 
 class EventApplet : public Plasma::PopupApplet
 {
@@ -73,6 +74,7 @@ private slots:
     void setupModel();
     void akonadiStatusChanged();
     void plasmaThemeChanged();
+    void koConfigChanged();
 
 protected slots:
     void configAccepted();
@@ -91,7 +93,7 @@ private:
     QGraphicsLinearLayout *layout;
     EventModel *m_model;
     EventFilterModel *m_filterModel;
-//    Plasma::TreeView *m_view;
+    KDirWatch *m_categoryColorWatch;
     QGraphicsProxyWidget *proxyWidget;
     EventTreeView *m_view;
     Plasma::ToolTipContent tooltip;

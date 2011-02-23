@@ -49,6 +49,8 @@
 #include <KConfigDialog>
 #include <KIcon>
 #include <KIconLoader>
+#include <KStandardDirs>
+#include <KDirWatch>
 
 // plasma headers
 #include <Plasma/Theme>
@@ -121,6 +123,13 @@ void EventApplet::init()
 
     int opacity = cg.readEntry("KOOpacity", 10);
     setupCategoryColors(opacity);
+
+    QString koConfigPath = KStandardDirs::locateLocal("config", "korganizerrc");
+    m_categoryColorWatch = new KDirWatch(this);
+    m_categoryColorWatch->addFile(koConfigPath);
+    connect(m_categoryColorWatch, SIGNAL(created(const QString &)), this, SLOT(koConfigChanged()));
+    connect(m_categoryColorWatch, SIGNAL(dirty(const QString &)), this, SLOT(koConfigChanged()));
+
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(plasmaThemeChanged()));
     
     QStringList keys, values;
@@ -199,6 +208,15 @@ void EventApplet::setupCategoryColors(int opacity)
 
 void EventApplet::plasmaThemeChanged()
 {
+    colorizeModel(FALSE);
+}
+
+void EventApplet::koConfigChanged()
+{
+    KConfigGroup cg = config();
+    int opacity = cg.readEntry("KOOpacity", 10);
+    setupCategoryColors(opacity);
+    m_model->setCategoryColors(m_categoryColors);
     colorizeModel(FALSE);
 }
 
