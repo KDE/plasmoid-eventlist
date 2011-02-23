@@ -121,7 +121,8 @@ void EventApplet::init()
 
     int opacity = cg.readEntry("KOOpacity", 10);
     setupCategoryColors(opacity);
-
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(plasmaThemeChanged()));
+    
     QStringList keys, values;
     keys << i18n("Birthday") << i18n("Holiday");
     values << QString("%{startDate} %{yearsSince}. %{summary}") << QString("%{startDate} %{summary} to %{endDate}");
@@ -194,6 +195,11 @@ void EventApplet::setupCategoryColors(int opacity)
             m_categoryColors.insert(category, cColor);
         }
     }
+}
+
+void EventApplet::plasmaThemeChanged()
+{
+    colorizeModel(FALSE);
 }
 
 void EventApplet::akonadiStatusChanged()

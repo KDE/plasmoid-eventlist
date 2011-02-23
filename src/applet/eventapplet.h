@@ -72,6 +72,7 @@ private slots:
     void setShownResources();
     void setupModel();
     void akonadiStatusChanged();
+    void plasmaThemeChanged();
 
 protected slots:
     void configAccepted();
