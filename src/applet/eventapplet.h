@@ -99,16 +99,15 @@ private:
     FormatConfig m_formatConfig;
     Ui::EventAppletColorConfig m_colorConfigUi;
     int m_urgency, m_birthdayUrgency, m_checkInterval, m_period;
-    QColor m_urgentBg, m_passedFg, m_birthdayBg, m_anniversaryBg, m_todoBg, m_finishedTodoBg;
+    QColor m_urgentBg, m_passedFg, m_todoBg, m_finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;
-	QMap<QString, QString> m_categoryFormat;
+    QMap<QString, QString> m_categoryFormat;
     QList<QColor> m_colors;
     QTimer *m_timer;
     Akonadi::AgentManager *m_agentManager;
     QStringList disabledResources;
     QDateTime lastCheckTime;
     bool m_showFinishedTodos;
-    bool m_useKoColors;
 };
 
 #endif

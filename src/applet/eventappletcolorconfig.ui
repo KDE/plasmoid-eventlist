@@ -143,89 +143,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="recurringEventsBox">
-     <property name="title">
-      <string>Colors for recurring events</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Backgroundcolor for Birthdays:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KColorButton" name="birthdayColorButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>The backgroundcolor for birthdays.</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Opacity:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="KIntSpinBox" name="birthdayOpacity">
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="maximum">
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Backgroundcolor for Anniversaries:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KColorButton" name="anniversariesColorButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>The backgroundcolor for anniversaries.</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_7">
-        <property name="text">
-         <string>Opacity:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="KIntSpinBox" name="anniversariesOpacity">
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="maximum">
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Colors for todos</string>
@@ -333,45 +250,22 @@
      <property name="title">
       <string>KOrganizer colors</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0" colspan="3">
-       <widget class="QCheckBox" name="useKOrganizerColors">
-        <property name="toolTip">
-         <string>Use the colors defined in KOrganizer categories for events if available.</string>
-        </property>
-        <property name="text">
-         <string>Use colors of KOrganizer</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3" rowspan="2">
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>380</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="1" rowspan="2">
-       <widget class="KIntSpinBox" name="korganizerOpacity">
-        <property name="suffix">
-         <string>%</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
        <widget class="QLabel" name="label_14">
         <property name="text">
          <string>Opacity:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="2">
+      <item>
+       <widget class="KIntSpinBox" name="korganizerOpacity">
+        <property name="suffix">
+         <string>%</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>

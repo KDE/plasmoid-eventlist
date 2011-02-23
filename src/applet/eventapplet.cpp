@@ -109,13 +109,6 @@ void EventApplet::init()
     m_passedFg = QColor(cg.readEntry("PassedColor", QString("#C3C3C3")));
     m_colors.insert(passedColorPos, m_passedFg);
     
-    m_birthdayBg = QColor(cg.readEntry("BirthdayColor", QString("#C0FFC0")));
-    m_birthdayBg.setAlphaF(cg.readEntry("BirthdayOpacity", 10)/100.0);
-    m_colors.insert(birthdayColorPos, m_birthdayBg);
-    m_anniversaryBg = QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA")));
-    m_anniversaryBg.setAlphaF(cg.readEntry("AnniversariesOpacity", 10)/100.0);
-    m_colors.insert(anniversariesColorPos, m_anniversaryBg);
-    
     m_todoBg = QColor(cg.readEntry("TodoColor", QString("#FFD235")));
     m_todoBg.setAlphaF(cg.readEntry("TodoOpacity", 10)/100.0);
     m_colors.insert(todoColorPos, m_todoBg);
@@ -126,22 +119,21 @@ void EventApplet::init()
     m_finishedTodoBg.setAlphaF(cg.readEntry("FinishedTodoOpacity", 10)/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
-    m_useKoColors = cg.readEntry("UseKoColors", TRUE);
-	int opacity = cg.readEntry("KOOpacity", 10);
+    int opacity = cg.readEntry("KOOpacity", 10);
     setupCategoryColors(opacity);
 
-	QStringList keys, values;
-	keys << i18n("Birthday") << i18n("Holiday");
-	values << QString("%{startDate} %{yearsSince}. %{summary}") << QString("%{startDate} %{summary} to %{endDate}");
-	keys = cg.readEntry("CategoryFormatsKeys", keys);
-	values = cg.readEntry("CategoryFormatsValues", values);
+    QStringList keys, values;
+    keys << i18n("Birthday") << i18n("Holiday");
+    values << QString("%{startDate} %{yearsSince}. %{summary}") << QString("%{startDate} %{summary} to %{endDate}");
+    keys = cg.readEntry("CategoryFormatsKeys", keys);
+    values = cg.readEntry("CategoryFormatsValues", values);
 
-	for (int i = 0; i < keys.size(); ++i) {
-		m_categoryFormat.insert(keys.at(i), values.at(i));
-	}
+    for (int i = 0; i < keys.size(); ++i) {
+        m_categoryFormat.insert(keys.at(i), values.at(i));
+    }
 
     m_delegate = new EventItemDelegate(this, normalEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
-	m_delegate->setCategoryFormats(m_categoryFormat);
+    m_delegate->setCategoryFormats(m_categoryFormat);
 
     graphicsWidget();
 
@@ -163,9 +155,9 @@ void EventApplet::setupModel()
     m_agentManager = Akonadi::AgentManager::self();
 
     m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors);
-	m_model->setCategoryColors(m_useKoColors, m_categoryColors);
-	m_model->initModel();
-	m_model->initMonitor();
+    m_model->setCategoryColors(m_categoryColors);
+    m_model->initModel();
+    m_model->initMonitor();
     m_model->setSortRole(EventModel::SortRole);
     m_model->sort(0, Qt::AscendingOrder);
 
@@ -198,9 +190,9 @@ void EventApplet::setupCategoryColors(int opacity)
     foreach(const QString &category, categories) {
         QColor cColor = categoryColors.readEntry(category, QColor());
         if (cColor.isValid()) {
-		    cColor.setAlphaF(opacity/100.0);
-			m_categoryColors.insert(category, cColor);
-		}
+            cColor.setAlphaF(opacity/100.0);
+            m_categoryColors.insert(category, cColor);
+        }
     }
 }
 
@@ -404,7 +396,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     QWidget *formatWidget = new QWidget();
     m_formatConfig.setupUi(formatWidget);
-	m_formatConfig.setupConnections();
+    m_formatConfig.setupConnections();
     QWidget *colorWidget = new QWidget();
     m_colorConfigUi.setupUi(colorWidget);
     parent->setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
@@ -424,13 +416,13 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_formatConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
     m_formatConfig.periodBox->setValue(cg.readEntry("Period", 365));
 
-	QMap<QString, QString>::const_iterator i = m_categoryFormat.constBegin();
+    QMap<QString, QString>::const_iterator i = m_categoryFormat.constBegin();
     while (i != m_categoryFormat.constEnd()) {
         QStringList itemText;
-		itemText << i.key() << i.value();
-		QTreeWidgetItem *categoryItem = new QTreeWidgetItem(itemText);
-		categoryItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
-		m_formatConfig.categoryFormatWidget->addTopLevelItem(categoryItem);
+        itemText << i.key() << i.value();
+        QTreeWidgetItem *categoryItem = new QTreeWidgetItem(itemText);
+        categoryItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+        m_formatConfig.categoryFormatWidget->addTopLevelItem(categoryItem);
         ++i;
     }
 
@@ -441,19 +433,13 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_colorConfigUi.urgentColorButton->setColor(QColor(cg.readEntry("UrgentColor", QString("#FF0000"))));
     m_colorConfigUi.urgentOpacity->setValue(cg.readEntry("UrgentOpacity", 10));
 
-    m_colorConfigUi.birthdayColorButton->setColor(QColor(cg.readEntry("BirthdayColor", QString("#C0FFC0"))));
-    m_colorConfigUi.birthdayOpacity->setValue(cg.readEntry("BirthdayOpacity", 10));
-    m_colorConfigUi.anniversariesColorButton->setColor(QColor(cg.readEntry("AnniversariesColor", QString("#ABFFEA"))));
-    m_colorConfigUi.anniversariesOpacity->setValue(cg.readEntry("AnniversariesOpacity", 10));
-    
     m_colorConfigUi.todoColorButton->setColor(QColor(cg.readEntry("TodoColor", QString("#FFD235"))));
     m_colorConfigUi.todoOpacity->setValue(cg.readEntry("TodoOpacity", 10));
     m_colorConfigUi.showFinishedTodos->setChecked(cg.readEntry("ShowFinishedTodos", FALSE));
     m_colorConfigUi.finishedTodoButton->setColor(QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0"))));
     m_colorConfigUi.finishedTodoOpacity->setValue(cg.readEntry("FinishedTodoOpacity", 10));
 
-	m_colorConfigUi.useKOrganizerColors->setChecked(cg.readEntry("UseKoColors", TRUE));
-	m_colorConfigUi.korganizerOpacity->setValue(cg.readEntry("KOOpacity", 10));
+    m_colorConfigUi.korganizerOpacity->setValue(cg.readEntry("KOOpacity", 10));
 }
 
 void EventApplet::configAccepted()
@@ -499,20 +485,6 @@ void EventApplet::configAccepted()
     cg.writeEntry("PassedColor", m_passedFg.name());
     m_colors.insert(passedColorPos, m_passedFg);
     
-    m_birthdayBg = m_colorConfigUi.birthdayColorButton->color();
-    int birthdayOpacity = m_colorConfigUi.birthdayOpacity->value();
-    cg.writeEntry("BirthdayColor", m_birthdayBg.name());
-    cg.writeEntry("BirthdayOpacity", birthdayOpacity);
-    m_birthdayBg.setAlphaF(birthdayOpacity/100.0);
-    m_colors.insert(birthdayColorPos, m_birthdayBg);
-
-    m_anniversaryBg = m_colorConfigUi.anniversariesColorButton->color();
-    int anniversariesOpacity = m_colorConfigUi.anniversariesOpacity->value();
-    cg.writeEntry("AnniversariesColor", m_anniversaryBg.name());
-    cg.writeEntry("AnniversariesOpacity", anniversariesOpacity);
-    m_anniversaryBg.setAlphaF(anniversariesOpacity/100.0);
-    m_colors.insert(anniversariesColorPos, m_anniversaryBg);
-
     m_todoBg = m_colorConfigUi.todoColorButton->color();
     int todoOpacity = m_colorConfigUi.todoOpacity->value();
     cg.writeEntry("TodoColor", m_todoBg.name());
@@ -531,30 +503,27 @@ void EventApplet::configAccepted()
     m_finishedTodoBg.setAlphaF(finishedTodoOpacity/100.0);
     m_colors.insert(finishedTodoColorPos, m_finishedTodoBg);
 
-	bool oldUseKoColors = m_useKoColors;
-    m_useKoColors = m_colorConfigUi.useKOrganizerColors->isChecked();
-	cg.writeEntry("UseKoColors", m_useKoColors);
-	QHash<QString, QColor> oldColorHash = m_categoryColors;
-	int opacity = m_colorConfigUi.korganizerOpacity->value();
-	cg.writeEntry("KOOpacity", opacity);
-	setupCategoryColors(opacity);
+    QHash<QString, QColor> oldColorHash = m_categoryColors;
+    int opacity = m_colorConfigUi.korganizerOpacity->value();
+    cg.writeEntry("KOOpacity", opacity);
+    setupCategoryColors(opacity);
 
-	m_categoryFormat.clear();
-	QStringList keys, values;
-	QTreeWidgetItemIterator it(m_formatConfig.categoryFormatWidget);
+    m_categoryFormat.clear();
+    QStringList keys, values;
+    QTreeWidgetItemIterator it(m_formatConfig.categoryFormatWidget);
     while (*it) {
         m_categoryFormat[(*it)->text(0)] = (*it)->text(1);
-		keys << (*it)->text(0);
-		values << (*it)->text(1);
+        keys << (*it)->text(0);
+        values << (*it)->text(1);
          ++it;
      }
 
-	cg.writeEntry("CategoryFormatsKeys", keys);
-	cg.writeEntry("CategoryFormatsValues", values);
-	m_delegate->setCategoryFormats(m_categoryFormat);
+    cg.writeEntry("CategoryFormatsKeys", keys);
+    cg.writeEntry("CategoryFormatsValues", values);
+    m_delegate->setCategoryFormats(m_categoryFormat);
 
     m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
-	m_model->setCategoryColors(m_useKoColors, m_categoryColors);
+    m_model->setCategoryColors(m_categoryColors);
 
     if (oldPeriod != m_period) {
         m_filterModel->setPeriod(m_period);
@@ -565,7 +534,7 @@ void EventApplet::configAccepted()
     }
 
     if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
-		oldUseKoColors != m_useKoColors || oldColorHash != m_categoryColors) {
+        oldColorHash != m_categoryColors) {
         colorizeModel(FALSE);
     }
 
@@ -588,21 +557,24 @@ void EventApplet::colorizeModel(bool timerTriggered)
         int childRows = m_model->rowCount(headerIndex);
         for (int c = 0; c < childRows; ++c) {
             QModelIndex index = m_model->index(c, 0, headerIndex);
+            const QVariant v = index.data(Qt::DisplayRole);
+            QMap<QString, QVariant> values = v.toMap();
+            QString category = values["mainCategory"].toString();
             int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
             QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
+
+            QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+            m_model->setData(index, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
+
             if (timerTriggered && now.daysTo(itemDtTime) > m_birthdayUrgency) {
                 break;
-            } else if (itemRole == EventModel::BirthdayItem) {
+            } else if (itemRole == EventModel::BirthdayItem || itemRole == EventModel::AnniversaryItem) {
                 if (itemDtTime.date() >= now.date() && now.daysTo(itemDtTime) < m_birthdayUrgency) {
                     m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
+                } else if (m_categoryColors.contains(category)) {
+                    m_model->setData(index, QVariant(QBrush(m_categoryColors.value(category))), Qt::BackgroundRole);
                 } else {
-                    m_model->setData(index, QVariant(QBrush(m_birthdayBg)), Qt::BackgroundRole);
-                }
-            } else if (itemRole == EventModel::AnniversaryItem) {
-                if (itemDtTime.date() >= now.date() && now.daysTo(itemDtTime) < m_birthdayUrgency) {
-                    m_model->setData(index, QVariant(QBrush(m_urgentBg)), Qt::BackgroundRole);
-                } else {
-                    m_model->setData(index, QVariant(QBrush(m_anniversaryBg)), Qt::BackgroundRole);
+                    m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
                 }
             } else if (itemRole == EventModel::NormalItem) {
                 if (itemDtTime > now && now.secsTo(itemDtTime) < m_urgency * 60) {
@@ -610,22 +582,10 @@ void EventApplet::colorizeModel(bool timerTriggered)
                 } else if (now > itemDtTime) {
                     m_model->setData(index, QVariant(QBrush(m_passedFg)), Qt::ForegroundRole);
                     m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
+                } else if (m_categoryColors.contains(category)) {
+                    m_model->setData(index, QVariant(QBrush(m_categoryColors.value(category))), Qt::BackgroundRole);
                 } else {
-					if (m_useKoColors) {
-						const QVariant v = index.data(Qt::DisplayRole);
-						QMap<QString, QVariant> values = v.toMap();
-						if (!values["categories"].toStringList().isEmpty()) {
-							QString category = values["categories"].toStringList().first();
-							if (m_categoryColors.contains(category)) {
-								m_model->setData(index, QVariant(QBrush(m_categoryColors.value(category))), Qt::BackgroundRole);
-							}
-						}
-					} else {
-						m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
-					}
-
-                    QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
-                    m_model->setData(index, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
+                    m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
                 }
             } else if (itemRole == EventModel::TodoItem) {
                 const QVariant v = index.data(Qt::DisplayRole);

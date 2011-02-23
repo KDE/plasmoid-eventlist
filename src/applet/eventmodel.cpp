@@ -203,15 +203,12 @@ void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor
     birthdayUrgency = birthdayTime;
     urgentBg = itemColors.at(urgentColorPos);
     passedFg = itemColors.at(passedColorPos);
-    birthdayBg = itemColors.at(birthdayColorPos);
-    anniversariesBg = itemColors.at(anniversariesColorPos);
     todoBg = itemColors.at(todoColorPos);
     finishedTodoBg = itemColors.at(finishedTodoColorPos);
 }
 
-void EventModel::setCategoryColors(bool useKoColors, QHash<QString, QColor> categoryColors)
+void EventModel::setCategoryColors(QHash<QString, QColor> categoryColors)
 {
-    m_useKoColors = useKoColors;
     m_categoryColors = categoryColors;
 }
 
@@ -301,14 +298,13 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
                 if (itemDt >= QDate::currentDate() && QDate::currentDate().daysTo(itemDt) < birthdayUrgency) {
                     eventItem->setBackground(QBrush(urgentBg));
                 } else {
-					if (m_useKoColors && (m_categoryColors.contains(i18n("Birthday")) || m_categoryColors.contains("Birthday"))) {
-						QString b = "Birthday";
-						if (m_categoryColors.contains(i18n("Birthday")))
-							b = i18n("Birthday");
-						eventItem->setBackground(QBrush(m_categoryColors.value(b)));
-					} else {
-						eventItem->setBackground(QBrush(birthdayBg));
-					}
+                    if (m_categoryColors.contains(i18n("Birthday")) || m_categoryColors.contains("Birthday")) {
+                        QString b = "Birthday";
+                        if (m_categoryColors.contains(i18n("Birthday"))) {
+                            b = i18n("Birthday");
+                        }
+                        eventItem->setBackground(QBrush(m_categoryColors.value(b)));
+                    }
                 }
                 eventItem->setData(QVariant(BirthdayItem), ItemTypeRole);
             } else if (values["isAnniversary"].toBool()) {
@@ -318,11 +314,9 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
                 if (itemDt >= QDate::currentDate() && QDate::currentDate().daysTo(itemDt) < birthdayUrgency) {
                     eventItem->setBackground(QBrush(urgentBg));
                 } else {
-					if (m_useKoColors && m_categoryColors.contains(category)) {
-						eventItem->setBackground(QBrush(m_categoryColors.value(category)));
-					} else {
-						eventItem->setBackground(QBrush(anniversariesBg));
-					}
+                    if (m_categoryColors.contains(category)) {
+                        eventItem->setBackground(QBrush(m_categoryColors.value(category)));
+                    }
                 }
                 eventItem->setData(QVariant(AnniversaryItem), ItemTypeRole);
             } else {
@@ -333,12 +327,10 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
                     eventItem->setBackground(QBrush(urgentBg));
                 } else if (QDateTime::currentDateTime() > itemDtTime) {
                     eventItem->setForeground(QBrush(passedFg));
-				} else if (m_useKoColors) {
-					if (m_categoryColors.contains(category)) {
-						eventItem->setBackground(QBrush(m_categoryColors.value(category)));
-					}
-				}
-			}
+                } else if (m_categoryColors.contains(category)) {
+                    eventItem->setBackground(QBrush(m_categoryColors.value(category)));
+                }
+            }
 
             eventItem->setData(data, Qt::DisplayRole);
             eventItem->setData(eventDtTime, SortRole);
@@ -366,11 +358,9 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             eventItem->setBackground(QBrush(urgentBg));
         } else if (QDateTime::currentDateTime() > itemDtTime) {
             eventItem->setForeground(QBrush(passedFg));
-        } else if (m_useKoColors) {
-			if (m_categoryColors.contains(category)) {
- 				    eventItem->setBackground(QBrush(m_categoryColors.value(category)));
-			}
-		}
+        } else if (m_categoryColors.contains(category)) {
+            eventItem->setBackground(QBrush(m_categoryColors.value(category)));
+        }
 
         addItemRow(values["startDate"].toDate(), eventItem);
     }
@@ -470,14 +460,16 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["summary"] = event->summary();
     values["description"] = event->description();
     values["location"] = event->location();
-	QStringList categories = event->categories();
-    values["categories"] = categories;
-	if (categories.isEmpty())
-		values["mainCategory"] = i18n("Unspecified");
-	else
-		values["mainCategory"] = categories.first();
+    QStringList categories = event->categories();
+    if (categories.isEmpty()) {
+        values["categories"] = i18n("Unspecified");
+        values["mainCategory"] = i18n("Unspecified");
+    } else {
+        values["categories"] = event->categoriesStr();
+        values["mainCategory"] = categories.first();
+    }
 
-	values["status"] = event->status();
+    values["status"] = event->status();
     values["startDate"] = event->dtStart().dateTime().toLocalTime();
     values["endDate"] = event->dtEnd().dateTime().toLocalTime();
 
@@ -495,10 +487,10 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["recurDates"] = recurDates;
 
     if (event->customProperty("KABC", "BIRTHDAY") == QString("YES") || categories.contains(i18n("Birthday")) || categories.contains("Birthday")) {
-		values["isBirthday"] = QVariant(TRUE);
-	} else {
-		values["isBirthday"] = QVariant(FALSE);
-	}
+        values["isBirthday"] = QVariant(TRUE);
+    } else {
+        values["isBirthday"] = QVariant(FALSE);
+    }
 
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
 #if KDE_IS_VERSION(4,4,60)
@@ -521,7 +513,15 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["summary"] = todo->summary();
     values["description"] = todo->description();
     values["location"] = todo->location();
-    values["categories"] = todo->categoriesStr();
+    QStringList categories = todo->categories();
+    if (categories.isEmpty()) {
+        values["categories"] = i18n("Unspecified");
+        values["mainCategory"] = i18n("Unspecified");
+    } else {
+        values["categories"] = todo->categoriesStr();
+        values["mainCategory"] = categories.first();
+    }
+
     values["completed"] = todo->isCompleted();
     values["percent"] = todo->percentComplete();
     if (todo->hasStartDate()) {
