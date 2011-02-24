@@ -220,9 +220,6 @@ void EventApplet::plasmaThemeChanged()
 {
     QString currentStyle = Plasma::Theme::defaultTheme()->styleSheet();
     title->setStyleSheet(currentStyle);
-    QFont bold = title->font();
-    bold.setBold(true);
-    title->setFont(bold);
     colorizeModel(FALSE);
 }
 
@@ -278,10 +275,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
                 SLOT(slotUpdateTooltip(QString)));
 
         title = new Plasma::Label();
-        title->setText(i18n("Upcoming Events"));
-        QFont bold = font();
-        bold.setBold(true);
-        title->setFont(bold);
+        title->setText("<b>" + i18n("Upcoming Events") + "</b>");
 
         layout = new QGraphicsLinearLayout(Qt::Vertical);
         layout->addItem(title);
@@ -457,10 +451,11 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     for (int i = 0; i < m_headerItemsList.size(); i += 3) {
         QStringList itemText;
         itemText << m_headerItemsList.value(i) << m_headerItemsList.value(i + 1) << m_headerItemsList.value(i + 2);
-        QTreeWidgetItem *headerItem = new QTreeWidgetItem(itemText);
+        TreeWidgetItem *headerItem = new TreeWidgetItem(itemText);
         headerItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
         m_generalConfig.headerWidget->addTopLevelItem(headerItem);
     }
+    m_generalConfig.headerWidget->sortByColumn(2, Qt::AscendingOrder);
     m_generalConfig.periodBox->setValue(cg.readEntry("Period", 365));
 
     m_formatConfig.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));

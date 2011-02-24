@@ -18,7 +18,25 @@
 #ifndef GENERALCONFIG_H
 #define GENERALCONFIG_H
 
+#include <QTreeWidgetItem>
+
 #include "ui_eventappletgeneralconfig.h"
+
+class TreeWidgetItem : public QTreeWidgetItem
+{
+public:
+    TreeWidgetItem(QTreeWidget *tree) : QTreeWidgetItem(tree) {}
+    TreeWidgetItem(const QStringList &strings) :QTreeWidgetItem (strings) {}
+    bool operator< (const QTreeWidgetItem &other) const
+    {
+        int sortCol = treeWidget()->sortColumn();
+        if (sortCol != 2)
+            return QTreeWidgetItem::operator<(other);
+        int myNumber = text(sortCol).toInt();
+        int otherNumber = other.text(sortCol).toInt();
+        return myNumber < otherNumber;
+    }
+};
 
 class GeneralConfig : public QWidget, public Ui::EventAppletGeneralConfig
 {

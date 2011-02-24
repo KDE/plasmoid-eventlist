@@ -17,7 +17,6 @@
 
 #include "generalconfig.h"
 
-#include <QTreeWidgetItem>
 #include <QTreeWidgetItemIterator>
 
 #include <KDebug>
@@ -48,7 +47,7 @@ void GeneralConfig::slotAddHeader()
 
     QStringList itemText;
     itemText << i18n("Title") << QString("Your tooltip") << QString::number(begin);
-    QTreeWidgetItem *headerItem = new QTreeWidgetItem(itemText);
+    TreeWidgetItem *headerItem = new TreeWidgetItem(itemText);
     headerItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
     headerWidget->addTopLevelItem(headerItem);
 }
