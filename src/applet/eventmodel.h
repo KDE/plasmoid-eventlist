@@ -77,6 +77,7 @@ public:
 public:
     void setDateFormat(int format, QString string);
     void setCategoryColors(const QHash<QString, QColor>);
+    void setHeaderItems(QStringList headerParts);
     void initModel();
     void initMonitor();
     void resetModel();
@@ -91,16 +92,17 @@ private slots:
     void itemMoved(const Akonadi::Item &, const Akonadi::Collection &, const Akonadi::Collection &);
 
 private:
+    void createHeaderItems(QStringList headerParts);
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
     void addItem(const Akonadi::Item &item, const Akonadi::Collection &collection);
     void addItemRow(QDate eventDate, QStandardItem *items);
-    int figureRow(QStandardItem *headerItem);
     QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *, const Akonadi::Collection &);
     QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCal::Todo *, const Akonadi::Collection &);
 
 private:
-    QStandardItem *parentItem, *olderItem, *todayItem, *tomorrowItem, *weekItem, *monthItem, *laterItem, *somedayItem;
-    QList<QStandardItem *> sectionItems;
+    QStandardItem *parentItem;
+    QStringList m_headerPartsList;
+    QMap<QDate, QStandardItem *> m_sectionItemsMap;
     int urgency, birthdayUrgency;
     QColor urgentBg, passedFg, todoBg, finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;

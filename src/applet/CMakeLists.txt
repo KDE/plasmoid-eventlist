@@ -9,13 +9,15 @@ set(eventapplet_SRCS
     eventtreeview.cpp
     eventitemdelegate.cpp
     korganizerappletutil.cpp
+    generalconfig.cpp
     formatconfig.cpp
+    headerdelegate.cpp
 )
 
 qt4_add_dbus_interface(eventapplet_SRCS org.kde.korganizer.Korganizer.xml korganizer_interface)
 qt4_add_dbus_interface(eventapplet_SRCS org.kde.Korganizer.Calendar.xml calendar_interface)
 
-kde4_add_ui_files(eventapplet_SRCS eventappletformatconfig.ui eventappletcolorconfig.ui)
+kde4_add_ui_files(eventapplet_SRCS eventappletgeneralconfig.ui eventappletformatconfig.ui eventappletcolorconfig.ui)
 
 kde4_add_plugin(plasma_applet_events ${eventapplet_SRCS})
 target_link_libraries(plasma_applet_events

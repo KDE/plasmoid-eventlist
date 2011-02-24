@@ -22,6 +22,7 @@
 #include "eventitemdelegate.h"
 #include "korganizerappletutil.h"
 #include "eventtreeview.h"
+#include "headerdelegate.h"
 
 // qt headers
 #include <QComboBox>
@@ -142,6 +143,14 @@ void EventApplet::init()
         m_categoryFormat.insert(keys.at(i), values.at(i));
     }
 
+    QStringList headerList;
+    headerList << i18n("Today") << i18n("Events of today") << QString::number(0);
+    headerList << i18n("Tomorrow") << i18n("Events for tomorrow") << QString::number(1);
+    headerList << i18n("Week") << i18n("Events of the next week") << QString::number(2);
+    headerList << i18n("Next 4 weeks") << i18n("Events for the next 4 weeks") << QString::number(8);
+    headerList << i18n("Later") << i18n("Events later than 4 weeks") << QString::number(29);
+    m_headerItemsList = cg.readEntry("HeaderItems", headerList);
+
     m_delegate = new EventItemDelegate(this, normalEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
     m_delegate->setCategoryFormats(m_categoryFormat);
 
@@ -166,6 +175,7 @@ void EventApplet::setupModel()
 
     m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors);
     m_model->setCategoryColors(m_categoryColors);
+    m_model->setHeaderItems(m_headerItemsList);
     m_model->initModel();
     m_model->initMonitor();
     m_model->setSortRole(EventModel::SortRole);
@@ -208,6 +218,11 @@ void EventApplet::setupCategoryColors(int opacity)
 
 void EventApplet::plasmaThemeChanged()
 {
+    QString currentStyle = Plasma::Theme::defaultTheme()->styleSheet();
+    title->setStyleSheet(currentStyle);
+    QFont bold = title->font();
+    bold.setBold(true);
+    title->setFont(bold);
     colorizeModel(FALSE);
 }
 
@@ -262,7 +277,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
         connect(m_view, SIGNAL(tooltipUpdated(QString)),
                 SLOT(slotUpdateTooltip(QString)));
 
-        Plasma::Label *title = new Plasma::Label();
+        title = new Plasma::Label();
         title->setText(i18n("Upcoming Events"));
         QFont bold = font();
         bold.setBold(true);
@@ -418,6 +433,11 @@ void EventApplet::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 {
+    QWidget *generalWidget = new QWidget();
+    m_generalConfig.setupUi(generalWidget);
+    HeaderDelegate *hd = new HeaderDelegate();
+    m_generalConfig.headerWidget->setItemDelegateForColumn(2, hd);
+    m_generalConfig.setupConnections();
     QWidget *formatWidget = new QWidget();
     m_formatConfig.setupUi(formatWidget);
     m_formatConfig.setupConnections();
@@ -428,17 +448,26 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
-    parent->addPage(formatWidget, i18n("Text Format"), icon());
+    parent->addPage(generalWidget, i18n("General"), "view-list-tree");
+    parent->addPage(formatWidget, i18n("Text Format"), "format-text-code");
     parent->addPage(colorWidget, i18n("Colors"), "fill-color");
 
     KConfigGroup cg = config();
+
+    for (int i = 0; i < m_headerItemsList.size(); i += 3) {
+        QStringList itemText;
+        itemText << m_headerItemsList.value(i) << m_headerItemsList.value(i + 1) << m_headerItemsList.value(i + 2);
+        QTreeWidgetItem *headerItem = new QTreeWidgetItem(itemText);
+        headerItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
+        m_generalConfig.headerWidget->addTopLevelItem(headerItem);
+    }
+    m_generalConfig.periodBox->setValue(cg.readEntry("Period", 365));
 
     m_formatConfig.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
     m_formatConfig.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
     m_formatConfig.noDueDateEdit->setText(cg.readEntry("NoDueDateFormat", QString("%{summary}")));
     m_formatConfig.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
     m_formatConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
-    m_formatConfig.periodBox->setValue(cg.readEntry("Period", 365));
 
     QMap<QString, QString>::const_iterator i = m_categoryFormat.constBegin();
     while (i != m_categoryFormat.constEnd()) {
@@ -470,6 +499,19 @@ void EventApplet::configAccepted()
 {
     KConfigGroup cg = config();
 
+    QStringList oldHeaderList = m_headerItemsList;
+    m_headerItemsList.clear();
+    QTreeWidgetItemIterator hi(m_generalConfig.headerWidget);
+    while (*hi) {
+        m_headerItemsList << (*hi)->text(0) << (*hi)->text(1) << (*hi)->text(2);
+         ++hi;
+     }
+    cg.writeEntry("HeaderItems", m_headerItemsList);
+
+    int oldPeriod = cg.readEntry("Period", 365);
+    m_period = m_generalConfig.periodBox->value();
+    cg.writeEntry("Period", m_period);
+
     QString normalEventFormat = m_formatConfig.normalEventEdit->text();
     cg.writeEntry("NormalEventFormat", normalEventFormat);
     QString todoFormat = m_formatConfig.todoEdit->text();
@@ -482,10 +524,6 @@ void EventApplet::configAccepted()
     cg.writeEntry("CustomDateFormat", customString);
 
     m_delegate->settingsChanged(normalEventFormat, todoFormat, noDueDateFormat, dateFormat, customString);
-
-    int oldPeriod = cg.readEntry("Period", 365);
-    m_period = m_formatConfig.periodBox->value();
-    cg.writeEntry("Period", m_period);
 
     int oldUrgency = m_urgency;
     m_urgency = m_colorConfigUi.urgencyBox->value();
@@ -557,7 +595,10 @@ void EventApplet::configAccepted()
         m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     }
 
-    if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
+    if (oldHeaderList != m_headerItemsList) {
+        m_model->setHeaderItems(m_headerItemsList);
+        m_model->resetModel();
+    } else if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
         oldColorHash != m_categoryColors) {
         colorizeModel(FALSE);
     }
@@ -569,12 +610,14 @@ void EventApplet::configAccepted()
 
 void EventApplet::colorizeModel(bool timerTriggered)
 {
+    QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     QDateTime now = QDateTime::currentDateTime();
 
     int headerRows = m_model->rowCount(QModelIndex());
     for (int r = 0; r < headerRows; ++r) {
         QModelIndex headerIndex = m_model->index(r, 0, QModelIndex());
         QDateTime headerDtTime = m_model->data(headerIndex, EventModel::SortRole).toDateTime();
+        m_model->setData(headerIndex, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
         if (timerTriggered && now.daysTo(headerDtTime) > m_birthdayUrgency) {
             break;
         }
@@ -587,7 +630,6 @@ void EventApplet::colorizeModel(bool timerTriggered)
             int itemRole = m_model->data(index, EventModel::ItemTypeRole).toInt();
             QDateTime itemDtTime = m_model->data(index, EventModel::SortRole).toDateTime();
 
-            QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
             m_model->setData(index, QVariant(QBrush(defaultTextColor)), Qt::ForegroundRole);
 
             if (timerTriggered && now.daysTo(itemDtTime) > m_birthdayUrgency) {

@@ -48,13 +48,6 @@
 
 EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList) : QStandardItemModel(parent),
     parentItem(0),
-    olderItem(0),
-    todayItem(0),
-    tomorrowItem(0),
-    weekItem(0),
-    monthItem(0),
-    laterItem(0),
-    somedayItem(0),
     m_monitor(0)
 {
     parentItem = invisibleRootItem();
@@ -69,43 +62,7 @@ EventModel::~EventModel()
 
 void EventModel::initModel()
 {
-    if (!olderItem) {
-        olderItem = new QStandardItem();
-        initHeaderItem(olderItem, i18n("Earlier stuff"), i18n("Unfinished todos, still ongoing earlier events etc."), -28);
-    }
-
-    if (!todayItem) {
-        todayItem = new QStandardItem();
-        initHeaderItem(todayItem, i18n("Today"), i18n("Events of today"), 0);
-    }
-
-    if (!tomorrowItem) {
-        tomorrowItem = new QStandardItem();
-        initHeaderItem(tomorrowItem, i18n("Tomorrow"), i18n("Events for tomorrow"), 1);
-    }
-
-    if (!weekItem) {
-        weekItem = new QStandardItem();
-        initHeaderItem(weekItem, i18n("Week"), i18n("Events of the next week"), 2);
-    }
-
-    if (!monthItem) {
-        monthItem = new QStandardItem();
-        initHeaderItem(monthItem, i18n("Next 4 weeks"), i18n("Events for the next 4 weeks"), 8);
-    }
-
-    if (!laterItem) {
-        laterItem = new QStandardItem();
-        initHeaderItem(laterItem, i18n("Later"), i18n("Events later than 4 weeks"), 29);
-    }
-
-    if (!somedayItem) {
-        somedayItem = new QStandardItem();
-        initHeaderItem(somedayItem, i18n("Some day"), i18n("Todos with no due date"), 366);
-    }
-
-    // this list should always be sorted by date
-    sectionItems << olderItem << todayItem << tomorrowItem << weekItem << monthItem << laterItem << somedayItem;
+    createHeaderItems(m_headerPartsList);
 
     Akonadi::CollectionFetchJob *job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(),
                                                                        Akonadi::CollectionFetchJob::Recursive);
@@ -176,14 +133,6 @@ void EventModel::resetModel()
 {
     clear();
     parentItem = invisibleRootItem();
-    olderItem = 0;
-    todayItem = 0;
-    tomorrowItem = 0;
-    weekItem = 0;
-    monthItem = 0;
-    laterItem = 0;
-    somedayItem = 0;
-    sectionItems.clear();
     delete m_monitor;
     m_monitor = 0;
 
@@ -212,6 +161,30 @@ void EventModel::setCategoryColors(QHash<QString, QColor> categoryColors)
     m_categoryColors = categoryColors;
 }
 
+void EventModel::setHeaderItems(QStringList headerParts)
+{
+    m_headerPartsList = headerParts;
+}
+
+void EventModel::createHeaderItems(QStringList headerParts)
+{
+    m_sectionItemsMap.clear();
+
+    QStandardItem *olderItem = new QStandardItem();
+    initHeaderItem(olderItem, i18n("Earlier stuff"), i18n("Unfinished todos, still ongoing earlier events etc."), -28);
+    m_sectionItemsMap.insert(olderItem->data(SortRole).toDate(), olderItem);
+
+    QStandardItem *somedayItem = new QStandardItem();
+    initHeaderItem(somedayItem, i18n("Some day"), i18n("Todos with no due date"), 366);
+    m_sectionItemsMap.insert(somedayItem->data(SortRole).toDate(), somedayItem);
+
+    for (int i = 0; i < headerParts.size(); i += 3) {
+        QStandardItem *item = new QStandardItem();
+        initHeaderItem(item, headerParts.value(i), headerParts.value(i + 1), headerParts.value(i + 2).toInt());
+        m_sectionItemsMap.insert(item->data(SortRole).toDate(), item);
+    }
+}
+
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
     addItem(item, collection);
@@ -219,7 +192,7 @@ void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection 
 
 void EventModel::removeItem(const Akonadi::Item &item)
 {
-    foreach (QStandardItem *i, sectionItems) {
+    foreach (QStandardItem *i, m_sectionItemsMap) {
         QModelIndexList l;
         if (i->hasChildren())
             l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.id());
@@ -423,7 +396,7 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
 {
     QStandardItem *headerItem = 0;
 
-    foreach (QStandardItem *item, sectionItems) {
+    foreach (QStandardItem *item, m_sectionItemsMap) {
         if (eventDate < item->data(SortRole).toDate())
             break;
         else
@@ -434,25 +407,12 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
         headerItem->appendRow(incidenceItem);
         headerItem->sortChildren(0, Qt::AscendingOrder);
         if (headerItem->row() == -1) {
-            parentItem->insertRow(figureRow(headerItem), headerItem);
+            parentItem->appendRow(headerItem);
+            parentItem->sortChildren(0, Qt::AscendingOrder);
         }
         
         emit modelNeedsExpanding();
     }
-}
-
-int EventModel::figureRow(QStandardItem *headerItem)
-{
-    int row = 0;
-
-    foreach (QStandardItem *item, sectionItems) {
-        if (item->data(SortRole).toDateTime() >= headerItem->data(SortRole).toDateTime())
-            break;
-        if (item->row() != -1)
-            row = item->row() + 1;
-    }
-
-    return row;
 }
 
 QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal::Event *event, const Akonadi::Collection &collection)
