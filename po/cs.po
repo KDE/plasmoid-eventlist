@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
-"POT-Creation-Date: 2011-02-25 12:02+0100\n"
+"POT-Creation-Date: 2011-02-25 12:16+0100\n"
 "PO-Revision-Date: 2010-08-07 23:48+0200\n"
 "Last-Translator: Karol Slanina <karol.slanina@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -136,7 +136,7 @@ msgstr ""
 
 #. i18n: file: eventappletgeneralconfig.ui:55
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
-#: generalconfig.cpp:49 rc.cpp:187
+#: generalconfig.cpp:49 rc.cpp:191
 #, fuzzy
 msgid "Title"
 msgstr "Časy"
@@ -147,7 +147,7 @@ msgstr "Časy"
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletFormatConfig)
 #. i18n: file: eventappletgeneralconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletGeneralConfig)
-#: rc.cpp:3 rc.cpp:94 rc.cpp:177
+#: rc.cpp:3 rc.cpp:94 rc.cpp:181
 msgid "Form"
 msgstr "Formulář"
 
@@ -314,17 +314,31 @@ msgstr "Formát bežných událostí:"
 msgid "The text displayed for common events."
 msgstr "Text, který bude zobrazený pro běžné události."
 
+#. i18n: file: eventappletformatconfig.ui:59
+#. i18n: ectx: property (text), widget (QTreeWidget, categoryFormatWidget)
+#: rc.cpp:106
+#, fuzzy
+msgid "Category"
+msgstr "Později"
+
+#. i18n: file: eventappletformatconfig.ui:64
+#. i18n: ectx: property (text), widget (QTreeWidget, categoryFormatWidget)
+#: rc.cpp:109
+#, fuzzy
+msgid "Format"
+msgstr "Formulář"
+
 #. i18n: file: eventappletformatconfig.ui:72
 #. i18n: ectx: property (text), widget (QPushButton, addCategoryButton)
 #. i18n: file: eventappletgeneralconfig.ui:73
 #. i18n: ectx: property (text), widget (QPushButton, addHeaderButton)
-#: rc.cpp:108 rc.cpp:196
+#: rc.cpp:112 rc.cpp:200
 msgid "Add"
 msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:79
 #. i18n: ectx: property (text), widget (QPushButton, copyCategoryButton)
-#: rc.cpp:111
+#: rc.cpp:115
 msgid "Copy"
 msgstr ""
 
@@ -332,13 +346,13 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, removeCategoryButton)
 #. i18n: file: eventappletgeneralconfig.ui:80
 #. i18n: ectx: property (text), widget (QPushButton, removeHeaderButton)
-#: rc.cpp:114 rc.cpp:199
+#: rc.cpp:118 rc.cpp:203
 msgid "Remove"
 msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:100
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: rc.cpp:118
+#: rc.cpp:122
 #, fuzzy, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
@@ -364,13 +378,13 @@ msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:110
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
-#: rc.cpp:128
+#: rc.cpp:132
 msgid "Todo text formatting"
 msgstr "Formátování textu úkolů"
 
 #. i18n: file: eventappletformatconfig.ui:122
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: rc.cpp:132
+#: rc.cpp:136
 #, fuzzy, no-c-format
 msgid ""
 "The format for the displayed text for todos.\n"
@@ -394,85 +408,85 @@ msgstr ""
 
 #. i18n: file: eventappletformatconfig.ui:129
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: rc.cpp:141
+#: rc.cpp:145
 msgid "Format for todos:"
 msgstr "Formát úkolů:"
 
 #. i18n: file: eventappletformatconfig.ui:136
 #. i18n: ectx: property (toolTip), widget (KLineEdit, todoEdit)
-#: rc.cpp:144
+#: rc.cpp:148
 msgid "The text displayed for common todos."
 msgstr "Text, který bude zobrazený pro běžné úkoly."
 
 #. i18n: file: eventappletformatconfig.ui:146
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: rc.cpp:147
+#: rc.cpp:151
 msgid "Todos with no due date:"
 msgstr "Úkoly bez termínu:"
 
 #. i18n: file: eventappletformatconfig.ui:153
 #. i18n: ectx: property (toolTip), widget (KLineEdit, noDueDateEdit)
-#: rc.cpp:150
+#: rc.cpp:154
 msgid "The text displayed for todos with no due date."
 msgstr "Text, který bude zobrazený pro úkoly bez termínu."
 
 #. i18n: file: eventappletformatconfig.ui:163
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: rc.cpp:153
+#: rc.cpp:157
 msgid "Date appearance settings"
 msgstr "Nastavení zobrazení data"
 
 #. i18n: file: eventappletformatconfig.ui:169
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: rc.cpp:156
+#: rc.cpp:160
 msgid "Date format:"
 msgstr "Formát data:"
 
 #. i18n: file: eventappletformatconfig.ui:176
 #. i18n: ectx: property (toolTip), widget (KComboBox, dateFormatBox)
-#: rc.cpp:159
+#: rc.cpp:163
 msgid "What date format to use."
 msgstr "Jaký formát datumu bude použitý."
 
 #. i18n: file: eventappletformatconfig.ui:180
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:162
+#: rc.cpp:166
 msgid "KDE ShortDate"
 msgstr "KDE krátký formát"
 
 #. i18n: file: eventappletformatconfig.ui:185
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:165
+#: rc.cpp:169
 msgid "KDE LongDate"
 msgstr "KDE dlouhý formát"
 
 #. i18n: file: eventappletformatconfig.ui:190
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
-#: rc.cpp:168
+#: rc.cpp:172
 msgid "Custom"
 msgstr "Vlastní"
 
 #. i18n: file: eventappletformatconfig.ui:198
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: rc.cpp:171
+#: rc.cpp:175
 msgid "Custom format:"
 msgstr "Vlastní formát:"
 
 #. i18n: file: eventappletformatconfig.ui:205
 #. i18n: ectx: property (toolTip), widget (KLineEdit, customFormatEdit)
-#: rc.cpp:174
+#: rc.cpp:178
 msgid "A string describing the custom format. It is using the QDate syntax."
 msgstr "Text popisující vlastní formát. Je třeba použít syntaxi QDate."
 
 #. i18n: file: eventappletgeneralconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: rc.cpp:180
+#: rc.cpp:184
 msgid "Header sections"
 msgstr ""
 
 #. i18n: file: eventappletgeneralconfig.ui:27
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, headerWidget)
-#: rc.cpp:183
+#: rc.cpp:187
 msgid ""
 "Add your own headers here, start is the first day of the period counting "
 "from today,\n"
@@ -481,40 +495,40 @@ msgstr ""
 
 #. i18n: file: eventappletgeneralconfig.ui:60
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
-#: rc.cpp:190
+#: rc.cpp:194
 msgid "Tooltip"
 msgstr ""
 
 #. i18n: file: eventappletgeneralconfig.ui:65
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
-#: rc.cpp:193
+#: rc.cpp:197
 msgid "Start"
 msgstr ""
 
 #. i18n: file: eventappletgeneralconfig.ui:90
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
-#: rc.cpp:202
+#: rc.cpp:206
 msgid "Miscellenous options"
 msgstr "Ostatní nastavení"
 
 #. i18n: file: eventappletgeneralconfig.ui:96
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: rc.cpp:205
+#: rc.cpp:209
 msgid "Period to show incidences (in days):"
 msgstr "Zobrazený časový úsek (ve dnech):"
 
 #. i18n: file: eventappletgeneralconfig.ui:103
 #. i18n: ectx: property (toolTip), widget (KIntSpinBox, periodBox)
-#: rc.cpp:208
+#: rc.cpp:212
 msgid "The time frame to show incidences."
 msgstr "Pro jaký časový úsek budou zobrazené události."
 
-#: rc.cpp:209
+#: rc.cpp:213
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Aleš Nejdr"
 
-#: rc.cpp:210
+#: rc.cpp:214
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "ales.nejdr@gmail.com"

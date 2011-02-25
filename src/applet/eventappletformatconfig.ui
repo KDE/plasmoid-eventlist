@@ -56,12 +56,12 @@
         </attribute>
         <column>
          <property name="text">
-          <string notr="true">Category</string>
+          <string>Category</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string notr="true">Format</string>
+          <string>Format</string>
          </property>
         </column>
        </widget>
