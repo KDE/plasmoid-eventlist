@@ -1,3 +1,10 @@
+0.3.92 (0.4 beta)
+- ability to add your own headers
+- remove custom colors for birthdays,
+  always use korganizer category colors
+- connect to plasma theme changes
+- watch korganizerrc for changes
+
 0.3.91 (0.4 beta)
 - ability to use richtext in format strings
 - some changes to make it work better with pim 4.6
