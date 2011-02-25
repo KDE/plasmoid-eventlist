@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
+    <width>604</width>
     <height>837</height>
    </rect>
   </property>
@@ -92,8 +92,8 @@
         <property name="text">
          <string>The format for the displayed text for events.
 Substitutions (mostly self-explanatory) are:
-%{startDate}, %{endDate}, %{startTime}, %{endTime},
-%{summary}, %{description}, %{location}, %{duration},
+%{startDate}, %{endDate} - start and end date, %{startTime}, %{endTime} - start and end time,
+%{summary} - summary, %{description} - description, %{location} - location, %{duration} - duration,
 %{yearsSince} - years since the first time (useful for birthdays),
 %{resourceName} - the i18n name of the Akonadi resource,
 %{mainCategory}, %{categories} - the first or all categories,
@@ -115,8 +115,8 @@ Substitutions (mostly self-explanatory) are:
         <property name="text">
          <string>The format for the displayed text for todos.
 Substutions (again mostly self-explanatory) are:
-%{dueDate}, %{dueTime}, %{startDate}, %{startTime},
-%{summary}, %{description}, %{percent}, %{location},
+%{dueDate}, %{dueTime} - due date and time, %{startDate}, %{startTime} - start date and time,
+%{summary} - summary, %{description} - description, %{percent} - finished percent, %{location} - location,
 %{resourceName} - the i18n name of the Akonadi resource,
 %{mainCategory}, %{categories} - the first or all categories,
 %{tab} - a tabulator</string>
