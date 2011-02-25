@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.2.4\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2011-02-25 12:02+0100\n"
-"PO-Revision-Date: 2011-02-25 11:58+0100\n"
+"PO-Revision-Date: 2011-02-25 12:08+0100\n"
 "Last-Translator: Gerd Fleischer <gerdfleischer@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -338,7 +338,7 @@ msgstr "Löschen"
 #. i18n: file: eventappletformatconfig.ui:100
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: rc.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
 "Substitutions (mostly self-explanatory) are:\n"
@@ -352,9 +352,11 @@ msgid ""
 "%{tab} - a tabulator"
 msgstr ""
 "Das Format für den angezeigten Text für die Ereignisse.\n"
-"Als Platzhalter (größtenteils selbsterklärend):\n"
-"%{startDate}, %{endDate}, %{startTime}, %{endTime},\n"
-"%{summary}, %{description}, %{location} - Ort, %{duration},\n"
+"Platzhalter (größtenteils selbsterklärend):\n"
+"%{startDate}, %{endDate} - Start - und Enddatum, %{startTime}, %{endTime} - "
+"Start - und Endzeit,\n"
+"%{summary} - Zusammenfassung, %{description} - Beschreibung, %{location} - "
+"Ort, %{duration} - Dauer,\n"
 "%{yearsSince} - Jahre seit dem ersten Stattfinden (nützlich für "
 "Geburtstage),\n"
 "%{resourceName} - der i18n Name der Akonadi Ressource,\n"
@@ -370,7 +372,7 @@ msgstr "Aufgaben Textformatierung"
 #. i18n: file: eventappletformatconfig.ui:122
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: rc.cpp:132
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format for the displayed text for todos.\n"
 "Substutions (again mostly self-explanatory) are:\n"
@@ -383,12 +385,13 @@ msgid ""
 "%{tab} - a tabulator"
 msgstr ""
 "Das Format für den angezeigten Text für Aufgaben.\n"
-"Als Platzhalter kann verwendet werden:\n"
-"%{dueDate} - Fälligkeitstermin, %{dueTime} - Fälligkeitszeit,\n"
-"%{startDate} - Datum des Beginns, %{startTime} - Startzeit,\n"
-"%{summary} - Zusammenfassung, %{description} - Beschreibung\n"
-"%{percent} - erledigter Anteil, %{location} - Ort,\n"
+"Als Platzhalter (auch größtenteils selbsterklärend):\n"
+"%{dueDate}, %{dueTime} - Fälligkeitsdatum und -zeit, %{startDate}, "
+"%{startTime} - Startdatum und -zeit,\n"
+"%{summary} - Zusammenfassung, %{description} - Beschreibung, %{percent} - "
+"erledigter Anteil, %{location} - Ort,\n"
 "%{resourceName} - der i18n Name der Akonadi Ressource,\n"
+"%{mainCategory}, %{categories} - die erste oder alle Kategorien,\n"
 "%{tab} - ein Tabulator"
 
 #. i18n: file: eventappletformatconfig.ui:129
