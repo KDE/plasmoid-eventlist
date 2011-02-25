@@ -220,6 +220,25 @@ void EventApplet::plasmaThemeChanged()
 {
     QString currentStyle = Plasma::Theme::defaultTheme()->styleSheet();
     title->setStyleSheet(currentStyle);
+    
+    QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
+    QColor baseColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor);
+    QColor altBaseColor = baseColor.darker(150);
+    QColor buttonColor = altBaseColor;
+    baseColor.setAlpha(50);
+    altBaseColor.setAlpha(50);
+    buttonColor.setAlpha(150);
+
+    QPalette p = palette();
+    p.setColor(QPalette::Base, baseColor);
+    p.setColor(QPalette::AlternateBase, altBaseColor);
+    p.setColor(QPalette::Button, buttonColor);
+    p.setColor(QPalette::Foreground, textColor);
+    p.setColor(QPalette::Text, textColor);
+    
+    m_view->viewport()->setPalette(p);
+    m_view->setPalette(p);
+
     colorizeModel(FALSE);
 }
 
