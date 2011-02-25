@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Gerd Fleischer <GerdFleischer@gmx.de>, 2010.
-# Gerd Fleischer <gerdfleischer@gmx.de>, 2010.
+# Gerd Fleischer <gerdfleischer@gmx.de>, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.2.4\n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2011-02-25 11:42+0100\n"
-"PO-Revision-Date: 2010-09-25 09:58+0200\n"
+"PO-Revision-Date: 2011-02-25 11:58+0100\n"
 "Last-Translator: Gerd Fleischer <gerdfleischer@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -24,9 +24,8 @@ msgid "Birthday"
 msgstr "Geburtstag"
 
 #: eventapplet.cpp:137
-#, fuzzy
 msgid "Holiday"
-msgstr "Heute"
+msgstr "Ferien"
 
 #: eventapplet.cpp:147
 msgid "Today"
@@ -98,7 +97,7 @@ msgstr "Anstehende Termine von Akonadi Ressourcen"
 
 #: eventapplet.cpp:464
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 #: eventapplet.cpp:465
 msgid "Text Format"
@@ -131,14 +130,13 @@ msgstr "Aufgaben ohne festen Termin"
 #: eventmodel.cpp:431 eventmodel.cpp:432 eventmodel.cpp:484 eventmodel.cpp:485
 #: formatconfig.cpp:40
 msgid "Unspecified"
-msgstr ""
+msgstr "Nicht angegeben"
 
 #. i18n: file: eventappletgeneralconfig.ui:55
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: generalconfig.cpp:49 rc.cpp:187
-#, fuzzy
 msgid "Title"
-msgstr "Zeiten"
+msgstr "Titel"
 
 #. i18n: file: eventappletcolorconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
@@ -295,7 +293,7 @@ msgstr "Die Hintergrundfarbe für erledigte Aufgaben."
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rc.cpp:84
 msgid "KOrganizer colors"
-msgstr ""
+msgstr "KOrganizer Farben"
 
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -321,13 +319,13 @@ msgstr "Der Text der für normale Ereignisse angezeigt wird."
 #. i18n: ectx: property (text), widget (QPushButton, addHeaderButton)
 #: rc.cpp:108 rc.cpp:196
 msgid "Add"
-msgstr ""
+msgstr "Hinzufügen"
 
 #. i18n: file: eventappletformatconfig.ui:79
 #. i18n: ectx: property (text), widget (QPushButton, copyCategoryButton)
 #: rc.cpp:111
 msgid "Copy"
-msgstr ""
+msgstr "Kopieren"
 
 #. i18n: file: eventappletformatconfig.ui:86
 #. i18n: ectx: property (text), widget (QPushButton, removeCategoryButton)
@@ -335,12 +333,12 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, removeHeaderButton)
 #: rc.cpp:114 rc.cpp:199
 msgid "Remove"
-msgstr ""
+msgstr "Löschen"
 
 #. i18n: file: eventappletformatconfig.ui:100
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: rc.cpp:118
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
 "Substitutions (mostly self-explanatory) are:\n"
@@ -352,14 +350,13 @@ msgid ""
 "%{tab} - a tabulator"
 msgstr ""
 "Das Format für den angezeigten Text für die Ereignisse.\n"
-"Als Platzhalter kann verwendet werden:\n"
-"%{startDate} - Datum des Beginns, %{endDate} - Datum des Endes,\n"
-"%{startTime} - Zeit des Beginns, %{endTime} - Zeit des Endes,\n"
-"%{summary} - Zusammenfassung, %{description} - Beschreibung,\n"
-"%{location} - Ort, %{duration} - Dauer in Stunden,\n"
+"Als Platzhalter (größtenteils selbsterklärend):\n"
+"%{startDate}, %{endDate}, %{startTime}, %{endTime},\n"
+"%{summary}, %{description}, %{location} - Ort, %{duration},\n"
 "%{yearsSince} - Jahre seit dem ersten Stattfinden (nützlich für "
 "Geburtstage),\n"
 "%{resourceName} - der i18n Name der Akonadi Ressource,\n"
+"%{mainCategory}, %{categories} - die erste oder alle Kategorien,\n"
 "%{tab} - ein Tabulator"
 
 #. i18n: file: eventappletformatconfig.ui:110
@@ -468,7 +465,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: rc.cpp:180
 msgid "Header sections"
-msgstr ""
+msgstr "Zeiträume"
 
 #. i18n: file: eventappletgeneralconfig.ui:27
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, headerWidget)
@@ -478,18 +475,22 @@ msgid ""
 "from today,\n"
 "it will stretch to the next header or end of the displayed timeframe."
 msgstr ""
+"Hier können eigene Zeiträume definiert werden, Anfang ist der erste Tag, "
+"von heute an gezählt,\n"
+"ersteckt sich bis zum Beginn des nächsten oder zum Ende des angezeigten "
+"gesamten Zeitraums."
 
 #. i18n: file: eventappletgeneralconfig.ui:60
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: rc.cpp:190
 msgid "Tooltip"
-msgstr ""
+msgstr "Tooltip"
 
 #. i18n: file: eventappletgeneralconfig.ui:65
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: rc.cpp:193
 msgid "Start"
-msgstr ""
+msgstr "Anfang"
 
 #. i18n: file: eventappletgeneralconfig.ui:90
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
