@@ -22,6 +22,10 @@
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0" colspan="2">
        <widget class="QTreeWidget" name="headerWidget">
+        <property name="toolTip">
+         <string>Add your own headers here, start is the first day of the period counting from today,
+it will stretch to the next header or end of the displayed timeframe.</string>
+        </property>
         <property name="indentation">
          <number>0</number>
         </property>
@@ -34,9 +38,18 @@
         <property name="sortingEnabled">
          <bool>true</bool>
         </property>
+        <property name="expandsOnDoubleClick">
+         <bool>false</bool>
+        </property>
         <property name="columnCount">
          <number>3</number>
         </property>
+        <attribute name="headerStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="headerStretchLastSection">
+         <bool>true</bool>
+        </attribute>
         <column>
          <property name="text">
           <string>Title</string>
@@ -49,7 +62,7 @@
         </column>
         <column>
          <property name="text">
-          <string>Begin</string>
+          <string>Start</string>
          </property>
         </column>
        </widget>
