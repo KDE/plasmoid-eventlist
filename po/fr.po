@@ -3,19 +3,20 @@
 #
 # Cédric Bellegarde <gnumdk@gmail.com>, 2010.
 # Gerd Fleischer <gerdfleischer@gmx.de>, 2011.
+# Cédric Bellegarde <cedric.bellegarde@ensat.fr>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2010-09-28 20:34+0200\n"
-"PO-Revision-Date: 2011-01-01 12:22+0100\n"
-"Last-Translator: Gerd Fleischer <gerdfleischer@gmx.de>\n"
+"PO-Revision-Date: 2011-02-07 09:13+0100\n"
+"Last-Translator: Cédric Bellegarde <cedric.bellegarde@ensat.fr>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: eventapplet.cpp:210 eventapplet.cpp:347
@@ -364,7 +365,7 @@ msgstr "Format des tâches"
 #. i18n: file: eventappletformatconfig.ui:85
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: rc.cpp:147
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format fot the displayed text for todos.\n"
 "Substutions are:\n"
@@ -375,16 +376,14 @@ msgid ""
 "%{resourceName} - the i18n name of the Akonadi resource,\n"
 "%{tab} - a tabulator"
 msgstr ""
-"Format du texte des événements.\n"
+"Le format pour le texte des tâches à faire:\n"
 "Les substitutions sont:\n"
-"%{startDate} - Date de départ, %{endDate} - Date de fin,\n"
-"%{startTime} - Heure de départ, %{endTime} - Heure de fin,\n"
-"%{summary} - Résumé, %{description} - Description,\n"
-"%{location} - Emplacement, %{duration} - Durée en, heure,\n"
-"%{yearsSince} - Années depuis la première fois (utile pour les "
-"anniversaires),\n"
-"%{resourceName} - Le nom de la ressource Akonadi,\n"
-"%{tab} - Tabulation"
+"%{dueDate} - la date de fin, %{dueTime} - l'heure de fin,\n"
+"%{startDate} - la date de départ, %{startTime} - l'heure de départ,\n"
+"%{summary} - le résumé, %{description} - la description,\n"
+"%{percent} - pourcentage accompli, %{location} - emplacement,\n"
+"%{resourceName} - le nom de la ressource Akonadi,\n"
+"%{tab} - une tabulation"
 
 #. i18n: file: eventappletformatconfig.ui:92
 #. i18n: ectx: property (text), widget (QLabel, label_8)
@@ -456,7 +455,8 @@ msgstr "Format personnalisé:"
 #. i18n: ectx: property (toolTip), widget (KLineEdit, customFormatEdit)
 #: rc.cpp:190
 msgid "A string describing the custom format. It is using the QDate syntax."
-msgstr "Une chaîne décrivant le format personnalisé (utilisation de la syntaxe QDate)"
+msgstr ""
+"Une chaîne décrivant le format personnalisé (utilisation de la syntaxe QDate)"
 
 #. i18n: file: eventappletformatconfig.ui:178
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
