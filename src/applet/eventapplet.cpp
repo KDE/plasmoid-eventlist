@@ -218,9 +218,11 @@ void EventApplet::setupCategoryColors(int opacity)
 
 void EventApplet::plasmaThemeChanged()
 {
+#if KDE_IS_VERSION(4,5,0)
     QString currentStyle = Plasma::Theme::defaultTheme()->styleSheet();
     title->setStyleSheet(currentStyle);
-    
+#endif
+
     QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     QColor baseColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::BackgroundColor);
     QColor altBaseColor = baseColor.darker(150);
