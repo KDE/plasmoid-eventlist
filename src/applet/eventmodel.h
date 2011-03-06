@@ -42,10 +42,6 @@ static const int passedColorPos = 1;
 static const int todoColorPos = 2;
 static const int finishedTodoColorPos = 3;
 
-#define HAS_REAL_AKONADI_PIM_MAJOR 4
-#define HAS_REAL_AKONADI_PIM_MINOR 6
-#define HAS_REAL_AKONADI_PIM_PATCH 1
-
 /**
 * Model of the view
 * Categorizes the events using the startDate property
