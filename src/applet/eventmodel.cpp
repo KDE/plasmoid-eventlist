@@ -213,23 +213,15 @@ void EventModel::removeItem(const Akonadi::Item &item)
 void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &)
 {
     kDebug() << "item changed";
-#if KDE_IS_VERSION(HAS_REAL_AKONADI_PIM_MAJOR,HAS_REAL_AKONADI_PIM_MINOR,HAS_REAL_AKONADI_PIM_PATCH)
     removeItem(item);
     addItem(item, item.parentCollection());
-#else
-    Q_UNUSED(item);
-#endif
 }
 
 void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection &, const Akonadi::Collection &)
 {
     kDebug() << "item moved";
-#if KDE_IS_VERSION(HAS_REAL_AKONADI_PIM_MAJOR,HAS_REAL_AKONADI_PIM_MINOR,HAS_REAL_AKONADI_PIM_PATCH)
     removeItem(item);
     addItem(item, item.parentCollection());
-#else
-    Q_UNUSED(item);
-#endif
 }
 
 void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &collection)
