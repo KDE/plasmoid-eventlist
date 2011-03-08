@@ -23,6 +23,7 @@
 #include <kcal/recurrence.h>
 
 #include <akonadi/collectionfetchjob.h>
+#include <akonadi/collectionfetchscope.h>
 #include <akonadi/item.h>
 #include <akonadi/itemfetchjob.h>
 #include <akonadi/itemfetchscope.h>
@@ -64,8 +65,15 @@ void EventModel::initModel()
 {
     createHeaderItems(m_headerPartsList);
 
+    Akonadi::CollectionFetchScope scope;
+    QStringList mimeTypes;
+    mimeTypes << Akonadi::IncidenceMimeTypeVisitor::eventMimeType() << Akonadi::IncidenceMimeTypeVisitor::todoMimeType();
+    scope.setContentMimeTypes(mimeTypes);
+
     Akonadi::CollectionFetchJob *job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(),
                                                                        Akonadi::CollectionFetchJob::Recursive);
+    job->setFetchScope(scope);
+
     if (job->exec()) {
         Akonadi::Collection::List collections = job->collections();
         foreach (const Akonadi::Collection &collection, collections) {
