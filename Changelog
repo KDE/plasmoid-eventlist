@@ -1,3 +1,8 @@
+0.3.96 (0.4 rc)
+- build again with KDE 4.4
+- remove some #if that were needed for pim 4.5 (wich is dead)
+- set collectionfetchscope to events/todos on initial fetch
+
 0.3.95 (0.4 beta)
 - ability to add your own headers
 - remove custom colors for birthdays,
