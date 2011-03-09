@@ -1,9 +1,14 @@
 To install:
 
+To build out of the source tree
+unpack the archive,
+mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` ../
+cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` PATH_TO_APPLET_ROOT
 make 
-sudo make install
+sudo make install or su -c "make install"
+
+where PATH_TO_APPLET_ROOT is the path to the applet source (e.g. $HOME/plasmoid-eventlist-0.3.95/).
 
 If you use kdepim 4.6 and open events/todos with rightclick does not work try
 adding -DHAS_AKONADI_PIM=1 to cmake
