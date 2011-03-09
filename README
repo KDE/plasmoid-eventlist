@@ -5,6 +5,9 @@ cmake -DCMAKE_INSTALL_PREFIX=`kde4-config --prefix` ../
 make 
 sudo make install
 
+If you use kdepim 4.6 and open events/todos with rightclick does not work try
+adding -DHAS_AKONADI_PIM=1 to cmake
+
 How to setup Akonadi:
 Of course you have to install the akonadiserver (openSUSE the akonadi-runtime package),
 the resources are in the kdepim-runtime package where are also the config modules and utilities.
@@ -27,8 +30,3 @@ mysql_upgrade --socket=$HOME/.local/share/akonadi/db_misc/mysql.socket
 Then stop and restart the server.
 
 Then you can add resources.
-
-Some time ago it was planned that pim 4.5 will be released with KDE SC 4.5.1,
-unfortunately that didn't happen, currently no release date is known, afaik.
-As the behavior with signal for added/removed items is different between 4.4 and 4.5
-I added some ifdefs in eventmodel.cpp (around line 224, 254, 265). Maybe you need to adjust the kdeversion.
