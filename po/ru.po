@@ -1,32 +1,31 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Oleksandr Natalenko <pfactum@gmail.com>, 2010.
+# Oleksandr Natalenko <pfactum@gmail.com>, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2011-02-25 12:16+0100\n"
-"PO-Revision-Date: 2010-09-26 23:55+0300\n"
-"Last-Translator: Oleksandr Natalenko <pfactum@gmail.com>\n"
+"PO-Revision-Date: 2011-03-11 22:35+0200\n"
+"Last-Translator: Oleksandr Natalenko\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
-"X-Generator: Lokalize 1.1\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 1.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: eventapplet.cpp:137 eventmodel.cpp:274 eventmodel.cpp:276
 #: eventmodel.cpp:277 eventmodel.cpp:455
 msgid "Birthday"
-msgstr "День рожденияДень рождения"
+msgstr "День рождения"
 
 #: eventapplet.cpp:137
-#, fuzzy
 msgid "Holiday"
-msgstr "Сегодня"
+msgstr "Выходной"
 
 #: eventapplet.cpp:147
 msgid "Today"
@@ -34,7 +33,7 @@ msgstr "Сегодня"
 
 #: eventapplet.cpp:147
 msgid "Events of today"
-msgstr "События сегодня"
+msgstr "События на сегодня"
 
 #: eventapplet.cpp:148
 msgid "Tomorrow"
@@ -42,7 +41,7 @@ msgstr "Завтра"
 
 #: eventapplet.cpp:148
 msgid "Events for tomorrow"
-msgstr "События завтра"
+msgstr "События на завтра"
 
 #: eventapplet.cpp:149
 msgid "Week"
@@ -98,7 +97,7 @@ msgstr "Ближайшие события с ресурсов Akonadi"
 
 #: eventapplet.cpp:464
 msgid "General"
-msgstr ""
+msgstr "Общее"
 
 #: eventapplet.cpp:465
 msgid "Text Format"
@@ -131,14 +130,13 @@ msgstr "Дела без даты выполнения"
 #: eventmodel.cpp:431 eventmodel.cpp:432 eventmodel.cpp:484 eventmodel.cpp:485
 #: formatconfig.cpp:40
 msgid "Unspecified"
-msgstr ""
+msgstr "Неопределённое"
 
 #. i18n: file: eventappletgeneralconfig.ui:55
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: generalconfig.cpp:49 rc.cpp:191
-#, fuzzy
 msgid "Title"
-msgstr "Время"
+msgstr "Название"
 
 #. i18n: file: eventappletcolorconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
@@ -154,7 +152,7 @@ msgstr "Форма"
 #. i18n: ectx: property (title), widget (QGroupBox, timeBox)
 #: rc.cpp:6
 msgid "Times"
-msgstr "Время"
+msgstr "Количество повторов"
 
 #. i18n: file: eventappletcolorconfig.ui:26
 #. i18n: ectx: property (text), widget (QLabel, label_8)
@@ -255,19 +253,19 @@ msgstr "Цвет текста для пропущенных событий ил�
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: rc.cpp:49
 msgid "Colors for todos"
-msgstr "Цвета для дел"
+msgstr "Цвета дел"
 
 #. i18n: file: eventappletcolorconfig.ui:154
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: rc.cpp:52
 msgid "Backgroundcolor for todos:"
-msgstr "Фоновый цвет для дел:"
+msgstr "Фоновый цвет дел:"
 
 #. i18n: file: eventappletcolorconfig.ui:167
 #. i18n: ectx: property (toolTip), widget (KColorButton, todoColorButton)
 #: rc.cpp:55
 msgid "The backgroundcolor for common todos."
-msgstr "Фоновый цвет для общих дел."
+msgstr "Фоновый цвет общих дел."
 
 #. i18n: file: eventappletcolorconfig.ui:194
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showFinishedTodos)
@@ -297,7 +295,7 @@ msgstr "Фоновый цвет уже завершённых дел."
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rc.cpp:84
 msgid "KOrganizer colors"
-msgstr ""
+msgstr "Цвета KOrganizer"
 
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -320,16 +318,14 @@ msgstr "Текст, который отображается для общих с
 #. i18n: file: eventappletformatconfig.ui:59
 #. i18n: ectx: property (text), widget (QTreeWidget, categoryFormatWidget)
 #: rc.cpp:106
-#, fuzzy
 msgid "Category"
-msgstr "Позднее"
+msgstr "Категория"
 
 #. i18n: file: eventappletformatconfig.ui:64
 #. i18n: ectx: property (text), widget (QTreeWidget, categoryFormatWidget)
 #: rc.cpp:109
-#, fuzzy
 msgid "Format"
-msgstr "Форма"
+msgstr "Формат"
 
 #. i18n: file: eventappletformatconfig.ui:72
 #. i18n: ectx: property (text), widget (QPushButton, addCategoryButton)
@@ -337,13 +333,13 @@ msgstr "Форма"
 #. i18n: ectx: property (text), widget (QPushButton, addHeaderButton)
 #: rc.cpp:112 rc.cpp:200
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 #. i18n: file: eventappletformatconfig.ui:79
 #. i18n: ectx: property (text), widget (QPushButton, copyCategoryButton)
 #: rc.cpp:115
 msgid "Copy"
-msgstr ""
+msgstr "Копировать"
 
 #. i18n: file: eventappletformatconfig.ui:86
 #. i18n: ectx: property (text), widget (QPushButton, removeCategoryButton)
@@ -351,12 +347,12 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, removeHeaderButton)
 #: rc.cpp:118 rc.cpp:203
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #. i18n: file: eventappletformatconfig.ui:100
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: rc.cpp:122
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
 "Substitutions (mostly self-explanatory) are:\n"
@@ -369,15 +365,17 @@ msgid ""
 "%{mainCategory}, %{categories} - the first or all categories,\n"
 "%{tab} - a tabulator"
 msgstr ""
-"Формат для текста событий.\n"
+"Формат текста событий.\n"
 "Подстановками являются:\n"
-"%{startDate} — дата начала, %{endDate} — дата окончания,\n"
-"%{startTime} — время начала, %{endTime} — время окончания,\n"
-"%{summary} — резюме, %{description} — описание,\n"
-"%{location} — размещение, %{duration} — длительность в часах,\n"
+"%{startDate}, %{endDate} — дата начала и окончания, %{startTime}, %{endTime} "
+"- "
+"время начала и окончания,\n"
+"%{summary} — резюме, %{description} — описание, %{location} — размещение, %"
+"{duration} — длительность,\n"
 "%{yearsSince} — лет, начиная с первого раза (полезно для дней рождения),\n"
 "%{resourceName} — интернационализированное название ресурса Akonadi,\n"
-"%{tab} - табулятор"
+"%{mainCategory}, %{categories} — первая или все категории,\n"
+"%{tab} — табулятор"
 
 #. i18n: file: eventappletformatconfig.ui:110
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
@@ -388,7 +386,7 @@ msgstr "Формат текста дел"
 #. i18n: file: eventappletformatconfig.ui:122
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: rc.cpp:136
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format for the displayed text for todos.\n"
 "Substutions (again mostly self-explanatory) are:\n"
@@ -400,20 +398,21 @@ msgid ""
 "%{mainCategory}, %{categories} - the first or all categories,\n"
 "%{tab} - a tabulator"
 msgstr ""
-"Формат для текста дел.\n"
+"Формат текста дел.\n"
 "Подстановками являются:\n"
-"%{dueDate} — дата окончания, %{dueTime} — время окончания,\n"
-"%{startDate} — дата начала, %{startTime} — время начала,\n"
-"%{summary} — резюме, %{description} — описание,\n"
-"%{percent} — процент завершения, %{location} — расположение,\n"
-"%{resourceName} — интернационализированное имя ресурсп Akonadi,\n"
+"%{dueDate}, %{dueTime} — дата и время окончания, %{startDate}, %{startTime} — "
+"дата и время начала,\n"
+"%{summary} — резюме, %{description} — описание, %{percent} — процент "
+"завершения, %{location} — расположение,\n"
+"%{resourceName} — интернационализированное имя ресурса Akonadi,\n"
+"%{mainCategory}, %{categories} — первая или все категории,\n"
 "%{tab} — табулятор"
 
 #. i18n: file: eventappletformatconfig.ui:129
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: rc.cpp:145
 msgid "Format for todos:"
-msgstr "Формат для дел:"
+msgstr "Формат дел:"
 
 #. i18n: file: eventappletformatconfig.ui:136
 #. i18n: ectx: property (toolTip), widget (KLineEdit, todoEdit)
@@ -449,7 +448,7 @@ msgstr "Формат даты:"
 #. i18n: ectx: property (toolTip), widget (KComboBox, dateFormatBox)
 #: rc.cpp:163
 msgid "What date format to use."
-msgstr "Какой формат доты использовать."
+msgstr "Какой формат даты использовать."
 
 #. i18n: file: eventappletformatconfig.ui:180
 #. i18n: ectx: property (text), item, widget (KComboBox, dateFormatBox)
@@ -485,7 +484,7 @@ msgstr "Строка, описывающая собственный формат
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: rc.cpp:184
 msgid "Header sections"
-msgstr ""
+msgstr "Секции заголовка"
 
 #. i18n: file: eventappletgeneralconfig.ui:27
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, headerWidget)
@@ -495,18 +494,21 @@ msgid ""
 "from today,\n"
 "it will stretch to the next header or end of the displayed timeframe."
 msgstr ""
+"Добавьте здесь ваши собственные заголовки, начало — первый день, начиная с "
+"сегоднешнего,\n"
+"он растянется на следующий заголовок или конец отображаемого временного кадра."
 
 #. i18n: file: eventappletgeneralconfig.ui:60
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: rc.cpp:194
 msgid "Tooltip"
-msgstr ""
+msgstr "Контекстная подсказка"
 
 #. i18n: file: eventappletgeneralconfig.ui:65
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: rc.cpp:197
 msgid "Start"
-msgstr ""
+msgstr "Начало"
 
 #. i18n: file: eventappletgeneralconfig.ui:90
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
