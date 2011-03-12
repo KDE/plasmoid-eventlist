@@ -2,20 +2,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Cédric Bellegarde <gnumdk@gmail.com>, 2010.
-# jacopo, 2010.
+# jacopo, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: gerdfleischer@web.de\n"
 "POT-Creation-Date: 2011-02-25 12:16+0100\n"
-"PO-Revision-Date: 2010-09-28 21:15+0200\n"
+"PO-Revision-Date: 2011-03-12 00:55+0100\n"
 "Last-Translator: jacopo\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: eventapplet.cpp:137 eventmodel.cpp:274 eventmodel.cpp:276
@@ -24,9 +24,8 @@ msgid "Birthday"
 msgstr "Compleanno"
 
 #: eventapplet.cpp:137
-#, fuzzy
 msgid "Holiday"
-msgstr "Oggi"
+msgstr "Vacanza "
 
 #: eventapplet.cpp:147
 msgid "Today"
@@ -98,7 +97,7 @@ msgstr "Prossimi eventi (risorse di Akonadi)"
 
 #: eventapplet.cpp:464
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 #: eventapplet.cpp:465
 msgid "Text Format"
@@ -131,14 +130,13 @@ msgstr "Cose-da-fare senza scadenza"
 #: eventmodel.cpp:431 eventmodel.cpp:432 eventmodel.cpp:484 eventmodel.cpp:485
 #: formatconfig.cpp:40
 msgid "Unspecified"
-msgstr ""
+msgstr "Non specificato"
 
 #. i18n: file: eventappletgeneralconfig.ui:55
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: generalconfig.cpp:49 rc.cpp:191
-#, fuzzy
 msgid "Title"
-msgstr "Tempi"
+msgstr "Titolo"
 
 #. i18n: file: eventappletcolorconfig.ui:14
 #. i18n: ectx: property (windowTitle), widget (QWidget, EventAppletColorConfig)
@@ -211,7 +209,7 @@ msgstr "Colore di sfondo per gli eventi prossimi:"
 #. i18n: ectx: property (toolTip), widget (KColorButton, urgentColorButton)
 #: rc.cpp:33
 msgid "The backgroundcolor for soon beginning events."
-msgstr "Colore di fondo per gli eventi che stano per iniziare"
+msgstr "Il colore di fondo per gli eventi che stano per iniziare"
 
 #. i18n: file: eventappletcolorconfig.ui:108
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -248,7 +246,7 @@ msgstr "Colore del testo per gli eventi iniziati o finiti:"
 #. i18n: ectx: property (toolTip), widget (KColorButton, startedColorButton)
 #: rc.cpp:46
 msgid "The textcolor for already started or passed events."
-msgstr "Colore del testo per gli eventi iniziati o finiti:"
+msgstr "Il colore del testo per gli eventi iniziati o finiti:"
 
 #. i18n: file: eventappletcolorconfig.ui:148
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -266,7 +264,7 @@ msgstr "Colore di fondo per le cose-da-fare"
 #. i18n: ectx: property (toolTip), widget (KColorButton, todoColorButton)
 #: rc.cpp:55
 msgid "The backgroundcolor for common todos."
-msgstr "Colore di sfondo per le code-da-fare normali."
+msgstr "Il colore di sfondo per le code-da-fare normali."
 
 #. i18n: file: eventappletcolorconfig.ui:194
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showFinishedTodos)
@@ -290,13 +288,13 @@ msgstr "Sfondo per le cose-da-fare terminate:"
 #. i18n: ectx: property (toolTip), widget (KColorButton, finishedTodoButton)
 #: rc.cpp:74
 msgid "The backgroundcolor for already finished todos."
-msgstr "Sfondo per le cose-da-fare terminate."
+msgstr "Lo sfondo per le cose-da-fare terminate."
 
 #. i18n: file: eventappletcolorconfig.ui:251
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: rc.cpp:84
 msgid "KOrganizer colors"
-msgstr ""
+msgstr "Colori di KOrganizer"
 
 #. i18n: file: eventappletformatconfig.ui:20
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -319,16 +317,14 @@ msgstr "Il testo mostrato per gli eventi comuni."
 #. i18n: file: eventappletformatconfig.ui:59
 #. i18n: ectx: property (text), widget (QTreeWidget, categoryFormatWidget)
 #: rc.cpp:106
-#, fuzzy
 msgid "Category"
-msgstr "Più tardi"
+msgstr "Categoria"
 
 #. i18n: file: eventappletformatconfig.ui:64
 #. i18n: ectx: property (text), widget (QTreeWidget, categoryFormatWidget)
 #: rc.cpp:109
-#, fuzzy
 msgid "Format"
-msgstr "Form"
+msgstr "Formato"
 
 #. i18n: file: eventappletformatconfig.ui:72
 #. i18n: ectx: property (text), widget (QPushButton, addCategoryButton)
@@ -336,13 +332,13 @@ msgstr "Form"
 #. i18n: ectx: property (text), widget (QPushButton, addHeaderButton)
 #: rc.cpp:112 rc.cpp:200
 msgid "Add"
-msgstr ""
+msgstr "Aggiungi"
 
 #. i18n: file: eventappletformatconfig.ui:79
 #. i18n: ectx: property (text), widget (QPushButton, copyCategoryButton)
 #: rc.cpp:115
 msgid "Copy"
-msgstr ""
+msgstr "Copia"
 
 #. i18n: file: eventappletformatconfig.ui:86
 #. i18n: ectx: property (text), widget (QPushButton, removeCategoryButton)
@@ -350,12 +346,12 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, removeHeaderButton)
 #: rc.cpp:118 rc.cpp:203
 msgid "Remove"
-msgstr ""
+msgstr "Rimuovi"
 
 #. i18n: file: eventappletformatconfig.ui:100
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: rc.cpp:122
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format for the displayed text for events.\n"
 "Substitutions (mostly self-explanatory) are:\n"
@@ -370,12 +366,13 @@ msgid ""
 msgstr ""
 "Il formato del testo per gli eventi mostrati.\n"
 "I segnaposto sono:\n"
-"%{startDate} - data d'inizio, %{endDate} - data di termine,\n"
-"%{startTime} - ora d'inizio, %{endTime} - ora di termine,\n"
-"%{summary} - sommario, %{description} - descrizione,\n"
-"%{location} - luogo, %{duration} - durata (in ore),\n"
+"%{startDate} ,%{endDate} - data d'inizio e di fine, %{startTime} , %{endTime} "
+"- ora d'inizio e di termine,\n"
+"%{summary} - sommario, %{description} - descrizione, %{location} - luogo, %"
+"{duration} - durata (in ore),\n"
 "%{yearsSince} - anni passati dalla prima volta  (utile per i compleanni),\n"
 "%{resourceName} -  il i18n nome della risorsa di Akonadi ,\n"
+"%{mainCategory}, %{categories} - la prima o tutte le categorie,\n"
 "%{tab} - carattere di tabulazione"
 
 #. i18n: file: eventappletformatconfig.ui:110
@@ -387,7 +384,7 @@ msgstr "Formato del testo per le cose-da-fare"
 #. i18n: file: eventappletformatconfig.ui:122
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: rc.cpp:136
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The format for the displayed text for todos.\n"
 "Substutions (again mostly self-explanatory) are:\n"
@@ -401,11 +398,12 @@ msgid ""
 msgstr ""
 "Il formato del testo per le cose-da-fare mostrate.\n"
 "I segnaposto sono:\n"
-"%{dueDate} - data di scadenza , %{dueTime} - ora di scadenza,\n"
-"%{startDate} - data d'inizio, %{endDate} - data di termine,\n"
-"%{summary} - sommario, %{description} - descrizione,\n"
-"%{percent} - percentuale di completamento, %{location} - luogo\n"
+"%{dueDate}, %{dueTime} - data e ora di scadenza, %{startDate}, %{startTime} - "
+"data e ora d'inizio,\n"
+"%{summary} - sommario, %{description} - descrizione, %{percent} - percentuale "
+"di completamento, %{location} - luogo\n"
 "%{resourceName} -  il i18n nome della risorsa di Akonadi ,\n"
+"%{mainCategory}, %{categories} - la prima o tutte le categorie,\n"
 "%{tab} - carattere di tabulazione"
 
 #. i18n: file: eventappletformatconfig.ui:129
@@ -486,7 +484,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: rc.cpp:184
 msgid "Header sections"
-msgstr ""
+msgstr "Parti dell'intestazione"
 
 #. i18n: file: eventappletgeneralconfig.ui:27
 #. i18n: ectx: property (toolTip), widget (QTreeWidget, headerWidget)
@@ -496,18 +494,22 @@ msgid ""
 "from today,\n"
 "it will stretch to the next header or end of the displayed timeframe."
 msgstr ""
+"Aggiungi le tue intestazioni qui, l'inizio è  il primo giorno del periodo "
+"contando da oggi,\n"
+"si prolungherà sino alla prossima intestazione o alla fine del periodo di "
+"tempo mostrato."
 
 #. i18n: file: eventappletgeneralconfig.ui:60
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: rc.cpp:194
 msgid "Tooltip"
-msgstr ""
+msgstr "Tooltip"
 
 #. i18n: file: eventappletgeneralconfig.ui:65
 #. i18n: ectx: property (text), widget (QTreeWidget, headerWidget)
 #: rc.cpp:197
 msgid "Start"
-msgstr ""
+msgstr "Inizio"
 
 #. i18n: file: eventappletgeneralconfig.ui:90
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
