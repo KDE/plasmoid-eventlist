@@ -67,7 +67,9 @@ void EventModel::initModel()
 
     Akonadi::CollectionFetchScope scope;
     QStringList mimeTypes;
-    mimeTypes << Akonadi::IncidenceMimeTypeVisitor::eventMimeType() << Akonadi::IncidenceMimeTypeVisitor::todoMimeType();
+    mimeTypes << Akonadi::IncidenceMimeTypeVisitor::eventMimeType();
+    mimeTypes << Akonadi::IncidenceMimeTypeVisitor::todoMimeType();
+    mimeTypes << "text/calendar";
     scope.setContentMimeTypes(mimeTypes);
 
     Akonadi::CollectionFetchJob *job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(),
@@ -111,6 +113,7 @@ void EventModel::initMonitor()
     m_monitor->setCollectionMonitored(Akonadi::Collection::root());
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
     m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::todoMimeType(), true);
+    m_monitor->setMimeTypeMonitored("text/calendar", true);
 
     connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
                        SLOT(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)));
