@@ -52,6 +52,7 @@
 #include <KIconLoader>
 #include <KStandardDirs>
 #include <KDirWatch>
+#include <KTabWidget>
 
 // plasma headers
 #include <Plasma/Theme>
@@ -69,7 +70,8 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_graphicsWidget(0),
     m_view(0),
     m_delegate(0),
-    m_formatConfig(),
+    m_eventFormatConfig(),
+    m_todoFormatConfig(),
     m_colorConfigUi(),
     m_timer(0),
     m_agentManager(0)
@@ -453,9 +455,17 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     HeaderDelegate *hd = new HeaderDelegate();
     m_generalConfig.headerWidget->setItemDelegateForColumn(2, hd);
     m_generalConfig.setupConnections();
-    QWidget *formatWidget = new QWidget();
-    m_formatConfig.setupUi(formatWidget);
-    m_formatConfig.setupConnections();
+
+    KTabWidget *formatTabs = new KTabWidget();
+    
+    QWidget *eventFormatWidget = new QWidget();
+    m_eventFormatConfig.setupUi(eventFormatWidget);
+    m_eventFormatConfig.setupConnections();
+    QWidget *todoFormatWidget = new QWidget();
+    m_todoFormatConfig.setupUi(todoFormatWidget);
+
+    formatTabs->addTab(eventFormatWidget, i18n("Event text formatting"));
+    formatTabs->addTab(todoFormatWidget, i18n("Todo text formatting"));
     QWidget *colorWidget = new QWidget();
     m_colorConfigUi.setupUi(colorWidget);
     parent->setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel);
@@ -464,7 +474,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
     parent->addPage(generalWidget, i18n("General"), "view-list-tree");
-    parent->addPage(formatWidget, i18n("Text Format"), "format-text-code");
+    parent->addPage(formatTabs, i18n("Text Format"), "format-text-code");
     parent->addPage(colorWidget, i18n("Colors"), "fill-color");
 
     KConfigGroup cg = config();
@@ -478,12 +488,10 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     }
     m_generalConfig.headerWidget->sortByColumn(2, Qt::AscendingOrder);
     m_generalConfig.periodBox->setValue(cg.readEntry("Period", 365));
+    m_generalConfig.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
+    m_generalConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
 
-    m_formatConfig.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
-    m_formatConfig.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
-    m_formatConfig.noDueDateEdit->setText(cg.readEntry("NoDueDateFormat", QString("%{summary}")));
-    m_formatConfig.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
-    m_formatConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
+    m_eventFormatConfig.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
 
     QMap<QString, QString>::const_iterator i = m_categoryFormat.constBegin();
     while (i != m_categoryFormat.constEnd()) {
@@ -491,9 +499,12 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
         itemText << i.key() << i.value();
         QTreeWidgetItem *categoryItem = new QTreeWidgetItem(itemText);
         categoryItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        m_formatConfig.categoryFormatWidget->addTopLevelItem(categoryItem);
+        m_eventFormatConfig.categoryFormatWidget->addTopLevelItem(categoryItem);
         ++i;
     }
+
+    m_todoFormatConfig.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
+    m_todoFormatConfig.noDueDateEdit->setText(cg.readEntry("NoDueDateFormat", QString("%{summary}")));
 
     m_colorConfigUi.urgencyBox->setValue(cg.readEntry("UrgencyTime", 15));
     m_colorConfigUi.birthdayUrgencyBox->setValue(cg.readEntry("BirthdayUrgencyTime", 14));
@@ -515,6 +526,7 @@ void EventApplet::configAccepted()
 {
     KConfigGroup cg = config();
 
+    //general config
     QStringList oldHeaderList = m_headerItemsList;
     m_headerItemsList.clear();
     QTreeWidgetItemIterator hi(m_generalConfig.headerWidget);
@@ -527,20 +539,36 @@ void EventApplet::configAccepted()
     int oldPeriod = cg.readEntry("Period", 365);
     m_period = m_generalConfig.periodBox->value();
     cg.writeEntry("Period", m_period);
-
-    QString normalEventFormat = m_formatConfig.normalEventEdit->text();
-    cg.writeEntry("NormalEventFormat", normalEventFormat);
-    QString todoFormat = m_formatConfig.todoEdit->text();
-    cg.writeEntry("TodoFormat", todoFormat);
-    QString noDueDateFormat = m_formatConfig.noDueDateEdit->text();
-    cg.writeEntry("NoDueDateFormat", noDueDateFormat);
-    int dateFormat = m_formatConfig.dateFormatBox->currentIndex();
+    int dateFormat = m_generalConfig.dateFormatBox->currentIndex();
     cg.writeEntry("DateFormat", dateFormat);
-    QString customString = m_formatConfig.customFormatEdit->text();
+    QString customString = m_generalConfig.customFormatEdit->text();
     cg.writeEntry("CustomDateFormat", customString);
 
+    //event config
+    QString normalEventFormat = m_eventFormatConfig.normalEventEdit->text();
+    cg.writeEntry("NormalEventFormat", normalEventFormat);
+    m_categoryFormat.clear();
+    QStringList keys, values;
+    QTreeWidgetItemIterator it(m_eventFormatConfig.categoryFormatWidget);
+    while (*it) {
+        m_categoryFormat[(*it)->text(0)] = (*it)->text(1);
+        keys << (*it)->text(0);
+        values << (*it)->text(1);
+         ++it;
+     }
+    cg.writeEntry("CategoryFormatsKeys", keys);
+    cg.writeEntry("CategoryFormatsValues", values);
+
+    //todo config
+    QString todoFormat = m_todoFormatConfig.todoEdit->text();
+    cg.writeEntry("TodoFormat", todoFormat);
+    QString noDueDateFormat = m_todoFormatConfig.noDueDateEdit->text();
+    cg.writeEntry("NoDueDateFormat", noDueDateFormat);
+
+    m_delegate->setCategoryFormats(m_categoryFormat);
     m_delegate->settingsChanged(normalEventFormat, todoFormat, noDueDateFormat, dateFormat, customString);
 
+    //color config
     int oldUrgency = m_urgency;
     m_urgency = m_colorConfigUi.urgencyBox->value();
     cg.writeEntry("UrgencyTime", m_urgency);
@@ -585,20 +613,6 @@ void EventApplet::configAccepted()
     int opacity = m_colorConfigUi.korganizerOpacity->value();
     cg.writeEntry("KOOpacity", opacity);
     setupCategoryColors(opacity);
-
-    m_categoryFormat.clear();
-    QStringList keys, values;
-    QTreeWidgetItemIterator it(m_formatConfig.categoryFormatWidget);
-    while (*it) {
-        m_categoryFormat[(*it)->text(0)] = (*it)->text(1);
-        keys << (*it)->text(0);
-        values << (*it)->text(1);
-         ++it;
-     }
-
-    cg.writeEntry("CategoryFormatsKeys", keys);
-    cg.writeEntry("CategoryFormatsValues", values);
-    m_delegate->setCategoryFormats(m_categoryFormat);
 
     m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
     m_model->setCategoryColors(m_categoryColors);
