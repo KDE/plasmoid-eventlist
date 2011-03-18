@@ -270,7 +270,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             if (values["isBirthday"].toBool()) {
                 data["itemType"] = BirthdayItem;
                 int n = eventDtTime.toDate().year() - values["startDate"].toDate().year();
-                data["yearsSince"] = QString::number(n);
+                n > 2000 ? data["yearsSince"] = "XX" : data["yearsSince"] = QString::number(n); // workaround missing facebook birthdays
                 if (itemDt >= QDate::currentDate() && QDate::currentDate().daysTo(itemDt) < birthdayUrgency) {
                     eventItem->setBackground(QBrush(urgentBg));
                 } else {
