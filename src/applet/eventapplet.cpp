@@ -60,6 +60,7 @@
 #include <akonadi/control.h>
 #include <akonadi/agentinstance.h>
 #include <akonadi/servermanager.h>
+#include <akonadi/kcal/incidencemimetypevisitor.h>
 
 K_EXPORT_PLASMA_APPLET(events, EventApplet)
 
@@ -361,7 +362,9 @@ void EventApplet::setShownResources()
     Akonadi::AgentInstance::List instList = m_agentManager->instances();
     foreach (const Akonadi::AgentInstance &inst, instList) {
         QStringList agentMimeTypes = inst.type().mimeTypes();
-        if (agentMimeTypes.contains("application/x-vnd.akonadi.calendar.event")) {
+        if (agentMimeTypes.contains(Akonadi::IncidenceMimeTypeVisitor::eventMimeType()) ||
+            agentMimeTypes.contains(Akonadi::IncidenceMimeTypeVisitor::todoMimeType()) ||
+            agentMimeTypes.contains("text/calendar")) {
             QCheckBox *resBox = new QCheckBox(inst.name());
             resBox->setChecked(!disabledResources.contains(inst.identifier()));
             resBox->setProperty("identifier", inst.identifier());
