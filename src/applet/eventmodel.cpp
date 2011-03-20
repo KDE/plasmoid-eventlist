@@ -27,7 +27,6 @@
 #include <akonadi/item.h>
 #include <akonadi/itemfetchjob.h>
 #include <akonadi/itemfetchscope.h>
-#include <akonadi/itemfetchscope.h>
 #include <akonadi/entitydisplayattribute.h>
 #include <akonadi/servermanager.h>
 #include <akonadi/kcal/incidencemimetypevisitor.h>
