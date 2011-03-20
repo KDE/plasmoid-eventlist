@@ -75,31 +75,40 @@ void EventModel::initModel()
     Akonadi::CollectionFetchJob *job = new Akonadi::CollectionFetchJob(Akonadi::Collection::root(),
                                                                        Akonadi::CollectionFetchJob::Recursive);
     job->setFetchScope(scope);
+    connect(job, SIGNAL(result(KJob *)), this, SLOT(initialCollectionFetchFinished(KJob *)));
+    job->start();
+}
 
-    if (job->exec()) {
-        Akonadi::Collection::List collections = job->collections();
-        foreach (const Akonadi::Collection &collection, collections) {
-            Akonadi::ItemFetchJob *ijob = new Akonadi::ItemFetchJob(collection);
-            ijob->fetchScope().fetchFullPayload();
-
-            if (ijob->exec()) {
-                Akonadi::Item::List items = ijob->items();
-                foreach (const Akonadi::Item &item, items) {
-                    if (item.hasPayload <KCal::Event::Ptr>()) {
-                        KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
-                        if (event) {
-                            addEventItem(eventDetails(item, event, collection));
-                        } // if event
-                    } else if (item.hasPayload <KCal::Todo::Ptr>()) {
-                        KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
-                        if (todo) {
-                            addTodoItem(todoDetails(item, todo, collection));
-                        }
-                    } // if hasPayload
-                } // foreach
-            }
-        }
+void EventModel::initialCollectionFetchFinished(KJob *job)
+{
+    Akonadi::CollectionFetchJob *cJob = qobject_cast<Akonadi::CollectionFetchJob *>(job);
+    Akonadi::Collection::List collections = cJob->collections();
+    foreach (const Akonadi::Collection &collection, collections) {
+        m_collections.insert(collection.id(), collection);
+        Akonadi::ItemFetchJob *job = new Akonadi::ItemFetchJob(collection);
+        job->fetchScope().fetchFullPayload();
+        connect(job, SIGNAL(result(KJob *)), this, SLOT(initialItemFetchFinished(KJob *)));
+        job->start();
     }
+}
+
+void EventModel::initialItemFetchFinished(KJob *job)
+{
+    Akonadi::ItemFetchJob *iJob = qobject_cast<Akonadi::ItemFetchJob *>(job);
+    Akonadi::Item::List items = iJob->items();
+    foreach (const Akonadi::Item &item, items) {
+        if (item.hasPayload <KCal::Event::Ptr>()) {
+            KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
+            if (event) {
+                addEventItem(eventDetails(item, event));
+            } // if event
+        } else if (item.hasPayload <KCal::Todo::Ptr>()) {
+            KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
+            if (todo) {
+                addTodoItem(todoDetails(item, todo));
+            }
+        } // if hasPayload
+    } // foreach
 }
 
 void EventModel::initMonitor()
@@ -198,6 +207,7 @@ void EventModel::createHeaderItems(QStringList headerParts)
 
 void EventModel::itemAdded(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
+    m_collections.insert(collection.id(), collection);
     addItem(item, collection);
 }
 
@@ -240,12 +250,12 @@ void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &c
     if (item.hasPayload<KCal::Event::Ptr>()) {
         KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
         if (event) {
-            addEventItem(eventDetails(item, event, collection));
+            addEventItem(eventDetails(item, event));
         } // if event
     } else if (item.hasPayload <KCal::Todo::Ptr>()) {
         KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
         if (todo) {
-            addTodoItem(todoDetails(item, todo, collection));
+            addTodoItem(todoDetails(item, todo));
         }
     }
 }
@@ -418,11 +428,12 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
     }
 }
 
-QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal::Event *event, const Akonadi::Collection &collection)
+QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal::Event *event)
 {
     QMap <QString, QVariant> values;
-    values["resource"] = collection.resource();
-    values["resourceName"] = collection.name();
+    Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
+    values["resource"] = itemCollection.resource();
+    values["resourceName"] = itemCollection.name();
     values["uid"] = event->uid();
     values["itemid"] = item.id();
     values["remoteid"] = item.remoteId();
@@ -463,7 +474,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
 
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
 #if KDE_IS_VERSION(4,4,60)
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(itemCollection.resource(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 #else
     values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(event, TRUE, KDateTime::Spec::LocalZone());
 #endif
@@ -471,11 +482,12 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     return values;
 }
 
-QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal::Todo *todo, const Akonadi::Collection &collection)
+QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal::Todo *todo)
 {
     QMap <QString, QVariant> values;
-    values["resource"] = collection.resource();
-    values["resourceName"] = collection.name();
+    Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
+    values["resource"] = itemCollection.resource();
+    values["resourceName"] = itemCollection.name();
     values["uid"] = todo->uid();
     values["itemid"] = item.id();
     values["remoteid"] = item.remoteId();
@@ -525,7 +537,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["recurDates"] = recurDates;
 
 #if KDE_IS_VERSION(4,4,60)
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(collection.resource(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(itemCollection.resource(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 #else
     values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(todo, TRUE, KDateTime::Spec::LocalZone());
 #endif

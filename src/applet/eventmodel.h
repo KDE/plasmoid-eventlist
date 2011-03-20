@@ -32,6 +32,7 @@
 #include <QString>
 
 class QStandardItem;
+class KJob;
 
 static const int ShortDateFormat = 0;
 static const int LongDateFormat = 1;
@@ -80,6 +81,8 @@ public:
     void settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors);
 
 private slots:
+    void initialCollectionFetchFinished(KJob *);
+    void initialItemFetchFinished(KJob *);
     void addEventItem(const QMap <QString, QVariant> &values);
     void addTodoItem(const QMap <QString, QVariant> &values);
     void itemAdded(const Akonadi::Item &, const Akonadi::Collection &);
@@ -92,8 +95,8 @@ private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
     void addItem(const Akonadi::Item &item, const Akonadi::Collection &collection);
     void addItemRow(QDate eventDate, QStandardItem *items);
-    QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *, const Akonadi::Collection &);
-    QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCal::Todo *, const Akonadi::Collection &);
+    QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *);
+    QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCal::Todo *);
 
 private:
     QStandardItem *parentItem;
@@ -102,6 +105,7 @@ private:
     int urgency, birthdayUrgency;
     QColor urgentBg, passedFg, todoBg, finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;
+    QHash<Akonadi::Entity::Id, Akonadi::Collection> m_collections;
     Akonadi::Monitor *m_monitor;
 
 signals:
