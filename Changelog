@@ -1,3 +1,9 @@
+0.3.97 (0.4 rc)
+- make initial fetch non blocking
+- redesign config dialog to fit smaller screens
+- update translations
+- add "text/calendar" to watched mime types (googledata)
+
 0.3.96 (0.4 rc)
 - build again with KDE 4.4
 - remove some #if that were needed for pim 4.5 (wich is dead)
