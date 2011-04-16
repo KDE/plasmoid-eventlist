@@ -477,7 +477,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
     parent->addPage(generalWidget, i18n("General"), "view-list-tree");
-    parent->addPage(formatTabs, i18n("Text Format"), "format-text-code");
+    parent->addPage(formatTabs, i18n("Text Format"), "format-text-bold");
     parent->addPage(colorWidget, i18n("Colors"), "fill-color");
 
     KConfigGroup cg = config();
