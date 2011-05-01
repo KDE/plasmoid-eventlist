@@ -45,6 +45,11 @@
 #include <QTreeWidgetItem>
 #include <QTreeWidgetItemIterator>
 
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusConnectionInterface>
+#include <QDBusServiceWatcher>
+
 // kde headers
 #include <KColorScheme>
 #include <KConfigDialog>
@@ -53,6 +58,7 @@
 #include <KStandardDirs>
 #include <KDirWatch>
 #include <KTabWidget>
+#include <KToolInvocation>
 
 // plasma headers
 #include <Plasma/Theme>
@@ -65,6 +71,7 @@
 K_EXPORT_PLASMA_APPLET(events, EventApplet)
 
 static const int MAX_RETRIES = 12;
+static const int WAIT_FOR_KO_MSECS = 2000;
 
 EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     Plasma::PopupApplet(parent, args),
@@ -75,7 +82,10 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_todoFormatConfig(),
     m_colorConfigUi(),
     m_timer(0),
-    m_agentManager(0)
+    m_agentManager(0),
+    m_openEventWatcher(0),
+    m_addEventWatcher(0),
+    m_addTodoWatcher(0)
 {
     KGlobal::locale()->insertCatalog("libkcal");
     KGlobal::locale()->insertCatalog("eventapplet");
@@ -314,13 +324,42 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
+    m_uid = QString();
 #ifdef HAS_AKONADI_PIM
-    QString uid = m_filterModel->data(index, EventModel::ItemIDRole).toString();
+    m_uid = m_filterModel->data(index, EventModel::ItemIDRole).toString();
 #else
-    QString uid = m_filterModel->data(index, EventModel::UIDRole).toString();
+    m_uid = m_filterModel->data(index, EventModel::UIDRole).toString();
 #endif
-    if (!uid.isEmpty())
-        KOrganizerAppletUtil::showEvent(uid);
+
+    if (!m_openEventWatcher) {
+        m_openEventWatcher = new QDBusServiceWatcher("org.kde.korganizer",
+                                                     QDBusConnection::sessionBus(),
+                                                     QDBusServiceWatcher::WatchForRegistration,
+                                                     this);
+    }
+
+    if (!m_uid.isEmpty()) {
+        if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.korganizer")) {
+            connect(m_openEventWatcher, SIGNAL(serviceRegistered(const QString &)),
+                    this, SLOT(korganizerStartedOpenEvent(const QString &)));
+
+            KToolInvocation::startServiceByDesktopName("korganizer");
+        } else {
+            KOrganizerAppletUtil::showEvent(m_uid);
+        }
+    }
+}
+
+void EventApplet::korganizerStartedOpenEvent(const QString &)
+{
+    delete m_openEventWatcher;
+    m_openEventWatcher = 0;
+    QTimer::singleShot(WAIT_FOR_KO_MSECS, this, SLOT(timedOpenEvent()));
+}
+
+void EventApplet::timedOpenEvent()
+{
+    KOrganizerAppletUtil::showEvent(m_uid);    
 }
 
 void EventApplet::openEventFromMenu()
@@ -330,12 +369,64 @@ void EventApplet::openEventFromMenu()
 
 void EventApplet::slotAddEvent()
 {
-    KOrganizerAppletUtil::showAddEvent();
+    if (!m_addEventWatcher) {
+        m_addEventWatcher = new QDBusServiceWatcher("org.kde.korganizer",
+                                                     QDBusConnection::sessionBus(),
+                                                     QDBusServiceWatcher::WatchForRegistration,
+                                                     this);
+    }
+
+    if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.korganizer")) {
+        connect(m_addEventWatcher, SIGNAL(serviceRegistered(const QString &)),
+                this, SLOT(korganizerStartedAddEvent(const QString &)));
+
+        KToolInvocation::startServiceByDesktopName("korganizer");
+    } else {
+        KOrganizerAppletUtil::showAddEvent();
+    }
+}
+
+void EventApplet::korganizerStartedAddEvent(const QString &)
+{
+    delete m_addEventWatcher;
+    m_addEventWatcher = 0;
+    QTimer::singleShot(WAIT_FOR_KO_MSECS, this, SLOT(timedAddEvent()));
+}
+
+void EventApplet::timedAddEvent()
+{
+    KOrganizerAppletUtil::showAddEvent();    
 }
 
 void EventApplet::slotAddTodo()
 {
-    KOrganizerAppletUtil::showAddTodo();
+    if (!m_addTodoWatcher) {
+        m_addTodoWatcher = new QDBusServiceWatcher("org.kde.korganizer",
+                                                     QDBusConnection::sessionBus(),
+                                                     QDBusServiceWatcher::WatchForRegistration,
+                                                     this);
+    }
+
+    if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.korganizer")) {
+        connect(m_addTodoWatcher, SIGNAL(serviceRegistered(const QString &)),
+                this, SLOT(korganizerStartedAddTodo(const QString &)));
+        
+        KToolInvocation::startServiceByDesktopName("korganizer");
+    } else {
+        KOrganizerAppletUtil::showAddTodo();
+    }
+}
+
+void EventApplet::korganizerStartedAddTodo(const QString &)
+{
+    delete m_addTodoWatcher;
+    m_addTodoWatcher = 0;
+    QTimer::singleShot(WAIT_FOR_KO_MSECS, this, SLOT(timedAddTodo()));
+}
+
+void EventApplet::timedAddTodo()
+{
+    KOrganizerAppletUtil::showAddTodo();    
 }
 
 void EventApplet::timerExpired()

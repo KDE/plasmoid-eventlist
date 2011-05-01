@@ -29,7 +29,6 @@ public:
     static void showAddTodo();
 
 private:
-    static void checkAndLaunchKontact();
     static void showMainWindow();
 };
 #endif

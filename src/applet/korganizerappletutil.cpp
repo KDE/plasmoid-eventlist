@@ -29,14 +29,10 @@
 
 // kde headers
 #include <KLocale>
-#include <KToolInvocation>
 #include <KWindowSystem>
-
 
 void KOrganizerAppletUtil::showEvent(const QString &uid)
 {
-    checkAndLaunchKontact();
-
     OrgKdeKorganizerKorganizerInterface interface("org.kde.korganizer",
                                                   "/Korganizer",
                                                   QDBusConnection::sessionBus());
@@ -46,8 +42,6 @@ void KOrganizerAppletUtil::showEvent(const QString &uid)
 
 void KOrganizerAppletUtil::showAddEvent()
 {
-    checkAndLaunchKontact();
-
     OrgKdeKorganizerCalendarInterface interface("org.kde.korganizer",
                                                   "/Calendar",
                                                   QDBusConnection::sessionBus());
@@ -57,8 +51,6 @@ void KOrganizerAppletUtil::showAddEvent()
 
 void KOrganizerAppletUtil::showAddTodo()
 {
-    checkAndLaunchKontact();
-
     OrgKdeKorganizerCalendarInterface interface("org.kde.korganizer",
                                                   "/Calendar",
                                                   QDBusConnection::sessionBus());
@@ -75,12 +67,4 @@ void KOrganizerAppletUtil::showMainWindow()
     QDBusReply<long> kontactWinId = kontactInterface.call("winId");
 
     KWindowSystem::forceActiveWindow (kontactWinId, 1);
-}
-
-void KOrganizerAppletUtil::checkAndLaunchKontact()
-{
-    if(!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.korganizer"))
-    {
-        KToolInvocation::kdeinitExecWait("korganizer");
-    }
 }

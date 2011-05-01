@@ -52,6 +52,7 @@ class QGraphicsProxyWidget;
 class QTreeView;
 class EventTreeView;
 class KDirWatch;
+class QDBusServiceWatcher;
 
 class EventApplet : public Plasma::PopupApplet
 {
@@ -77,6 +78,12 @@ private slots:
     void akonadiStatusChanged();
     void plasmaThemeChanged();
     void koConfigChanged();
+    void korganizerStartedOpenEvent(const QString &);
+    void korganizerStartedAddEvent(const QString &);
+    void korganizerStartedAddTodo(const QString &);
+    void timedOpenEvent();
+    void timedAddEvent();
+    void timedAddTodo();
 
 protected slots:
     void configAccepted();
@@ -116,6 +123,8 @@ private:
     QStringList disabledResources, m_headerItemsList;
     QDateTime lastCheckTime;
     bool m_showFinishedTodos;
+    QString m_uid;
+    QDBusServiceWatcher *m_openEventWatcher, *m_addEventWatcher, *m_addTodoWatcher;
 };
 
 #endif
