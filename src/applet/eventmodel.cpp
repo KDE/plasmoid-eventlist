@@ -147,7 +147,7 @@ void EventModel::initHeaderItem(QStandardItem *item, QString title, QString tool
 {
     QMap<QString, QVariant> data;
     data["itemType"] = HeaderItem;
-    data["title"] = "<b>" + title + "</b>";
+    data["title"] = QString("<b>" + title + "</b>");
     item->setData(data, Qt::DisplayRole);
     QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     item->setForeground(QBrush(textColor));
