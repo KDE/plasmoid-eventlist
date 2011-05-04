@@ -1,3 +1,8 @@
+0.4
+- try to make dbus calls work in all cases
+- make use of qstringbuilder
+- add spanish translation (thanks to Ernesto Manríquez)
+
 0.3.97 (0.4 rc)
 - make initial fetch non blocking
 - redesign config dialog to fit smaller screens
