@@ -88,7 +88,6 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_addTodoWatcher(0)
 {
     KGlobal::locale()->insertCatalog("libkcal");
-    KGlobal::locale()->insertCatalog("eventapplet");
     setBackgroundHints(DefaultBackground);
     setAspectRatioMode(Plasma::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
