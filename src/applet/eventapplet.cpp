@@ -496,7 +496,7 @@ QList<QAction *> EventApplet::contextualActions()
                 actionTitle.truncate(24);
                 actionTitle.append("...");
             }
-            QAction *openEvent = new QAction(i18n("Open \"%1\"").arg(actionTitle), this);
+            QAction *openEvent = new QAction(i18n("Open \"%1\"", actionTitle), this);
             openEvent->setIcon(KIcon("document-edit"));
             connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
             currentActions.append(openEvent);
