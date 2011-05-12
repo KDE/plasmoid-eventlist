@@ -17,7 +17,7 @@ foreach(_current_PO_FILE ${_po_files})
          DEPENDS ${_current_PO_FILE}
       )
 
-   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${_lang}.gmo DESTINATION ${LOCALE_INSTALL_DIR}/${_lang}/LC_MESSAGES/ RENAME eventapplet.mo)
+   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${_lang}.gmo DESTINATION ${LOCALE_INSTALL_DIR}/${_lang}/LC_MESSAGES/ RENAME plasma_applet_events.mo)
    list(APPEND _gmoFiles ${_gmoFile})
 endforeach(_current_PO_FILE)
 
