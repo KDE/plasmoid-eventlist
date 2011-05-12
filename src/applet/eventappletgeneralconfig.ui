@@ -84,7 +84,7 @@ it will stretch to the next header or end of the displayed timeframe.</string>
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Miscellenous options</string>
+      <string>Miscellaneous Options</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -129,7 +129,7 @@ it will stretch to the next header or end of the displayed timeframe.</string>
    <item>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Date appearance settings</string>
+      <string>Date Appearance Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
@@ -146,12 +146,12 @@ it will stretch to the next header or end of the displayed timeframe.</string>
         </property>
         <item>
          <property name="text">
-          <string>KDE ShortDate</string>
+          <string>KDE short date</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>KDE LongDate</string>
+          <string>KDE long date</string>
          </property>
         </item>
         <item>

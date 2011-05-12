@@ -167,7 +167,7 @@ void EventModel::resetModel()
 
     if (!Akonadi::ServerManager::isRunning()) {
         QStandardItem *errorItem = new QStandardItem();
-        errorItem->setData(QVariant(i18n("The Akonadi server is not running!")), Qt::DisplayRole);
+        errorItem->setData(QVariant(i18n("The Akonadi server is not running.")), Qt::DisplayRole);
         parentItem->appendRow(errorItem);
     } else {
         initModel();
@@ -200,7 +200,7 @@ void EventModel::createHeaderItems(QStringList headerParts)
     m_sectionItemsMap.clear();
 
     QStandardItem *olderItem = new QStandardItem();
-    initHeaderItem(olderItem, i18n("Earlier stuff"), i18n("Unfinished todos, still ongoing earlier events etc."), -28);
+    initHeaderItem(olderItem, i18n("Earlier stuff"), i18n("Unfinished todos, still ongoing earlier events, etc."), -28);
     m_sectionItemsMap.insert(olderItem->data(SortRole).toDate(), olderItem);
 
     QStandardItem *somedayItem = new QStandardItem();

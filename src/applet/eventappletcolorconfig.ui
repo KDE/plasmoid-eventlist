@@ -82,7 +82,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Backgroundcolor for near events:</string>
+         <string>Background color for near events:</string>
         </property>
        </widget>
       </item>
@@ -95,7 +95,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>The backgroundcolor for soon beginning events.</string>
+         <string>The background color for soon beginning events.</string>
         </property>
        </widget>
       </item>
@@ -119,7 +119,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Textcolor for started or passed events:</string>
+         <string>Text color for started or passed events:</string>
         </property>
        </widget>
       </item>
@@ -132,7 +132,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>The textcolor for already started or passed events.</string>
+         <string>The text color for already started or passed events.</string>
         </property>
        </widget>
       </item>
@@ -148,7 +148,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>Backgroundcolor for todos:</string>
+         <string>Background color for todos:</string>
         </property>
        </widget>
       </item>
@@ -161,7 +161,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>The backgroundcolor for common todos.</string>
+         <string>The background color for common todos.</string>
         </property>
        </widget>
       </item>
@@ -218,7 +218,7 @@
       <item row="2" column="1">
        <widget class="KColorButton" name="finishedTodoButton">
         <property name="toolTip">
-         <string>The backgroundcolor for already finished todos.</string>
+         <string>The background color for already finished todos.</string>
         </property>
        </widget>
       </item>
