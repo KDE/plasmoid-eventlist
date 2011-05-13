@@ -21,7 +21,7 @@
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>The format for the displayed text for todos.
-Substutions (again mostly self-explanatory) are:
+Substitutions (again mostly self-explanatory) are:
 %{dueDate}, %{dueTime} - due date and time, %{startDate}, %{startTime} - start date and time,
 %{summary} - summary, %{description} - description, %{percent} - finished percent, %{location} - location,
 %{resourceName} - the i18n name of the Akonadi resource,
