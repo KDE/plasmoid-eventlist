@@ -181,17 +181,15 @@ void EventApplet::setupModel()
 {
     Akonadi::Control::widgetNeedsAkonadi(m_view);
 
-    Akonadi::Control::start();
-    
     m_agentManager = Akonadi::AgentManager::self();
 
     m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors);
     m_model->setCategoryColors(m_categoryColors);
     m_model->setHeaderItems(m_headerItemsList);
-    m_model->initModel();
-    m_model->initMonitor();
-    m_model->setSortRole(EventModel::SortRole);
-    m_model->sort(0, Qt::AscendingOrder);
+    if (Akonadi::ServerManager::self()->isRunning()) {
+        m_model->initModel();
+        m_model->initMonitor();
+    }
 
     m_filterModel = new EventFilterModel(this);
     m_filterModel->setPeriod(m_period);

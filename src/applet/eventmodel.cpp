@@ -118,6 +118,9 @@ void EventModel::initialItemFetchFinished(KJob *job)
             } // if hasPayload
         } // foreach
     }
+    
+    setSortRole(EventModel::SortRole);
+    sort(0, Qt::AscendingOrder);
 }
 
 void EventModel::initMonitor()
