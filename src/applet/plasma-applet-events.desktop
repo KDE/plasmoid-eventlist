@@ -1,19 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Event List
-Name[de]=Ereignisliste
-Name[sk]=Zoznam udalostí
-Name[uk]=Список подій
-Name[ru]=Список событий
-Name[it]=Eventlist
-Name[es]=Lista de Eventos
 Comment=Shows a list with the events from Akonadi resources
-Comment[de]=Zeigt eine Liste mit den Ereignissen etc. von Akonadi Ressourcen
-Comment[sk]=Zobrazuje zoznam udalostí z Akonadi zdrojov
-Comment[uk]=Показує список подій із ресурсів Akonadi
-Comment[ru]=Показывает список событий из ресурсов Akonadi
-Comment[it]=Mostra un elenco di eventi presi dalle risorse di Akonadi
-Comment[es]=Muestra la lista de los eventos contenidos en recursos Akonadi
 Icon=view-pim-tasks
 Type=Service
 ServiceTypes=Plasma/Applet
