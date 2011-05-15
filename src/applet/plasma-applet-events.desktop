@@ -1,7 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Event List
+Name[sv]=Händelselista
+Name[uk]=Список подій
+Name[x-test]=xxEvent Listxx
 Comment=Shows a list with the events from Akonadi resources
+Comment[sv]=Visar en lista med händelser från Akonadi-resurser
+Comment[uk]=Показує список подій на основі даних ресурсів Akonadi
+Comment[x-test]=xxShows a list with the events from Akonadi resourcesxx
 Icon=view-pim-tasks
 Type=Service
 ServiceTypes=Plasma/Applet

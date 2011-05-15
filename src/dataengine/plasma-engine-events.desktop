@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Events Data Engine
+Name[sv]=Datagränssnitt för händelser
+Name[uk]=Рушій даних подій
+Name[x-test]=xxEvents Data Enginexx
 X-KDE-ServiceTypes=Plasma/DataEngine
 Type=Service
 Icon=go-jump-today
