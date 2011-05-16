@@ -27,6 +27,5 @@ INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}
     ${KDEPIMLIBS_INCLUDE_DIRS}
 )
 
-add_subdirectory(src/applet)
-# add_subdirectory(src/dataengine)
+add_subdirectory(src)
 
