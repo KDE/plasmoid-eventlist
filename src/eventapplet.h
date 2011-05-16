@@ -113,7 +113,7 @@ private:
     FormatConfig m_eventFormatConfig;
     Ui::TodoFormatConfig m_todoFormatConfig;
     Ui::EventAppletColorConfig m_colorConfigUi;
-    int m_urgency, m_birthdayUrgency, m_checkInterval, m_period;
+    int m_urgency, m_birthdayUrgency, m_checkInterval, m_period, m_recurringCount;
     QColor m_urgentBg, m_passedFg, m_todoBg, m_finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;
     QMap<QString, QString> m_categoryFormat;

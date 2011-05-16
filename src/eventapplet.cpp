@@ -115,6 +115,7 @@ void EventApplet::init()
     QString dtString = cg.readEntry("CustomDateFormat", QString("dd.MM."));
     m_appletTitle = cg.readEntry("AppletTitle", i18n("Upcoming Events"));
     m_period = cg.readEntry("Period", 365);
+    m_recurringCount = cg.readEntry("RecurringCount", 0);
 
     m_urgency = cg.readEntry("UrgencyTime", 15);
     m_birthdayUrgency = cg.readEntry("BirthdayUrgencyTime", 14);
@@ -184,7 +185,7 @@ void EventApplet::setupModel()
 
     m_agentManager = Akonadi::AgentManager::self();
 
-    m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors);
+    m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors, m_recurringCount);
     m_model->setCategoryColors(m_categoryColors);
     m_model->setHeaderItems(m_headerItemsList);
     if (Akonadi::ServerManager::self()->isRunning()) {
@@ -581,6 +582,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_generalConfig.headerWidget->sortByColumn(2, Qt::AscendingOrder);
     m_generalConfig.appletTitleEdit->setText(cg.readEntry("AppletTitle", i18n("Upcoming Events")));
     m_generalConfig.periodBox->setValue(cg.readEntry("Period", 365));
+    m_generalConfig.recurringCountBox->setValue(cg.readEntry("RecurringCount", 0));
     m_generalConfig.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
     m_generalConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
 
@@ -635,6 +637,9 @@ void EventApplet::configAccepted()
     int oldPeriod = cg.readEntry("Period", 365);
     m_period = m_generalConfig.periodBox->value();
     cg.writeEntry("Period", m_period);
+    int oldRecurringCount = cg.readEntry("RecurringCount", 0);
+    int m_recurringCount = m_generalConfig.recurringCountBox->value();
+    cg.writeEntry("RecurringCount", m_recurringCount);
     int dateFormat = m_generalConfig.dateFormatBox->currentIndex();
     cg.writeEntry("DateFormat", dateFormat);
     QString customString = m_generalConfig.customFormatEdit->text();
@@ -710,8 +715,9 @@ void EventApplet::configAccepted()
     cg.writeEntry("KOOpacity", opacity);
     setupCategoryColors(opacity);
 
-    m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors);
+    m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors, m_recurringCount);
     m_model->setCategoryColors(m_categoryColors);
+    m_model->setHeaderItems(m_headerItemsList);
 
     if (oldPeriod != m_period) {
         m_filterModel->setPeriod(m_period);
@@ -721,8 +727,7 @@ void EventApplet::configAccepted()
         m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     }
 
-    if (oldHeaderList != m_headerItemsList) {
-        m_model->setHeaderItems(m_headerItemsList);
+    if (oldHeaderList != m_headerItemsList || oldRecurringCount != m_recurringCount) {
         m_model->resetModel();
     } else if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
         oldColorHash != m_categoryColors) {

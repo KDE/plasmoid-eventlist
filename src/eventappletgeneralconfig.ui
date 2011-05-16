@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>412</width>
-    <height>532</height>
+    <width>401</width>
+    <height>657</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -98,6 +98,22 @@ it will stretch to the next header or end of the displayed timeframe.</string>
         </property>
        </widget>
       </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
@@ -121,7 +137,7 @@ it will stretch to the next header or end of the displayed timeframe.</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="1" column="2" rowspan="2" colspan="2">
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -133,6 +149,29 @@ it will stretch to the next header or end of the displayed timeframe.</string>
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Limit count of recurring incidences:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="KIntSpinBox" name="recurringCountBox">
+        <property name="toolTip">
+         <string>Set the maximum occurrence of recurring incidences.</string>
+        </property>
+        <property name="specialValueText">
+         <string>no limit</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -172,6 +211,19 @@ it will stretch to the next header or end of the displayed timeframe.</string>
         </item>
        </widget>
       </item>
+      <item row="0" column="2" rowspan="2">
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>140</width>
+          <height>38</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
@@ -193,6 +245,9 @@ it will stretch to the next header or end of the displayed timeframe.</string>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::MinimumExpanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

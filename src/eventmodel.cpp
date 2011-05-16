@@ -46,12 +46,12 @@
 
 #include <KDebug>
 
-EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList) : QStandardItemModel(parent),
+EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList, int count) : QStandardItemModel(parent),
     parentItem(0),
     m_monitor(0)
 {
     parentItem = invisibleRootItem();
-    settingsChanged(urgencyTime, birthdayTime, colorList);
+    settingsChanged(urgencyTime, birthdayTime, colorList, count);
 //     initModel();
 //     initMonitor();
 }
@@ -178,7 +178,7 @@ void EventModel::resetModel()
     }
 }
 
-void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors)
+void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors, int count)
 {
     urgency = urgencyTime;
     birthdayUrgency = birthdayTime;
@@ -186,6 +186,7 @@ void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor
     passedFg = itemColors.at(passedColorPos);
     todoBg = itemColors.at(todoColorPos);
     finishedTodoBg = itemColors.at(finishedTodoColorPos);
+    recurringCount = count;
 }
 
 void EventModel::setCategoryColors(QHash<QString, QColor> categoryColors)
@@ -279,8 +280,12 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
     QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
 
     if (values["recurs"].toBool()) {
+        int c = 0;
         QList<QVariant> dtTimes = values["recurDates"].toList();
         foreach (QVariant eventDtTime, dtTimes) {
+            if (recurringCount != 0 && c >= recurringCount)
+                break;
+
             QStandardItem *eventItem = new QStandardItem();
             eventItem->setForeground(QBrush(textColor));
             data["startDate"] = eventDtTime;
@@ -338,6 +343,8 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             eventItem->setData(values["tooltip"], TooltipRole);
 
             addItemRow(eventDtTime.toDate(), eventItem);
+
+            ++c;
         }
     } else {
         QStandardItem *eventItem;
@@ -371,8 +378,12 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
     QString category = values["mainCategory"].toString();
 
     if (values["recurs"].toBool()) {
+        int c = 0;
         QList<QVariant> dtTimes = values["recurDates"].toList();
         foreach (QVariant eventDtTime, dtTimes) {
+            if (recurringCount != 0 && c >= recurringCount)
+                break;
+
             QStandardItem *todoItem = new QStandardItem();
             data["dueDate"] = eventDtTime;
             data["itemType"] = TodoItem;
@@ -393,6 +404,8 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
             }
 
             addItemRow(eventDtTime.toDate(), todoItem);
+
+            ++c;
         }
     } else {
         QStandardItem *todoItem = new QStandardItem();

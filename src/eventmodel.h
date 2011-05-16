@@ -58,7 +58,7 @@ public:
         TooltipRole,
         ItemIDRole,
         ResourceRole
-	};
+    };
 
     enum ItemType {
         HeaderItem = 0,
@@ -68,7 +68,7 @@ public:
         TodoItem
     };
 
-    EventModel(QObject *parent = 0, int urgencyTime = 15, int birthdayTime = 14, QList<QColor> colorList = QList<QColor>());
+    EventModel(QObject *parent = 0, int urgencyTime = 15, int birthdayTime = 14, QList<QColor> colorList = QList<QColor>(), int count = 0);
     ~EventModel();
 
 public:
@@ -78,7 +78,7 @@ public:
     void initModel();
     void initMonitor();
     void resetModel();
-    void settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors);
+    void settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors, int count);
 
 private slots:
     void initialCollectionFetchFinished(KJob *);
@@ -102,7 +102,7 @@ private:
     QStandardItem *parentItem;
     QStringList m_headerPartsList;
     QMap<QDate, QStandardItem *> m_sectionItemsMap;
-    int urgency, birthdayUrgency;
+    int urgency, birthdayUrgency, recurringCount;
     QColor urgentBg, passedFg, todoBg, finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;
     QHash<Akonadi::Entity::Id, Akonadi::Collection> m_collections;
