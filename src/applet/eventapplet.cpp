@@ -113,6 +113,7 @@ void EventApplet::init()
     QString noDueDateFormat = cg.readEntry("NoDueDateFormat", QString("%{summary}"));
     int dtFormat = cg.readEntry("DateFormat", ShortDateFormat);
     QString dtString = cg.readEntry("CustomDateFormat", QString("dd.MM."));
+    m_appletTitle = cg.readEntry("AppletTitle", i18n("Upcoming Events"));
     m_period = cg.readEntry("Period", 365);
 
     m_urgency = cg.readEntry("UrgencyTime", 15);
@@ -306,7 +307,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
                 SLOT(slotUpdateTooltip(QString)));
 
         title = new Plasma::Label();
-        title->setText("<b>" + i18n("Upcoming Events") + "</b>");
+        title->setText("<qt><b>" + m_appletTitle + "</b></qt>");
 
         layout = new QGraphicsLinearLayout(Qt::Vertical);
         layout->addItem(title);
@@ -578,6 +579,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
         m_generalConfig.headerWidget->addTopLevelItem(headerItem);
     }
     m_generalConfig.headerWidget->sortByColumn(2, Qt::AscendingOrder);
+    m_generalConfig.appletTitleEdit->setText(cg.readEntry("AppletTitle", i18n("Upcoming Events")));
     m_generalConfig.periodBox->setValue(cg.readEntry("Period", 365));
     m_generalConfig.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
     m_generalConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
@@ -627,6 +629,9 @@ void EventApplet::configAccepted()
      }
     cg.writeEntry("HeaderItems", m_headerItemsList);
 
+    m_appletTitle = m_generalConfig.appletTitleEdit->text();
+    cg.writeEntry("AppletTitle", m_appletTitle);
+    title->setText("<qt><b>" + m_appletTitle + "</b></qt>");
     int oldPeriod = cg.readEntry("Period", 365);
     m_period = m_generalConfig.periodBox->value();
     cg.writeEntry("Period", m_period);

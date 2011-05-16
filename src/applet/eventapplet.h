@@ -123,7 +123,7 @@ private:
     QStringList disabledResources, m_headerItemsList;
     QDateTime lastCheckTime;
     bool m_showFinishedTodos;
-    QString m_uid;
+    QString m_uid, m_appletTitle;
     QDBusServiceWatcher *m_openEventWatcher, *m_addEventWatcher, *m_addTodoWatcher;
 };
 
