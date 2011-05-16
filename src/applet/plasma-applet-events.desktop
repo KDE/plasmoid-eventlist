@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=Event List
+Name[it]=Elenco eventi
+Name[pt]=Lista de Eventos
 Name[sv]=Händelselista
 Name[uk]=Список подій
 Name[x-test]=xxEvent Listxx
 Comment=Shows a list with the events from Akonadi resources
+Comment[it]=Mostra un elenco con gli eventi delle risorse di Akonadi
+Comment[pt]=Mostra uma lista com os eventos dos recursos do Akonadi
 Comment[sv]=Visar en lista med händelser från Akonadi-resurser
 Comment[uk]=Показує список подій на основі даних ресурсів Akonadi
 Comment[x-test]=xxShows a list with the events from Akonadi resourcesxx
