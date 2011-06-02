@@ -19,8 +19,8 @@
 #include "eventmodel.h"
 
 // kdepim headers
-#include <kcal/incidenceformatter.h>
-#include <kcal/recurrence.h>
+#include <kcalutils/incidenceformatter.h>
+#include <kcalcore/recurrence.h>
 
 #include <akonadi/collectionfetchjob.h>
 #include <akonadi/collectionfetchscope.h>
@@ -105,13 +105,13 @@ void EventModel::initialItemFetchFinished(KJob *job)
         Akonadi::ItemFetchJob *iJob = qobject_cast<Akonadi::ItemFetchJob *>(job);
         Akonadi::Item::List items = iJob->items();
         foreach (const Akonadi::Item &item, items) {
-            if (item.hasPayload <KCal::Event::Ptr>()) {
-                KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
+            if (item.hasPayload <KCalCore::Event::Ptr>()) {
+                KCalCore::Event::Ptr event = item.payload <KCalCore::Event::Ptr>();
                 if (event) {
                     addEventItem(eventDetails(item, event));
                 } // if event
-            } else if (item.hasPayload <KCal::Todo::Ptr>()) {
-                KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
+            } else if (item.hasPayload <KCalCore::Todo::Ptr>()) {
+                KCalCore::Todo::Ptr todo = item.payload<KCalCore::Todo::Ptr>();
                 if (todo) {
                     addTodoItem(todoDetails(item, todo));
                 }
@@ -260,13 +260,15 @@ void EventModel::itemMoved(const Akonadi::Item &item, const Akonadi::Collection 
 
 void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &collection)
 {
-    if (item.hasPayload<KCal::Event::Ptr>()) {
-        KCal::Event *event = item.payload <KCal::Event::Ptr>().get();
+    Q_UNUSED(collection);
+
+    if (item.hasPayload<KCalCore::Event::Ptr>()) {
+        KCalCore::Event::Ptr event = item.payload <KCalCore::Event::Ptr>();
         if (event) {
             addEventItem(eventDetails(item, event));
         } // if event
-    } else if (item.hasPayload <KCal::Todo::Ptr>()) {
-        KCal::Todo *todo = item.payload<KCal::Todo::Ptr>().get();
+    } else if (item.hasPayload <KCalCore::Todo::Ptr>()) {
+        KCalCore::Todo::Ptr todo = item.payload<KCalCore::Todo::Ptr>();
         if (todo) {
             addTodoItem(todoDetails(item, todo));
         }
@@ -453,7 +455,7 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
     }
 }
 
-QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal::Event *event)
+QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCalCore::Event::Ptr event)
 {
     QMap <QString, QVariant> values;
     Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
@@ -482,8 +484,8 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["recurs"] = recurs;
     QList<QVariant> recurDates;
     if (recurs) {
-        KCal::Recurrence *r = event->recurrence();
-        KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
+        KCalCore::Recurrence *r = event->recurrence();
+        KCalCore::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
         dtTimes.sortUnique();
         foreach (KDateTime t, dtTimes) {
             recurDates << QVariant(t.dateTime().toLocalTime());
@@ -498,12 +500,12 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     }
 
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(itemCollection.resource(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.resource(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 
     return values;
 }
 
-QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal::Todo *todo)
+QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalCore::Todo::Ptr todo)
 {
     QMap <QString, QVariant> values;
     Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
@@ -548,8 +550,8 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     values["recurs"] = recurs;
     QList<QVariant> recurDates;
     if (recurs) {
-        KCal::Recurrence *r = todo->recurrence();
-        KCal::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
+        KCalCore::Recurrence *r = todo->recurrence();
+        KCalCore::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
         dtTimes.sortUnique();
         foreach (KDateTime t, dtTimes) {
             recurDates << QVariant(t.dateTime().toLocalTime());
@@ -557,7 +559,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCal:
     }
     values["recurDates"] = recurDates;
 
-    values["tooltip"] = KCal::IncidenceFormatter::toolTipStr(itemCollection.resource(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.resource(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 
     return values;
 }

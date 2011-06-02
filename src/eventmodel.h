@@ -22,8 +22,8 @@
 #include <akonadi/monitor.h>
 #include <akonadi/collection.h>
 
-#include <kcal/event.h>
-#include <kcal/todo.h>
+#include <kcalcore/event.h>
+#include <kcalcore/todo.h>
 
 // qt headers
 #include <QStandardItemModel>
@@ -95,8 +95,8 @@ private:
     void initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days);
     void addItem(const Akonadi::Item &item, const Akonadi::Collection &collection);
     void addItemRow(QDate eventDate, QStandardItem *items);
-    QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCal::Event *);
-    QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCal::Todo *);
+    QMap<QString, QVariant> eventDetails(const Akonadi::Item &, KCalCore::Event::Ptr);
+    QMap<QString, QVariant> todoDetails(const Akonadi::Item &, KCalCore::Todo::Ptr);
 
 private:
     QStandardItem *parentItem;

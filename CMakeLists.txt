@@ -3,7 +3,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules )
 # search packages used by KDE
 find_package(KDE4 REQUIRED)
 find_package(Akonadi REQUIRED)
-find_package(KdepimLibs REQUIRED)
+find_package(KdepimLibs 4.6.0 REQUIRED)
 
 include(KDE4Defaults)
 include(MacroLibrary)
