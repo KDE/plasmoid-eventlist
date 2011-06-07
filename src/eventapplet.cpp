@@ -188,7 +188,7 @@ void EventApplet::setupModel()
     m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors, m_recurringCount);
     m_model->setCategoryColors(m_categoryColors);
     m_model->setHeaderItems(m_headerItemsList);
-    if (Akonadi::ServerManager::self()->isRunning()) {
+    if (Akonadi::ServerManager::state() == Akonadi::ServerManager::Running) {
         m_model->initModel();
         m_model->initMonitor();
     }
