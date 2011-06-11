@@ -19,8 +19,8 @@
 #include "eventmodel.h"
 
 // kdepim headers
-#include <kcalutils/incidenceformatter.h>
 #include <kcalcore/recurrence.h>
+#include <kcalutils/incidenceformatter.h>
 
 #include <akonadi/collectionfetchjob.h>
 #include <akonadi/collectionfetchscope.h>
@@ -29,7 +29,6 @@
 #include <akonadi/itemfetchscope.h>
 #include <akonadi/entitydisplayattribute.h>
 #include <akonadi/servermanager.h>
-#include <akonadi/kcal/incidencemimetypevisitor.h>
 
 // qt headers
 #include <QDate>
@@ -66,8 +65,8 @@ void EventModel::initModel()
 
     Akonadi::CollectionFetchScope scope;
     QStringList mimeTypes;
-    mimeTypes << Akonadi::IncidenceMimeTypeVisitor::eventMimeType();
-    mimeTypes << Akonadi::IncidenceMimeTypeVisitor::todoMimeType();
+    mimeTypes << KCalCore::Event::eventMimeType();
+    mimeTypes << KCalCore::Todo::todoMimeType();
     mimeTypes << "text/calendar";
     scope.setContentMimeTypes(mimeTypes);
 
@@ -132,8 +131,8 @@ void EventModel::initMonitor()
     m_monitor->fetchCollection(true);
     m_monitor->setItemFetchScope(scope);
     m_monitor->setCollectionMonitored(Akonadi::Collection::root());
-    m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::eventMimeType(), true);
-    m_monitor->setMimeTypeMonitored(Akonadi::IncidenceMimeTypeVisitor::todoMimeType(), true);
+    m_monitor->setMimeTypeMonitored(KCalCore::Event::eventMimeType(), true);
+    m_monitor->setMimeTypeMonitored(KCalCore::Todo::todoMimeType(), true);
     m_monitor->setMimeTypeMonitored("text/calendar", true);
 
     connect(m_monitor, SIGNAL(itemAdded(const Akonadi::Item &, const Akonadi::Collection &)),
