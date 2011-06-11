@@ -322,10 +322,10 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
     m_uid = QString();
-#ifdef HAS_AKONADI_PIM
-    m_uid = m_filterModel->data(index, EventModel::ItemIDRole).toString();
-#else
+#ifdef HAS_OLD_PIM
     m_uid = m_filterModel->data(index, EventModel::UIDRole).toString();
+#else
+    m_uid = m_filterModel->data(index, EventModel::ItemIDRole).toString();
 #endif
 
     if (!m_openEventWatcher) {
