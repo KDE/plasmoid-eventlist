@@ -39,3 +39,11 @@ mysql_upgrade --socket=$HOME/.local/share/akonadi/db_misc/mysql.socket
 Then stop and restart the server.
 
 Then you can add resources.
+
+============================================================================================================================
+
+Plasmoid configuration:
+
+The text format for incidences is configureable with Qt supported HTML subset, e.g.
+<tr><td width="65">%{startDate}</td><td width="45">%{startTime}</td><td>%{summary}</td></tr>
+as template for events (see http://doc.qt.nokia.com/4.7/richtext-html-subset.html).
