@@ -50,6 +50,7 @@ void GeneralConfig::slotAddHeader()
     TreeWidgetItem *headerItem = new TreeWidgetItem(itemText);
     headerItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
     headerWidget->addTopLevelItem(headerItem);
+    emit headerItemCountChanged();
 }
 
 void GeneralConfig::slotRemoveHeader()
@@ -59,6 +60,7 @@ void GeneralConfig::slotRemoveHeader()
 
     int index = headerWidget->indexOfTopLevelItem(headerWidget->currentItem());
     headerWidget->takeTopLevelItem(index);
+    emit headerItemCountChanged();
 }
 
 QList<int> GeneralConfig::usedDays()

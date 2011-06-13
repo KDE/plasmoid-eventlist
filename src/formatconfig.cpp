@@ -41,6 +41,7 @@ void FormatConfig::slotAddCategory()
 	QTreeWidgetItem *categoryItem = new QTreeWidgetItem(itemText);
 	categoryItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
 	categoryFormatWidget->addTopLevelItem(categoryItem);
+	emit categoryItemCountChanged();
 }
 
 void FormatConfig::slotCopyCategory()
@@ -49,11 +50,15 @@ void FormatConfig::slotCopyCategory()
 		QTreeWidgetItem *categoryItem = categoryFormatWidget->currentItem()->clone();
 		categoryItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
 		categoryFormatWidget->addTopLevelItem(categoryItem);
+		emit categoryItemCountChanged();
 	}
 }
 
 void FormatConfig::slotRemoveCategory()
 {
-	int index = categoryFormatWidget->indexOfTopLevelItem(categoryFormatWidget->currentItem());
-	categoryFormatWidget->takeTopLevelItem(index);
+	if (categoryFormatWidget->currentItem()) {
+		int index = categoryFormatWidget->indexOfTopLevelItem(categoryFormatWidget->currentItem());
+		categoryFormatWidget->takeTopLevelItem(index);
+		emit categoryItemCountChanged();
+	}
 }

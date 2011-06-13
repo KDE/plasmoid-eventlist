@@ -582,6 +582,14 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_generalConfig.recurringCountBox->setValue(cg.readEntry("RecurringCount", 0));
     m_generalConfig.dateFormatBox->setCurrentIndex(cg.readEntry("DateFormat", ShortDateFormat));
     m_generalConfig.customFormatEdit->setText(cg.readEntry("CustomDateFormat", QString("dd.MM.")));
+    
+    connect(m_generalConfig.headerWidget, SIGNAL(itemChanged(QTreeWidgetItem *, int)), parent, SLOT(settingsModified()));
+    connect(&m_generalConfig, SIGNAL(headerItemCountChanged()), parent, SLOT(settingsModified()));
+    connect(m_generalConfig.appletTitleEdit, SIGNAL(textEdited(const QString &)), parent, SLOT(settingsModified()));
+    connect(m_generalConfig.periodBox, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_generalConfig.recurringCountBox, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_generalConfig.dateFormatBox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_generalConfig.customFormatEdit, SIGNAL(textEdited(const QString &)), parent, SLOT(settingsModified()));
 
     m_eventFormatConfig.normalEventEdit->setText(cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}")));
 
@@ -595,8 +603,15 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
         ++i;
     }
 
+    connect(m_eventFormatConfig.normalEventEdit, SIGNAL(textEdited(const QString &)), parent, SLOT(settingsModified()));
+    connect(&m_eventFormatConfig, SIGNAL(categoryItemCountChanged()), parent, SLOT(settingsModified()));
+    connect(m_eventFormatConfig.categoryFormatWidget, SIGNAL(itemChanged(QTreeWidgetItem *, int)), parent, SLOT(settingsModified()));
+
     m_todoFormatConfig.todoEdit->setText(cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}")));
     m_todoFormatConfig.noDueDateEdit->setText(cg.readEntry("NoDueDateFormat", QString("%{summary}")));
+
+    connect(m_todoFormatConfig.todoEdit, SIGNAL(textEdited(const QString &)), parent, SLOT(settingsModified()));
+    connect(m_todoFormatConfig.noDueDateEdit, SIGNAL(textEdited(const QString &)), parent, SLOT(settingsModified()));
 
     m_colorConfigUi.urgencyBox->setValue(cg.readEntry("UrgencyTime", 15));
     m_colorConfigUi.birthdayUrgencyBox->setValue(cg.readEntry("BirthdayUrgencyTime", 14));
@@ -612,6 +627,18 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     m_colorConfigUi.finishedTodoOpacity->setValue(cg.readEntry("FinishedTodoOpacity", 10));
 
     m_colorConfigUi.korganizerOpacity->setValue(cg.readEntry("KOOpacity", 10));
+    
+    connect(m_colorConfigUi.urgencyBox, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.birthdayUrgencyBox, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.startedColorButton, SIGNAL(changed(const QColor &)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.urgentColorButton, SIGNAL(changed(const QColor &)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.urgentOpacity, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.todoColorButton, SIGNAL(changed(const QColor &)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.todoOpacity, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.showFinishedTodos, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.finishedTodoButton, SIGNAL(changed(const QColor &)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.finishedTodoOpacity, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_colorConfigUi.korganizerOpacity, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
 }
 
 void EventApplet::configAccepted()

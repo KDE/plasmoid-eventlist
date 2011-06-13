@@ -29,6 +29,10 @@ public:
     ~FormatConfig();
 	void setupConnections();
 
+signals:
+    void categoryItemCountChanged();
+
+
 private slots:
 	void slotAddCategory();
 	void slotCopyCategory();

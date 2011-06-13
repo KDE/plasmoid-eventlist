@@ -46,6 +46,9 @@ public:
     GeneralConfig(QWidget *parent = 0);
     ~GeneralConfig();
     void setupConnections();
+    
+signals:
+    void headerItemCountChanged();
 
 private slots:
     void slotAddHeader();
