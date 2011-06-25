@@ -1,3 +1,11 @@
+0.4.95 (0.5 rc)
+- port to kcalcore (needs 4.6)
+- add option to limit recurring incidences
+- add option to set a custom applet title
+- only initModel if Akonadiserver is really running
+- make apply button in 4.7 work
+- build for new pim by default
+
 0.4
 - try to make dbus calls work in all cases
 - make use of qstringbuilder
