@@ -28,4 +28,4 @@ INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}
 )
 
 add_subdirectory(src)
-
+#add_subdirectory(po)
