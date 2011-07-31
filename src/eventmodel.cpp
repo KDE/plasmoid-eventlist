@@ -280,6 +280,11 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
     QString category = values["mainCategory"].toString();
     QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
 
+    // dont add events starting later than a year
+    if (values["startDate"].toDate() > QDate::currentDate().addDays(365)) {
+        return;
+    }
+
     if (values["recurs"].toBool()) {
         int c = 0;
         QList<QVariant> dtTimes = values["recurDates"].toList();
@@ -377,6 +382,11 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
     QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     QMap<QString, QVariant> data = values;
     QString category = values["mainCategory"].toString();
+
+    // dont add todos starting later than a year
+    if (values["hasDueDate"].toBool() == TRUE && values["dueDate"].toDate() > QDate::currentDate().addDays(365)) {
+        return;
+    }
 
     if (values["recurs"].toBool()) {
         int c = 0;
