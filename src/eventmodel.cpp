@@ -509,7 +509,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     }
 
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
-    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.resource(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 
     return values;
 }
@@ -568,7 +568,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
     }
     values["recurDates"] = recurDates;
 
-    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.resource(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
 
     return values;
 }
