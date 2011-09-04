@@ -1,3 +1,7 @@
+0.5
+- fix showing empty header containing hidden events
+- use more descriptive name() than resource() for the tooltip string
+
 0.4.95 (0.5 rc)
 - port to kcalcore (needs 4.6)
 - add option to limit recurring incidences
