@@ -29,15 +29,16 @@ public:
     ~EventItemDelegate();
 
     QString displayText(const QVariant &value, const QLocale &locale)  const;
-	void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-	void settingsChanged(QString normal, QString todo, QString noDueDate, int format, QString customString);
-	void setCategoryFormats(QMap<QString, QString>);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void settingsChanged(QString normal, QString todo, QString noDueDate, int format, QString customString);
+    void setCategoryFormats(QMap<QString, QString>);
 
 private:
+    QHash<QString, QString> titleHash(QMap<QString, QVariant>) const;
     QHash<QString, QString> eventHash(QMap<QString, QVariant>) const;
     QHash<QString, QString> todoHash(QMap<QString, QVariant>) const;
-	QMap<QString, QString> m_categoryFormats;
+    QMap<QString, QString> m_categoryFormats;
     QString formattedDate(const QVariant &dtTime) const;
 
     QString m_normal, m_todo, m_noDueDate, m_dateString;

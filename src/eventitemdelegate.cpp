@@ -51,20 +51,20 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
 {
     Q_UNUSED(locale);
     QMap<QString, QVariant> data = value.toMap();
-	QString mainCategory = data["mainCategory"].toString();
+    QString mainCategory = data["mainCategory"].toString();
 
     int itemType = data["itemType"].toInt();
     switch (itemType) {
         case EventModel::HeaderItem:
-            return  data["title"].toString();
+            return  KMacroExpander::expandMacros(data["title"].toString(), titleHash(data));
             break;
         case EventModel::NormalItem:
         case EventModel::BirthdayItem:
         case EventModel::AnniversaryItem:
-			if (m_categoryFormats.contains(mainCategory))
-				return KMacroExpander::expandMacros(m_categoryFormats.value(mainCategory), eventHash(data));
-			else
-				return KMacroExpander::expandMacros(m_normal, eventHash(data));
+            if (m_categoryFormats.contains(mainCategory))
+                return KMacroExpander::expandMacros(m_categoryFormats.value(mainCategory), eventHash(data));
+            else
+                return KMacroExpander::expandMacros(m_normal, eventHash(data));
             break;
         case EventModel::TodoItem:
             if (data["hasDueDate"].toBool() == FALSE)
@@ -81,47 +81,56 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
 
 void EventItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-	painter->save();
+    painter->save();
 
-	QStyleOptionViewItemV4 opt = option;
-	initStyleOption(&opt, index);
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption(&opt, index);
 
-	QVariant value = index.data();
- 	QBrush bgBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
- 	QBrush fgBrush = qvariant_cast<QBrush>(index.data(Qt::ForegroundRole));
-	painter->setClipRect( opt.rect );
- 	painter->setBackgroundMode(Qt::OpaqueMode);
- 	painter->setBackground(Qt::transparent);
- 	painter->setBrush(bgBrush);
+    QVariant value = index.data();
+    QBrush bgBrush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
+    QBrush fgBrush = qvariant_cast<QBrush>(index.data(Qt::ForegroundRole));
+    painter->setClipRect( opt.rect );
+    painter->setBackgroundMode(Qt::OpaqueMode);
+    painter->setBackground(Qt::transparent);
+    painter->setBrush(bgBrush);
 
-	if (bgBrush.style() != Qt::NoBrush) {
-		QPen bgPen;
-		bgPen.setColor(bgBrush.color().darker(250));
-		bgPen.setStyle(Qt::SolidLine);
-		bgPen.setWidth(1);
-		painter->setPen(bgPen);
-		painter->drawRoundedRect(opt.rect.x(), opt.rect.y(), opt.rect.width() - bgPen.width(), opt.rect.height() - bgPen.width(), 3.0, 3.0);
-	}
+    if (bgBrush.style() != Qt::NoBrush) {
+        QPen bgPen;
+        bgPen.setColor(bgBrush.color().darker(250));
+        bgPen.setStyle(Qt::SolidLine);
+        bgPen.setWidth(1);
+        painter->setPen(bgPen);
+        painter->drawRoundedRect(opt.rect.x(), opt.rect.y(), opt.rect.width() - bgPen.width(), opt.rect.height() - bgPen.width(), 3.0, 3.0);
+    }
 
-	QTextDocument doc;
-	doc.setDocumentMargin(3);
-	doc.setDefaultStyleSheet("* {color: " + fgBrush.color().name() + ";}");
-	doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
-	QAbstractTextDocumentLayout::PaintContext context;
-	doc.setPageSize( opt.rect.size());
-	painter->translate(opt.rect.x(), opt.rect.y());
- 	doc.documentLayout()->draw(painter, context);
-	painter->restore();
+    QTextDocument doc;
+    doc.setDocumentMargin(3);
+    doc.setDefaultStyleSheet("* {color: " + fgBrush.color().name() + ";}");
+    doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
+    QAbstractTextDocumentLayout::PaintContext context;
+    doc.setPageSize( opt.rect.size());
+    painter->translate(opt.rect.x(), opt.rect.y());
+    doc.documentLayout()->draw(painter, context);
+    painter->restore();
 }
 
 QSize EventItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-	QVariant value = index.data();
+    QVariant value = index.data();
     QTextDocument doc;
-	doc.setDocumentMargin(3);
-	doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
+    doc.setDocumentMargin(3);
+    doc.setHtml("<html><qt></head><meta name=\"qrichtext\" content=\"1\" />" + displayText(value, QLocale::system()) + "</qt></html>");
     doc.setTextWidth(option.rect.width());
     return doc.size().toSize();
+}
+
+QHash<QString, QString> EventItemDelegate::titleHash(QMap<QString, QVariant> data) const
+{
+    QHash<QString,QString> dataHash;
+    dataHash.insert("date", formattedDate(data["date"]));
+    dataHash.insert("weekday", data["date"].toDateTime().toString("dddd"));
+
+    return dataHash;
 }
 
 QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> data) const

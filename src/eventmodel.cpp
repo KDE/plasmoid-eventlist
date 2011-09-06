@@ -148,12 +148,14 @@ void EventModel::initMonitor()
 void EventModel::initHeaderItem(QStandardItem *item, QString title, QString toolTip, int days)
 {
     QMap<QString, QVariant> data;
+    QDateTime date = QDateTime(QDate::currentDate().addDays(days));
     data["itemType"] = HeaderItem;
     data["title"] = QString("<b>" + title + "</b>");
+    data["date"] = date;
     item->setData(data, Qt::DisplayRole);
     QColor textColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
     item->setForeground(QBrush(textColor));
-    item->setData(QVariant(QDateTime(QDate::currentDate().addDays(days))), SortRole);
+    item->setData(QVariant(date), SortRole);
     item->setData(QVariant(HeaderItem), ItemTypeRole);
     item->setData(QVariant(QString()), ResourceRole);
     item->setData(QVariant(QString()), UIDRole);
