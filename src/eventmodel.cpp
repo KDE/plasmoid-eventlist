@@ -45,12 +45,12 @@
 
 #include <KDebug>
 
-EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList, int count) : QStandardItemModel(parent),
+EventModel::EventModel(QObject *parent, int urgencyTime, int birthdayTime, QList<QColor> colorList, int count, bool autoGroupHeader) : QStandardItemModel(parent),
     parentItem(0),
     m_monitor(0)
 {
     parentItem = invisibleRootItem();
-    settingsChanged(urgencyTime, birthdayTime, colorList, count);
+    settingsChanged(urgencyTime, birthdayTime, colorList, count, autoGroupHeader);
 //     initModel();
 //     initMonitor();
 }
@@ -165,6 +165,7 @@ void EventModel::initHeaderItem(QStandardItem *item, QString title, QString tool
 void EventModel::resetModel()
 {
     clear();
+    m_sectionItemsMap.clear();
     parentItem = invisibleRootItem();
     delete m_monitor;
     m_monitor = 0;
@@ -179,7 +180,7 @@ void EventModel::resetModel()
     }
 }
 
-void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors, int count)
+void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors, int count, bool autoGroupHeader)
 {
     urgency = urgencyTime;
     birthdayUrgency = birthdayTime;
@@ -188,6 +189,7 @@ void EventModel::settingsChanged(int urgencyTime, int birthdayTime, QList<QColor
     todoBg = itemColors.at(todoColorPos);
     finishedTodoBg = itemColors.at(finishedTodoColorPos);
     recurringCount = count;
+    useAutoGroupHeader = autoGroupHeader;
 }
 
 void EventModel::setCategoryColors(QHash<QString, QColor> categoryColors)
@@ -202,8 +204,6 @@ void EventModel::setHeaderItems(QStringList headerParts)
 
 void EventModel::createHeaderItems(QStringList headerParts)
 {
-    m_sectionItemsMap.clear();
-
     QStandardItem *olderItem = new QStandardItem();
     initHeaderItem(olderItem, i18n("Earlier stuff"), i18n("Unfinished todos, still ongoing earlier events, etc."), -28);
     m_sectionItemsMap.insert(olderItem->data(SortRole).toDate(), olderItem);
@@ -212,10 +212,12 @@ void EventModel::createHeaderItems(QStringList headerParts)
     initHeaderItem(somedayItem, i18n("Some day"), i18n("Todos with no due date"), 366);
     m_sectionItemsMap.insert(somedayItem->data(SortRole).toDate(), somedayItem);
 
-    for (int i = 0; i < headerParts.size(); i += 3) {
-        QStandardItem *item = new QStandardItem();
-        initHeaderItem(item, headerParts.value(i), headerParts.value(i + 1), headerParts.value(i + 2).toInt());
-        m_sectionItemsMap.insert(item->data(SortRole).toDate(), item);
+    if (!useAutoGroupHeader) {
+        for (int i = 0; i < headerParts.size(); i += 3) {
+            QStandardItem *item = new QStandardItem();
+            initHeaderItem(item, headerParts.value(i), headerParts.value(i + 1), headerParts.value(i + 2).toInt());
+            m_sectionItemsMap.insert(item->data(SortRole).toDate(), item);
+        }
     }
 }
 
@@ -453,6 +455,17 @@ void EventModel::addItemRow(QDate eventDate, QStandardItem *incidenceItem)
         else
             headerItem = item;
     }
+
+    if (useAutoGroupHeader) {
+        if ((headerItem && eventDate >= QDate::currentDate() && eventDate > headerItem->data(SortRole).toDate()) || (headerItem == 0 && eventDate > QDate::currentDate().addDays(-29))) {
+            int days = QDate::currentDate().daysTo(eventDate);
+            QStandardItem *item = new QStandardItem();
+            initHeaderItem(item, QString("%{date}"), QString(), days);
+            m_sectionItemsMap.insert(item->data(SortRole).toDate(), item);
+            headerItem = item;
+        }
+    }
+
 
     if (headerItem) {
         headerItem->appendRow(incidenceItem);

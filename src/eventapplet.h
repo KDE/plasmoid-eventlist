@@ -122,7 +122,7 @@ private:
     Akonadi::AgentManager *m_agentManager;
     QStringList disabledResources, m_headerItemsList;
     QDateTime lastCheckTime;
-    bool m_showFinishedTodos;
+    bool m_showFinishedTodos, m_autoGroupHeader;
     QString m_uid, m_appletTitle;
     QDBusServiceWatcher *m_openEventWatcher, *m_addEventWatcher, *m_addTodoWatcher;
 };

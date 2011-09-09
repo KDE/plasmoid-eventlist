@@ -163,6 +163,7 @@ void EventApplet::init()
     headerList << i18n("Next 4 weeks") << i18n("Events for the next 4 weeks") << QString::number(8);
     headerList << i18n("Later") << i18n("Events later than 4 weeks") << QString::number(29);
     m_headerItemsList = cg.readEntry("HeaderItems", headerList);
+    m_autoGroupHeader = cg.readEntry("AutoGroupHeader", FALSE);
 
     m_delegate = new EventItemDelegate(this, normalEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
     m_delegate->setCategoryFormats(m_categoryFormat);
@@ -184,7 +185,7 @@ void EventApplet::setupModel()
 
     m_agentManager = Akonadi::AgentManager::self();
 
-    m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors, m_recurringCount);
+    m_model = new EventModel(this, m_urgency, m_birthdayUrgency, m_colors, m_recurringCount, m_autoGroupHeader);
     m_model->setCategoryColors(m_categoryColors);
     m_model->setHeaderItems(m_headerItemsList);
     if (Akonadi::ServerManager::isRunning()) {
@@ -577,6 +578,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
         m_generalConfig.headerWidget->addTopLevelItem(headerItem);
     }
     m_generalConfig.headerWidget->sortByColumn(2, Qt::AscendingOrder);
+    m_generalConfig.autoGroupBox->setChecked(cg.readEntry("AutoGroupHeader", FALSE));
     m_generalConfig.appletTitleEdit->setText(cg.readEntry("AppletTitle", i18n("Upcoming Events")));
     m_generalConfig.periodBox->setValue(cg.readEntry("Period", 365));
     m_generalConfig.recurringCountBox->setValue(cg.readEntry("RecurringCount", 0));
@@ -585,6 +587,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     
     connect(m_generalConfig.headerWidget, SIGNAL(itemChanged(QTreeWidgetItem *, int)), parent, SLOT(settingsModified()));
     connect(&m_generalConfig, SIGNAL(headerItemCountChanged()), parent, SLOT(settingsModified()));
+    connect(m_generalConfig.autoGroupBox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_generalConfig.appletTitleEdit, SIGNAL(textEdited(const QString &)), parent, SLOT(settingsModified()));
     connect(m_generalConfig.periodBox, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
     connect(m_generalConfig.recurringCountBox, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
@@ -655,6 +658,9 @@ void EventApplet::configAccepted()
      }
     cg.writeEntry("HeaderItems", m_headerItemsList);
 
+    bool oldAutoGroup = m_autoGroupHeader;
+    m_autoGroupHeader = m_generalConfig.autoGroupBox->isChecked();
+    cg.writeEntry("AutoGroupHeader", m_autoGroupHeader);
     m_appletTitle = m_generalConfig.appletTitleEdit->text();
     cg.writeEntry("AppletTitle", m_appletTitle);
     title->setText("<qt><b>" + m_appletTitle + "</b></qt>");
@@ -739,7 +745,7 @@ void EventApplet::configAccepted()
     cg.writeEntry("KOOpacity", opacity);
     setupCategoryColors(opacity);
 
-    m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors, m_recurringCount);
+    m_model->settingsChanged(m_urgency, m_birthdayUrgency, m_colors, m_recurringCount, m_autoGroupHeader);
     m_model->setCategoryColors(m_categoryColors);
     m_model->setHeaderItems(m_headerItemsList);
 
@@ -751,7 +757,7 @@ void EventApplet::configAccepted()
         m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     }
 
-    if (oldHeaderList != m_headerItemsList || oldRecurringCount != m_recurringCount) {
+    if (oldHeaderList != m_headerItemsList || oldRecurringCount != m_recurringCount || oldAutoGroup != m_autoGroupHeader) {
         m_model->resetModel();
     } else if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
         oldColorHash != m_categoryColors) {

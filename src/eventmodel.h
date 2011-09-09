@@ -36,7 +36,9 @@ class KJob;
 
 static const int ShortDateFormat = 0;
 static const int LongDateFormat = 1;
-static const int CustomDateFormat = 2;
+static const int FancyShortDateFormat = 2;
+static const int FancyLongDateFormat = 3;
+static const int CustomDateFormat = 4;
 
 static const int urgentColorPos = 0;
 static const int passedColorPos = 1;
@@ -68,7 +70,7 @@ public:
         TodoItem
     };
 
-    EventModel(QObject *parent = 0, int urgencyTime = 15, int birthdayTime = 14, QList<QColor> colorList = QList<QColor>(), int count = 0);
+    EventModel(QObject *parent = 0, int urgencyTime = 15, int birthdayTime = 14, QList<QColor> colorList = QList<QColor>(), int count = 0, bool autoGroupHeader = FALSE);
     ~EventModel();
 
 public:
@@ -78,7 +80,7 @@ public:
     void initModel();
     void initMonitor();
     void resetModel();
-    void settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors, int count);
+    void settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors, int count, bool autoGroupHeader);
 
 private slots:
     void initialCollectionFetchFinished(KJob *);
@@ -107,6 +109,7 @@ private:
     QHash<QString, QColor> m_categoryColors;
     QHash<Akonadi::Entity::Id, Akonadi::Collection> m_collections;
     Akonadi::Monitor *m_monitor;
+    bool useAutoGroupHeader;
 
 signals:
     void modelNeedsExpanding();

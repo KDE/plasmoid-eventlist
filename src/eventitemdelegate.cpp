@@ -190,6 +190,12 @@ QString EventItemDelegate::formattedDate(const QVariant &dtTime) const
             case LongDateFormat:
                 date = KGlobal::locale()->formatDate(dtTime.toDate(), KLocale::LongDate);
                 break;
+            case FancyShortDateFormat:
+                date = KGlobal::locale()->formatDate(dtTime.toDate(), KLocale::FancyShortDate);
+                break;
+            case FancyLongDateFormat:
+                date = KGlobal::locale()->formatDate(dtTime.toDate(), KLocale::FancyLongDate);
+                break;
             case CustomDateFormat:
                 date = dtTime.toDate().toString(m_dateString);
                 break;

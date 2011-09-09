@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>657</height>
+    <width>405</width>
+    <height>727</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -94,6 +94,17 @@ it will stretch to the next header or end of the displayed timeframe.</string>
        <widget class="QPushButton" name="removeHeaderButton">
         <property name="text">
          <string>Remove</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="autoGroupBox">
+        <property name="toolTip">
+         <string>If checked incidences are grouped by date,
+the header sections above are not used.</string>
+        </property>
+        <property name="text">
+         <string>Automatically group incidences by date</string>
         </property>
        </widget>
       </item>
@@ -224,6 +235,16 @@ it will stretch to the next header or end of the displayed timeframe.</string>
         <item>
          <property name="text">
           <string>KDE long date</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>KDE fancy short date</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>KDE fancy long date</string>
          </property>
         </item>
         <item>
