@@ -32,14 +32,18 @@ public:
     void setPeriod(int period);
     void setShowFinishedTodos(bool showFinishedTodos);
     void setExcludedResources(QStringList resources);
+    void setDisabledCategories(QStringList categories);
     
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
 private:
+    bool isDisabledCategory(QModelIndex idx) const;
+
+private:
     int m_period;
     bool m_showFinishedTodos;
-    QStringList m_excludedResources;
+    QStringList m_excludedResources, m_disabledCategories;
 };
 
 #endif

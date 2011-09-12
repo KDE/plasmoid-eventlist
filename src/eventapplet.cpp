@@ -19,7 +19,6 @@
 #include "eventapplet.h"
 #include "eventmodel.h"
 #include "eventfiltermodel.h"
-#include "propertyfiltermodel.h"
 #include "eventitemdelegate.h"
 #include "korganizerappletutil.h"
 #include "eventtreeview.h"
@@ -195,17 +194,13 @@ void EventApplet::setupModel()
         m_model->initMonitor();
     }
 
-    m_propertyFilterModel = new PropertyFilterModel(this);
-    m_propertyFilterModel->setDisabledCategories(disabledCategories);
-    m_propertyFilterModel->setDynamicSortFilter(TRUE);
-    m_propertyFilterModel->setSourceModel(m_model);
-
     m_filterModel = new EventFilterModel(this);
     m_filterModel->setPeriod(m_period);
     m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     m_filterModel->setExcludedResources(disabledResources);
+    m_filterModel->setDisabledCategories(disabledCategories);
     m_filterModel->setDynamicSortFilter(TRUE);
-    m_filterModel->setSourceModel(m_propertyFilterModel);
+    m_filterModel->setSourceModel(m_model);
 
     m_view->setModel(m_filterModel);
     m_view->expandAll();
@@ -520,7 +515,7 @@ void EventApplet::setShownCategories()
         cg.writeEntry("DisabledCategories", disabledCategories);
         emit configNeedsSaving();
 
-        m_propertyFilterModel->setDisabledCategories(disabledCategories);
+        m_filterModel->setDisabledCategories(disabledCategories);
         m_view->expandAll();
     }
 }

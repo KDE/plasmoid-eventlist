@@ -45,7 +45,6 @@ class QModelIndex;
 class QAction;
 class KConfigDialog;
 class EventModel;
-class PropertyFilterModel;
 class EventFilterModel;
 class EventItemDelegate;
 class QGraphicsLinearLayout;
@@ -103,7 +102,6 @@ private:
     QGraphicsWidget *m_graphicsWidget;
     QGraphicsLinearLayout *layout;
     EventModel *m_model;
-    PropertyFilterModel *m_propertyFilterModel;
     EventFilterModel *m_filterModel;
     KDirWatch *m_categoryColorWatch;
     QGraphicsProxyWidget *proxyWidget;
