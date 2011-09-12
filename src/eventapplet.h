@@ -45,6 +45,7 @@ class QModelIndex;
 class QAction;
 class KConfigDialog;
 class EventModel;
+class PropertyFilterModel;
 class EventFilterModel;
 class EventItemDelegate;
 class QGraphicsLinearLayout;
@@ -74,6 +75,7 @@ private slots:
     void slotAddTodo();
     void timerExpired();
     void setShownResources();
+    void setShownCategories();
     void setupModel();
     void akonadiStatusChanged();
     void plasmaThemeChanged();
@@ -101,6 +103,7 @@ private:
     QGraphicsWidget *m_graphicsWidget;
     QGraphicsLinearLayout *layout;
     EventModel *m_model;
+    PropertyFilterModel *m_propertyFilterModel;
     EventFilterModel *m_filterModel;
     KDirWatch *m_categoryColorWatch;
     QGraphicsProxyWidget *proxyWidget;
@@ -120,7 +123,7 @@ private:
     QList<QColor> m_colors;
     QTimer *m_timer;
     Akonadi::AgentManager *m_agentManager;
-    QStringList disabledResources, m_headerItemsList;
+    QStringList disabledResources, disabledCategories, m_headerItemsList, m_categories;
     QDateTime lastCheckTime;
     bool m_showFinishedTodos, m_autoGroupHeader;
     QString m_uid, m_appletTitle;

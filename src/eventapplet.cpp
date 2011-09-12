@@ -19,6 +19,7 @@
 #include "eventapplet.h"
 #include "eventmodel.h"
 #include "eventfiltermodel.h"
+#include "propertyfiltermodel.h"
 #include "eventitemdelegate.h"
 #include "korganizerappletutil.h"
 #include "eventtreeview.h"
@@ -106,6 +107,7 @@ void EventApplet::init()
     KConfigGroup cg = config();
 
     disabledResources = cg.readEntry("DisabledResources", QStringList());
+    disabledCategories = cg.readEntry("DisabledCategories", QStringList());
 
     QString normalEventFormat = cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}"));
     QString todoFormat = cg.readEntry("TodoFormat", QString("%{dueDate} %{summary}"));
@@ -193,12 +195,17 @@ void EventApplet::setupModel()
         m_model->initMonitor();
     }
 
+    m_propertyFilterModel = new PropertyFilterModel(this);
+    m_propertyFilterModel->setDisabledCategories(disabledCategories);
+    m_propertyFilterModel->setDynamicSortFilter(TRUE);
+    m_propertyFilterModel->setSourceModel(m_model);
+
     m_filterModel = new EventFilterModel(this);
     m_filterModel->setPeriod(m_period);
     m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     m_filterModel->setExcludedResources(disabledResources);
     m_filterModel->setDynamicSortFilter(TRUE);
-    m_filterModel->setSourceModel(m_model);
+    m_filterModel->setSourceModel(m_propertyFilterModel);
 
     m_view->setModel(m_filterModel);
     m_view->expandAll();
@@ -216,10 +223,10 @@ void EventApplet::setupCategoryColors(int opacity)
     KConfig *koConfig = new KConfig("korganizerrc");
 
     KConfigGroup general(koConfig, "General");
-    QStringList categories = general.readEntry("Custom Categories", QStringList());
+    m_categories = general.readEntry("Custom Categories", QStringList());
 
     KConfigGroup categoryColors(koConfig, "Category Colors2");
-    foreach(const QString &category, categories) {
+    foreach(const QString &category, m_categories) {
         QColor cColor = categoryColors.readEntry(category, QColor());
         if (cColor.isValid()) {
             cColor.setAlphaF(opacity/100.0);
@@ -481,6 +488,43 @@ void EventApplet::setShownResources()
     }
 }
 
+void EventApplet::setShownCategories()
+{
+    KDialog *dialog = new KDialog();
+    dialog->setCaption(i18n("Select Categories"));
+    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+
+    QWidget *widget = new QWidget(dialog);
+    QVBoxLayout *layout = new QVBoxLayout();
+
+    foreach (QString category, m_categories) {
+        QCheckBox *categoriesBox = new QCheckBox(category);
+        categoriesBox->setChecked(!disabledCategories.contains(category));
+        categoriesBox->setProperty("category", category);
+        layout->addWidget(categoriesBox);
+    }
+
+    widget->setLayout(layout);
+    dialog->setMainWidget(widget);
+
+    if (dialog->exec() == QDialog::Accepted) {
+        disabledCategories.clear();
+        QList<QCheckBox *> categoriesList = widget->findChildren<QCheckBox *>();
+        foreach (QCheckBox *box, categoriesList) {
+            if (box->isChecked() == FALSE) {
+                disabledCategories.append(box->property("category").toString());
+            }
+        }
+
+        KConfigGroup cg = config();
+        cg.writeEntry("DisabledCategories", disabledCategories);
+        emit configNeedsSaving();
+
+        m_propertyFilterModel->setDisabledCategories(disabledCategories);
+        m_view->expandAll();
+    }
+}
+
 QList<QAction *> EventApplet::contextualActions()
 {
     QList<QAction *> currentActions;
@@ -515,6 +559,11 @@ QList<QAction *> EventApplet::contextualActions()
     selectResources->setIcon(KIcon("view-calendar-tasks"));
     connect(selectResources, SIGNAL(triggered()), this, SLOT(setShownResources()));
     currentActions.append(selectResources);
+
+    QAction *selectCategories = new QAction(i18n("Select shown categories"), this);
+    selectCategories->setIcon(KIcon("checkbox"));
+    connect(selectCategories, SIGNAL(triggered()), this, SLOT(setShownCategories()));
+    currentActions.append(selectCategories);
 
     return currentActions;
 }
