@@ -6,7 +6,6 @@ set(eventapplet_SRCS
     eventapplet.cpp
     eventmodel.cpp
     eventfiltermodel.cpp
-    propertyfiltermodel.cpp
     eventtreeview.cpp
     eventitemdelegate.cpp
     korganizerappletutil.cpp
