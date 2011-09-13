@@ -8,6 +8,7 @@ set(eventapplet_SRCS
     eventfiltermodel.cpp
     eventtreeview.cpp
     eventitemdelegate.cpp
+    checkboxdialog.cpp
     korganizerappletutil.cpp
     generalconfig.cpp
     formatconfig.cpp

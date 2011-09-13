@@ -23,6 +23,7 @@
 #include "korganizerappletutil.h"
 #include "eventtreeview.h"
 #include "headerdelegate.h"
+#include "checkboxdialog.h"
 
 // qt headers
 #include <QComboBox>
@@ -442,37 +443,27 @@ void EventApplet::timerExpired()
 
 void EventApplet::setShownResources()
 {
-    KDialog *dialog = new KDialog();
-    dialog->setCaption(i18n("Select Resources"));
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
-
-    QWidget *widget = new QWidget(dialog);
-    QVBoxLayout *layout = new QVBoxLayout();
-    
+    QMap<QString, QString> resourcesMap;
     Akonadi::AgentInstance::List instList = m_agentManager->instances();
     foreach (const Akonadi::AgentInstance &inst, instList) {
         QStringList agentMimeTypes = inst.type().mimeTypes();
         if (agentMimeTypes.contains(KCalCore::Event::eventMimeType()) ||
             agentMimeTypes.contains(KCalCore::Todo::todoMimeType()) ||
             agentMimeTypes.contains("text/calendar")) {
-            QCheckBox *resBox = new QCheckBox(inst.name());
-            resBox->setChecked(!disabledResources.contains(inst.identifier()));
-            resBox->setProperty("identifier", inst.identifier());
-            layout->addWidget(resBox);
+            resourcesMap[inst.name()] = inst.identifier();
         }
     }
 
-    widget->setLayout(layout);
-    dialog->setMainWidget(widget);
+    CheckBoxDialog *dialog = new CheckBoxDialog(0, disabledResources, resourcesMap);
+    dialog->setCaption(i18n("Select Resources"));
+    dialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Cancel);
+    dialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
+    dialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
+    dialog->setButtonText(KDialog::User2, i18n("Check all"));
+    dialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
 
     if (dialog->exec() == QDialog::Accepted) {
-        disabledResources.clear();
-        QList<QCheckBox *> resList = widget->findChildren<QCheckBox *>();
-        foreach (QCheckBox *box, resList) {
-            if (box->isChecked() == FALSE) {
-                disabledResources.append(box->property("identifier").toString());
-            }
-        }
+        disabledResources = dialog->disabledProperties();
 
         KConfigGroup cg = config();
         cg.writeEntry("DisabledResources", disabledResources);
@@ -485,31 +476,21 @@ void EventApplet::setShownResources()
 
 void EventApplet::setShownCategories()
 {
-    KDialog *dialog = new KDialog();
-    dialog->setCaption(i18n("Select Categories"));
-    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
-
-    QWidget *widget = new QWidget(dialog);
-    QVBoxLayout *layout = new QVBoxLayout();
-
+    QMap<QString, QString> categoriesMap;
     foreach (QString category, m_categories) {
-        QCheckBox *categoriesBox = new QCheckBox(category);
-        categoriesBox->setChecked(!disabledCategories.contains(category));
-        categoriesBox->setProperty("category", category);
-        layout->addWidget(categoriesBox);
+        categoriesMap[category] = category;
     }
 
-    widget->setLayout(layout);
-    dialog->setMainWidget(widget);
+    CheckBoxDialog *dialog = new CheckBoxDialog(0, disabledCategories, categoriesMap);
+    dialog->setCaption(i18n("Select Categories"));
+    dialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Cancel);
+    dialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
+    dialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
+    dialog->setButtonText(KDialog::User2, i18n("Check all"));
+    dialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
 
     if (dialog->exec() == QDialog::Accepted) {
-        disabledCategories.clear();
-        QList<QCheckBox *> categoriesList = widget->findChildren<QCheckBox *>();
-        foreach (QCheckBox *box, categoriesList) {
-            if (box->isChecked() == FALSE) {
-                disabledCategories.append(box->property("category").toString());
-            }
-        }
+        disabledCategories = dialog->disabledProperties();
 
         KConfigGroup cg = config();
         cg.writeEntry("DisabledCategories", disabledCategories);
