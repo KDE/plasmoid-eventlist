@@ -493,7 +493,8 @@ void EventApplet::setShownCategories()
     foreach (QString category, m_categories) {
         categoriesMap[category] = category;
     }
-
+    categoriesMap[i18n("Unspecified")] = i18n("Unspecified");
+    
     if (!categoriesDialog) {
         categoriesDialog = new CheckBoxDialog(0, disabledCategories, categoriesMap);
         categoriesDialog->setCaption(i18n("Select Categories"));
