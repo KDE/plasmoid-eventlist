@@ -28,6 +28,7 @@ public:
     CheckBoxDialog(QWidget* parent, QStringList disabledProperties, QMap<QString, QString> properties);
     ~CheckBoxDialog();
 
+    void setupCheckBoxWidget(QStringList disabledProperties, QMap<QString, QString> properties);
     QStringList disabledProperties();
 
 private slots:

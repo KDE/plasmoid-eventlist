@@ -29,8 +29,25 @@
 
 
 CheckBoxDialog::CheckBoxDialog(QWidget *parent, QStringList disabledProperties, QMap<QString, QString> properties)
-    : KDialog(parent)
+    : KDialog(parent),
+    m_checkBoxWidget(0)
 {
+    setupCheckBoxWidget(disabledProperties, properties);
+
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(slotUncheckAll()));
+    connect(this, SIGNAL(user2Clicked()), this, SLOT(slotCheckAll()));
+}
+
+CheckBoxDialog::~CheckBoxDialog()
+{
+}
+
+void CheckBoxDialog::setupCheckBoxWidget(QStringList disabledProperties, QMap<QString, QString> properties)
+{
+    if (m_checkBoxWidget) {
+        delete m_checkBoxWidget;
+    }
+
     m_checkBoxWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout();
 
@@ -46,12 +63,7 @@ CheckBoxDialog::CheckBoxDialog(QWidget *parent, QStringList disabledProperties, 
     m_checkBoxWidget->setLayout(layout);
     setMainWidget(m_checkBoxWidget);
 
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(slotUncheckAll()));
-    connect(this, SIGNAL(user2Clicked()), this, SLOT(slotCheckAll()));
-}
 
-CheckBoxDialog::~CheckBoxDialog()
-{
 }
 
 void CheckBoxDialog::slotUncheckAll()

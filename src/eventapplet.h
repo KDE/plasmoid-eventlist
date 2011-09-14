@@ -44,6 +44,7 @@ class QTimer;
 class QModelIndex;
 class QAction;
 class KConfigDialog;
+class CheckBoxDialog;
 class EventModel;
 class EventFilterModel;
 class EventItemDelegate;
@@ -74,7 +75,9 @@ private slots:
     void slotAddTodo();
     void timerExpired();
     void setShownResources();
+    void resourceDialogAccepted();
     void setShownCategories();
+    void categoriesDialogAccepted();
     void setupModel();
     void akonadiStatusChanged();
     void plasmaThemeChanged();
@@ -122,6 +125,7 @@ private:
     QTimer *m_timer;
     Akonadi::AgentManager *m_agentManager;
     QStringList disabledResources, disabledCategories, m_headerItemsList, m_categories;
+    CheckBoxDialog *resourceDialog, *categoriesDialog;
     QDateTime lastCheckTime;
     bool m_showFinishedTodos, m_autoGroupHeader;
     QString m_uid, m_appletTitle;

@@ -83,6 +83,8 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_colorConfigUi(),
     m_timer(0),
     m_agentManager(0),
+    resourceDialog(0),
+    categoriesDialog(0),
     m_openEventWatcher(0),
     m_addEventWatcher(0),
     m_addTodoWatcher(0)
@@ -454,24 +456,35 @@ void EventApplet::setShownResources()
         }
     }
 
-    CheckBoxDialog *dialog = new CheckBoxDialog(0, disabledResources, resourcesMap);
-    dialog->setCaption(i18n("Select Resources"));
-    dialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Cancel);
-    dialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
-    dialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
-    dialog->setButtonText(KDialog::User2, i18n("Check all"));
-    dialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
+    if (!resourceDialog) {
+        resourceDialog = new CheckBoxDialog(0, disabledResources, resourcesMap);
+        resourceDialog->setCaption(i18n("Select Resources"));
+        resourceDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel);
+        resourceDialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
+        resourceDialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
+        resourceDialog->setButtonText(KDialog::User2, i18n("Check all"));
+        resourceDialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
+        resourceDialog->setButtonsOrientation(Qt::Vertical);
 
-    if (dialog->exec() == QDialog::Accepted) {
-        disabledResources = dialog->disabledProperties();
-
-        KConfigGroup cg = config();
-        cg.writeEntry("DisabledResources", disabledResources);
-        emit configNeedsSaving();
-
-        m_filterModel->setExcludedResources(disabledResources);
-        m_view->expandAll();
+        connect(resourceDialog, SIGNAL(applyClicked()), this, SLOT(resourceDialogAccepted()));
+        connect(resourceDialog, SIGNAL(okClicked()), this, SLOT(resourceDialogAccepted()));
+    } else {
+        resourceDialog->setupCheckBoxWidget(disabledResources, resourcesMap);
     }
+
+    resourceDialog->show();
+}
+
+void EventApplet::resourceDialogAccepted()
+{
+    disabledResources = resourceDialog->disabledProperties();
+
+    KConfigGroup cg = config();
+    cg.writeEntry("DisabledResources", disabledResources);
+    emit configNeedsSaving();
+
+    m_filterModel->setExcludedResources(disabledResources);
+    m_view->expandAll();
 }
 
 void EventApplet::setShownCategories()
@@ -481,24 +494,35 @@ void EventApplet::setShownCategories()
         categoriesMap[category] = category;
     }
 
-    CheckBoxDialog *dialog = new CheckBoxDialog(0, disabledCategories, categoriesMap);
-    dialog->setCaption(i18n("Select Categories"));
-    dialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Cancel);
-    dialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
-    dialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
-    dialog->setButtonText(KDialog::User2, i18n("Check all"));
-    dialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
+    if (!categoriesDialog) {
+        categoriesDialog = new CheckBoxDialog(0, disabledCategories, categoriesMap);
+        categoriesDialog->setCaption(i18n("Select Categories"));
+        categoriesDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel);
+        categoriesDialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
+        categoriesDialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
+        categoriesDialog->setButtonText(KDialog::User2, i18n("Check all"));
+        categoriesDialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
+        categoriesDialog->setButtonsOrientation(Qt::Vertical);
 
-    if (dialog->exec() == QDialog::Accepted) {
-        disabledCategories = dialog->disabledProperties();
-
-        KConfigGroup cg = config();
-        cg.writeEntry("DisabledCategories", disabledCategories);
-        emit configNeedsSaving();
-
-        m_filterModel->setDisabledCategories(disabledCategories);
-        m_view->expandAll();
+        connect(categoriesDialog, SIGNAL(applyClicked()), this, SLOT(categoriesDialogAccepted()));
+        connect(categoriesDialog, SIGNAL(okClicked()), this, SLOT(categoriesDialogAccepted()));
+    } else {
+        categoriesDialog->setupCheckBoxWidget(disabledCategories, categoriesMap);
     }
+
+    categoriesDialog->show();
+}
+
+void EventApplet::categoriesDialogAccepted()
+{
+    disabledCategories = categoriesDialog->disabledProperties();
+
+    KConfigGroup cg = config();
+    cg.writeEntry("DisabledCategories", disabledCategories);
+    emit configNeedsSaving();
+
+    m_filterModel->setDisabledCategories(disabledCategories);
+    m_view->expandAll();
 }
 
 QList<QAction *> EventApplet::contextualActions()
