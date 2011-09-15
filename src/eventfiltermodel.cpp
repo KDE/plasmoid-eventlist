@@ -62,7 +62,7 @@ bool EventFilterModel::isDisabledCategory(QModelIndex idx) const
 {
     bool isDisabled = false;
     const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
-    foreach (QString disabledCategory, m_disabledCategories) {
+    foreach (const QString &disabledCategory, m_disabledCategories) {
         if (values["categories"].toStringList().contains(disabledCategory)) {
             isDisabled = true;
             break;

@@ -483,7 +483,7 @@ void EventApplet::resourceDialogAccepted()
 void EventApplet::setShownCategories()
 {
     QMap<QString, QString> categoriesMap;
-    foreach (QString category, m_categories) {
+    foreach (const QString &category, m_categories) {
         categoriesMap[category] = category;
     }
     categoriesMap[i18n("Unspecified")] = i18n("Unspecified");
