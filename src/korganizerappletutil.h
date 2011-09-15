@@ -23,6 +23,8 @@
 
 class KOrganizerAppletUtil : public QObject
 {
+    Q_OBJECT
+
 public:
     static void showEvent(const QString &uid);
     static void showAddEvent();
