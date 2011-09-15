@@ -32,9 +32,7 @@
 
 // Plasma includes
 #include <Plasma/PopupApplet>
-#include <Plasma/TreeView>
 #include <Plasma/Label>
-#include <Plasma/BusyWidget>
 #include <Plasma/ToolTipManager>
 
 #include <akonadi/agentmanager.h>
@@ -50,7 +48,6 @@ class EventFilterModel;
 class EventItemDelegate;
 class QGraphicsLinearLayout;
 class QGraphicsProxyWidget;
-class QTreeView;
 class EventTreeView;
 class KDirWatch;
 class QDBusServiceWatcher;
@@ -110,7 +107,6 @@ private:
     QGraphicsProxyWidget *proxyWidget;
     EventTreeView *m_view;
     Plasma::ToolTipContent tooltip;
-    Plasma::BusyWidget *busy;
     Plasma::Label *title;
     EventItemDelegate *m_delegate;
     GeneralConfig m_generalConfig;

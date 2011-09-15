@@ -18,9 +18,8 @@
 #include "eventtreeview.h"
 #include "eventmodel.h"
 
-#include <KDebug>
-
 #include <QModelIndex>
+#include <QMouseEvent>
 
 EventTreeView::EventTreeView(QWidget* parent)
     : QTreeView(parent)

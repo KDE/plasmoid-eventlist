@@ -23,8 +23,6 @@
 #include <QMapIterator>
 #include <QCheckBox>
 
-#include <KDebug>
-
 #include <KLocale>
 
 

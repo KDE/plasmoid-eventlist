@@ -18,9 +18,6 @@
 #include "eventitemdelegate.h"
 #include "eventmodel.h"
 
-// #include <Plasma/Svg>
-// #include <Plasma/Theme>
-
 #include <KGlobal>
 #include <KLocale>
 #include <KMacroExpanderBase>
@@ -30,8 +27,6 @@
 #include <QTextDocument>
 #include <QPainter>
 #include <QAbstractTextDocumentLayout>
-// #include <QRectF>
-// #include <QStyleOptionViewItem>
 
 EventItemDelegate::EventItemDelegate(QObject* parent, QString normal, QString todo, QString noDueDate, int dtFormat, QString dtString)
     : QStyledItemDelegate(parent),

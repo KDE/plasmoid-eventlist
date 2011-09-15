@@ -19,10 +19,9 @@
 #define EVENTTREEVIEW_H
 
 #include <QTreeView>
-#include <QMouseEvent>
 
 class QModelIndex;
-class QPoint;
+class QMouseEvent;
 
 class EventTreeView : public QTreeView
 {

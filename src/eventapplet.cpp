@@ -29,18 +29,12 @@
 #include <QComboBox>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
-#include <QHBoxLayout>
 #include <QLabel>
 #include <QToolButton>
-#include <QVBoxLayout>
-#include <QTreeView>
 #include <QModelIndex>
 #include <QTimer>
 #include <QAction>
-#include <QCheckBox>
 #include <QDateTime>
-#include <QPoint>
-#include <QCursor>
 #include <QMap>
 #include <QVariant>
 #include <QTreeWidgetItem>
@@ -55,7 +49,6 @@
 #include <KColorScheme>
 #include <KConfigDialog>
 #include <KIcon>
-#include <KIconLoader>
 #include <KStandardDirs>
 #include <KDirWatch>
 #include <KTabWidget>
