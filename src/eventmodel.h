@@ -70,7 +70,7 @@ public:
         TodoItem
     };
 
-    EventModel(QObject *parent = 0, int urgencyTime = 15, int birthdayTime = 14, QList<QColor> colorList = QList<QColor>(), int count = 0, bool autoGroupHeader = false);
+    explicit EventModel(QObject *parent = 0, int urgencyTime = 15, int birthdayTime = 14, QList<QColor> colorList = QList<QColor>(), int count = 0, bool autoGroupHeader = false);
     ~EventModel();
 
 public:
