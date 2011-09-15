@@ -326,7 +326,7 @@ QGraphicsWidget *EventApplet::graphicsWidget()
 
 void EventApplet::slotOpenEvent(const QModelIndex &index)
 {
-    m_uid = QString();
+    m_uid.clear();
 #ifdef HAS_OLD_PIM
     m_uid = m_filterModel->data(index, EventModel::UIDRole).toString();
 #else

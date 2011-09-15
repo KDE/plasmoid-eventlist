@@ -45,7 +45,7 @@ EventTreeView::~EventTreeView()
 
 void EventTreeView::mouseMoveEvent(QMouseEvent *event)
 {
-    QString tip = QString();
+    QString tip;
     idx = indexAt(event->pos());
     if (idx.isValid()) {
         tip = idx.data(EventModel::TooltipRole).toString();
@@ -56,7 +56,7 @@ void EventTreeView::mouseMoveEvent(QMouseEvent *event)
 
 void EventTreeView::mousePressEvent(QMouseEvent *event)
 {
-    QString tip = QString();
+    QString tip;
     idx = indexAt(event->pos());
     if (idx.isValid()) {
         tip = idx.data(EventModel::TooltipRole).toString();
