@@ -70,7 +70,7 @@ void CheckBoxDialog::slotUncheckAll()
 {
     QList<QCheckBox *> boxList = m_checkBoxWidget->findChildren<QCheckBox *>();
     foreach (QCheckBox *box, boxList) {
-        box->setChecked(FALSE);
+        box->setChecked(false);
     }
 }
 
@@ -78,7 +78,7 @@ void CheckBoxDialog::slotCheckAll()
 {
     QList<QCheckBox *> boxList = m_checkBoxWidget->findChildren<QCheckBox *>();
     foreach (QCheckBox *box, boxList) {
-        box->setChecked(TRUE);
+        box->setChecked(true);
     }
 }
 
@@ -88,7 +88,7 @@ QStringList CheckBoxDialog::disabledProperties()
 
     QList<QCheckBox *> boxList = m_checkBoxWidget->findChildren<QCheckBox *>();
     foreach (QCheckBox *box, boxList) {
-        if (box->isChecked() == FALSE) {
+        if (box->isChecked() == false) {
             disabled.append(box->property("prop").toString());
         }
     }

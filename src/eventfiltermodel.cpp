@@ -60,11 +60,11 @@ void EventFilterModel::setDisabledCategories(QStringList categories)
 
 bool EventFilterModel::isDisabledCategory(QModelIndex idx) const
 {
-    bool isDisabled = FALSE;
+    bool isDisabled = false;
     const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
     foreach (QString disabledCategory, m_disabledCategories) {
         if (values["categories"].toStringList().contains(disabledCategory)) {
-            isDisabled = TRUE;
+            isDisabled = true;
             break;
         }
     }
@@ -91,22 +91,22 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                     const QString cr = childIdx.data(EventModel::ResourceRole).toString();
                     if (!m_excludedResources.contains(cr) && !isDisabledCategory(childIdx)) {
                         const QMap<QString, QVariant> values = childIdx.data(Qt::DisplayRole).toMap();
-                        if (m_showFinishedTodos || values["completed"].toBool() == FALSE)
-                            return TRUE;
+                        if (m_showFinishedTodos || values["completed"].toBool() == false)
+                            return true;
                     }
                 }
-                return FALSE;
+                return false;
             } else {
                 if (!m_excludedResources.contains(resourceRole) && !isDisabledCategory(idx)) {
                     const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
-                    if (m_showFinishedTodos || values["completed"].toBool() == FALSE) {
-                        return TRUE;
+                    if (m_showFinishedTodos || values["completed"].toBool() == false) {
+                        return true;
                     }
                 }
-                return FALSE;
+                return false;
             }
         } else if (date > QDate::currentDate().addDays(m_period)) { // stuff later than ...
-            return FALSE;
+            return false;
         } else if (date < QDate::currentDate()) { // older stuff
             if (itemType == EventModel::HeaderItem) { // dont show empty header
                 if (sourceModel()->hasChildren(idx)) {
@@ -118,28 +118,28 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                             const int childType = childIdx.data(EventModel::ItemTypeRole).toInt();
                             const QMap<QString, QVariant> values = childIdx.data(Qt::DisplayRole).toMap();
                             if (childType == EventModel::TodoItem) { // dont show old finished stuff
-                                if (values["completed"].toBool() == FALSE)
-                                    return TRUE;
+                                if (values["completed"].toBool() == false)
+                                    return true;
                             } else {
                                 if (values["endDate"].toDate() >= QDate::currentDate())
-                                    return TRUE;
+                                    return true;
                             }
                         }
                     }
                 }
-                return FALSE;
+                return false;
             } else {
                 if (m_excludedResources.contains(resourceRole) || isDisabledCategory(idx)) {
-                    return FALSE;
+                    return false;
                 }
                 
                 const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
                 if (itemType == EventModel::TodoItem) {
-                    if (values["completed"].toBool() == TRUE) {
-                        return FALSE;
+                    if (values["completed"].toBool() == true) {
+                        return false;
                     }
                 } else if (values["endDate"].toDate() < QDate::currentDate()) {
-                    return FALSE;
+                    return false;
                 }
             }
         } else { // stuff from today to period
@@ -153,24 +153,24 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                         const int childType = childIdx.data(EventModel::ItemTypeRole).toInt();
                         const QMap<QString, QVariant> values = childIdx.data(Qt::DisplayRole).toMap();
                         if (childType != EventModel::TodoItem) {
-                            return TRUE;
-                        } else if (m_showFinishedTodos || values["completed"].toBool() == FALSE) {
-                            return TRUE;
+                            return true;
+                        } else if (m_showFinishedTodos || values["completed"].toBool() == false) {
+                            return true;
                         }
                     }
                 }
-                return FALSE;
+                return false;
             } else if (m_excludedResources.contains(resourceRole) || isDisabledCategory(idx)) {
-                return FALSE;
+                return false;
             } else if (itemType == EventModel::TodoItem) {
                 const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
-                if (!m_showFinishedTodos && values["completed"].toBool() == TRUE)
-                    return FALSE;
+                if (!m_showFinishedTodos && values["completed"].toBool() == true)
+                    return false;
             }
         }
     } else { // no valid date
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }

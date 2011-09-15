@@ -27,12 +27,12 @@ EventTreeView::EventTreeView(QWidget* parent)
 {
     setAttribute(Qt::WA_NoSystemBackground);
     setAutoFillBackground(false);
-    setMouseTracking(TRUE);
-    setAlternatingRowColors(TRUE);
-    setHeaderHidden(TRUE);
-    setRootIsDecorated(FALSE);
-    setAnimated(TRUE);
-    setWordWrap(TRUE);
+    setMouseTracking(true);
+    setAlternatingRowColors(true);
+    setHeaderHidden(true);
+    setRootIsDecorated(false);
+    setAnimated(true);
+    setWordWrap(true);
     setFrameShape(QFrame::NoFrame);
     setSelectionMode(QAbstractItemView::NoSelection);
     setSelectionBehavior(QAbstractItemView::SelectRows);

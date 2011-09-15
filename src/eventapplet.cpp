@@ -133,7 +133,7 @@ void EventApplet::init()
     m_todoBg.setAlphaF(cg.readEntry("TodoOpacity", 10)/100.0);
     m_colors.insert(todoColorPos, m_todoBg);
 
-    m_showFinishedTodos = cg.readEntry("ShowFinishedTodos", FALSE);
+    m_showFinishedTodos = cg.readEntry("ShowFinishedTodos", false);
     
     m_finishedTodoBg = QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0")));
     m_finishedTodoBg.setAlphaF(cg.readEntry("FinishedTodoOpacity", 10)/100.0);
@@ -167,7 +167,7 @@ void EventApplet::init()
     headerList << i18n("Next 4 weeks") << i18n("Events for the next 4 weeks") << QString::number(8);
     headerList << i18n("Later") << i18n("Events later than 4 weeks") << QString::number(29);
     m_headerItemsList = cg.readEntry("HeaderItems", headerList);
-    m_autoGroupHeader = cg.readEntry("AutoGroupHeader", FALSE);
+    m_autoGroupHeader = cg.readEntry("AutoGroupHeader", false);
 
     m_delegate = new EventItemDelegate(this, normalEventFormat, todoFormat, noDueDateFormat, dtFormat, dtString);
     m_delegate->setCategoryFormats(m_categoryFormat);
@@ -202,7 +202,7 @@ void EventApplet::setupModel()
     m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     m_filterModel->setExcludedResources(disabledResources);
     m_filterModel->setDisabledCategories(disabledCategories);
-    m_filterModel->setDynamicSortFilter(TRUE);
+    m_filterModel->setDynamicSortFilter(true);
     m_filterModel->setSourceModel(m_model);
 
     m_view->setModel(m_filterModel);
@@ -256,7 +256,7 @@ void EventApplet::plasmaThemeChanged()
     m_view->viewport()->setPalette(p);
     m_view->setPalette(p);
 
-    colorizeModel(FALSE);
+    colorizeModel(false);
 }
 
 void EventApplet::koConfigChanged()
@@ -265,7 +265,7 @@ void EventApplet::koConfigChanged()
     int opacity = cg.readEntry("KOOpacity", 10);
     setupCategoryColors(opacity);
     m_model->setCategoryColors(m_categoryColors);
-    colorizeModel(FALSE);
+    colorizeModel(false);
 }
 
 void EventApplet::akonadiStatusChanged()
@@ -436,7 +436,7 @@ void EventApplet::timerExpired()
     if (lastCheckTime.date() != QDate::currentDate()) {
         m_model->resetModel();
     } else {
-        colorizeModel(TRUE);
+        colorizeModel(true);
     }
 
     lastCheckTime = QDateTime::currentDateTime();
@@ -579,7 +579,7 @@ void EventApplet::createToolTip()
 {
     tooltip = Plasma::ToolTipContent(i18n("Upcoming Events"), "", KIcon("view-pim-tasks"));
     tooltip.setMainText(i18n("Upcoming events from Akonadi resources"));
-    tooltip.setAutohide(FALSE);
+    tooltip.setAutohide(false);
 }
 
 void EventApplet::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
@@ -628,7 +628,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
         m_generalConfig.headerWidget->addTopLevelItem(headerItem);
     }
     m_generalConfig.headerWidget->sortByColumn(2, Qt::AscendingOrder);
-    m_generalConfig.autoGroupBox->setChecked(cg.readEntry("AutoGroupHeader", FALSE));
+    m_generalConfig.autoGroupBox->setChecked(cg.readEntry("AutoGroupHeader", false));
     m_generalConfig.appletTitleEdit->setText(cg.readEntry("AppletTitle", i18n("Upcoming Events")));
     m_generalConfig.periodBox->setValue(cg.readEntry("Period", 365));
     m_generalConfig.recurringCountBox->setValue(cg.readEntry("RecurringCount", 0));
@@ -675,7 +675,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
 
     m_colorConfigUi.todoColorButton->setColor(QColor(cg.readEntry("TodoColor", QString("#FFD235"))));
     m_colorConfigUi.todoOpacity->setValue(cg.readEntry("TodoOpacity", 10));
-    m_colorConfigUi.showFinishedTodos->setChecked(cg.readEntry("ShowFinishedTodos", FALSE));
+    m_colorConfigUi.showFinishedTodos->setChecked(cg.readEntry("ShowFinishedTodos", false));
     m_colorConfigUi.finishedTodoButton->setColor(QColor(cg.readEntry("FinishedTodoColor", QString("#6FACE0"))));
     m_colorConfigUi.finishedTodoOpacity->setValue(cg.readEntry("FinishedTodoOpacity", 10));
 
@@ -811,7 +811,7 @@ void EventApplet::configAccepted()
         m_model->resetModel();
     } else if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
         oldColorHash != m_categoryColors) {
-        colorizeModel(FALSE);
+        colorizeModel(false);
     }
 
     m_view->expandAll();
@@ -865,7 +865,7 @@ void EventApplet::colorizeModel(bool timerTriggered)
                     m_model->setData(index, QVariant(QBrush(Qt::transparent)), Qt::BackgroundRole);
                 }
             } else if (itemRole == EventModel::TodoItem) {
-                if (values["completed"].toBool() == TRUE) {
+                if (values["completed"].toBool() == true) {
                     m_model->setData(index, QVariant(QBrush(m_finishedTodoBg)), Qt::BackgroundRole);
                 } else if (m_categoryColors.contains(category)) {
                     m_model->setData(index, QVariant(QBrush(m_categoryColors.value(category))), Qt::BackgroundRole);

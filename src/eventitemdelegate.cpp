@@ -67,7 +67,7 @@ QString EventItemDelegate::displayText(const QVariant &value, const QLocale &loc
                 return KMacroExpander::expandMacros(m_normal, eventHash(data));
             break;
         case EventModel::TodoItem:
-            if (data["hasDueDate"].toBool() == FALSE)
+            if (data["hasDueDate"].toBool() == false)
                 return KMacroExpander::expandMacros(m_noDueDate, todoHash(data));
             else
                 return KMacroExpander::expandMacros(m_todo, todoHash(data));

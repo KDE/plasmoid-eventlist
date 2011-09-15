@@ -388,7 +388,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
     QString category = values["mainCategory"].toString();
 
     // dont add todos starting later than a year
-    if (values["hasDueDate"].toBool() == TRUE && values["dueDate"].toDate() > QDate::currentDate().addDays(365)) {
+    if (values["hasDueDate"].toBool() == true && values["dueDate"].toDate() > QDate::currentDate().addDays(365)) {
         return;
     }
 
@@ -410,7 +410,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
             todoItem->setData(values["itemid"], ItemIDRole);
             todoItem->setData(values["resource"], ResourceRole);
             todoItem->setData(values["tooltip"], TooltipRole);
-            if (values["completed"].toBool() == TRUE) {
+            if (values["completed"].toBool() == true) {
                 todoItem->setBackground(QBrush(finishedTodoBg));
             } else if (m_categoryColors.contains(category)) {
                 todoItem->setBackground(QBrush(m_categoryColors.value(category)));
@@ -433,7 +433,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
         todoItem->setData(values["itemid"], ItemIDRole);
         todoItem->setData(values["resource"], ResourceRole);
         todoItem->setData(values["tooltip"], TooltipRole);
-        if (values["completed"].toBool() == TRUE) {
+        if (values["completed"].toBool() == true) {
             todoItem->setBackground(QBrush(finishedTodoBg));
         } else if (m_categoryColors.contains(category)) {
             todoItem->setBackground(QBrush(m_categoryColors.value(category)));
@@ -518,13 +518,13 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     values["recurDates"] = recurDates;
 
     if (event->customProperty("KABC", "BIRTHDAY") == QString("YES") || categories.contains(i18n("Birthday")) || categories.contains("Birthday")) {
-        values["isBirthday"] = QVariant(TRUE);
+        values["isBirthday"] = QVariant(true);
     } else {
-        values["isBirthday"] = QVariant(FALSE);
+        values["isBirthday"] = QVariant(false);
     }
 
-    event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(TRUE) : QVariant(FALSE);
-    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), event, event->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(true) : QVariant(false);
+    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), event, event->dtStart().date(), true, KDateTime::Spec::LocalZone());
 
     return values;
 }
@@ -553,21 +553,21 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
     values["completed"] = todo->isCompleted();
     values["percent"] = todo->percentComplete();
     if (todo->hasStartDate()) {
-        values["startDate"] = todo->dtStart(FALSE).dateTime().toLocalTime();
-        values["hasStartDate"] = TRUE;
+        values["startDate"] = todo->dtStart(false).dateTime().toLocalTime();
+        values["hasStartDate"] = true;
     } else {
         values["startDate"] = QDateTime();
-        values["hasStartDate"] = FALSE;
+        values["hasStartDate"] = false;
     }
     values["completedDate"] = todo->completed().dateTime().toLocalTime();
-    values["inProgress"] = todo->isInProgress(FALSE);
+    values["inProgress"] = todo->isInProgress(false);
     values["isOverdue"] = todo->isOverdue();
     if (todo->hasDueDate()) {
         values["dueDate"] = todo->dtDue().dateTime().toLocalTime();
-        values["hasDueDate"] = TRUE;
+        values["hasDueDate"] = true;
     } else {
         values["dueDate"] = QDateTime::currentDateTime().addDays(366);
-        values["hasDueDate"] = FALSE;
+        values["hasDueDate"] = false;
     }
 
     bool recurs = todo->recurs();
@@ -583,7 +583,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
     }
     values["recurDates"] = recurDates;
 
-    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), todo, todo->dtStart().date(), TRUE, KDateTime::Spec::LocalZone());
+    values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), todo, todo->dtStart().date(), true, KDateTime::Spec::LocalZone());
 
     return values;
 }
