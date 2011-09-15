@@ -15,8 +15,8 @@
  *   Copyright (C) 2010 by gerdfleischer <gerdfleischer@web.de>
  */
 
-#include "eventmodel.h"
 #include "eventfiltermodel.h"
+#include "eventmodel.h"
 
 #include <QVariant>
 #include <QDate>
