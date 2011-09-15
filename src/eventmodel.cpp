@@ -292,7 +292,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
     if (values["recurs"].toBool()) {
         int c = 0;
         QList<QVariant> dtTimes = values["recurDates"].toList();
-        foreach (QVariant eventDtTime, dtTimes) {
+        foreach (const QVariant &eventDtTime, dtTimes) {
             if (recurringCount != 0 && c >= recurringCount)
                 break;
 
@@ -395,7 +395,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
     if (values["recurs"].toBool()) {
         int c = 0;
         QList<QVariant> dtTimes = values["recurDates"].toList();
-        foreach (QVariant eventDtTime, dtTimes) {
+        foreach (const QVariant &eventDtTime, dtTimes) {
             if (recurringCount != 0 && c >= recurringCount)
                 break;
 
@@ -511,7 +511,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
         KCalCore::Recurrence *r = event->recurrence();
         KCalCore::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
         dtTimes.sortUnique();
-        foreach (KDateTime t, dtTimes) {
+        foreach (const KDateTime &t, dtTimes) {
             recurDates << QVariant(t.dateTime().toLocalTime());
         }
     }
@@ -577,7 +577,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
         KCalCore::Recurrence *r = todo->recurrence();
         KCalCore::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
         dtTimes.sortUnique();
-        foreach (KDateTime t, dtTimes) {
+        foreach (const KDateTime &t, dtTimes) {
             recurDates << QVariant(t.dateTime().toLocalTime());
         }
     }
