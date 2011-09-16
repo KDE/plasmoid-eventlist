@@ -46,7 +46,7 @@ void GeneralConfig::slotAddHeader()
     }
 
     QStringList itemText;
-    itemText << i18n("Title") << QString("Your tooltip") << QString::number(begin);
+    itemText << i18nc("Header item title", "Title") << i18nc("Header item tooltip", "Your tooltip") << QString::number(begin);
     TreeWidgetItem *headerItem = new TreeWidgetItem(itemText);
     headerItem->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEditable|Qt::ItemIsEnabled);
     headerWidget->addTopLevelItem(headerItem);

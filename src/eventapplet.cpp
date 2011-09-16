@@ -532,7 +532,7 @@ QList<QAction *> EventApplet::contextualActions()
                 actionTitle.truncate(24);
                 actionTitle.append("...");
             }
-            QAction *openEvent = new QAction(i18n("Open \"%1\"", actionTitle), this);
+            QAction *openEvent = new QAction(i18nc("Open incidence", "Open \"%1\"", actionTitle), this);
             openEvent->setIcon(KIcon("document-edit"));
             connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
             currentActions.append(openEvent);
@@ -607,7 +607,7 @@ void EventApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 
-    parent->addPage(generalWidget, i18n("General"), "view-list-tree");
+    parent->addPage(generalWidget, i18nc("general configuration", "General"), "view-list-tree");
     parent->addPage(formatTabs, i18n("Text Format"), "format-text-bold");
     parent->addPage(colorWidget, i18n("Colors"), "fill-color");
 
