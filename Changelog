@@ -1,3 +1,9 @@
+0.5.90 (0.6 beta)
+- option to autogroup incidences by date
+- add filtering by category
+- add apply, check/uncheck buttons to filter dialogs
+- fixes suggested by krazy
+
 0.5
 - fix showing empty header containing hidden events
 - use more descriptive name() than resource() for the tooltip string
