@@ -34,9 +34,11 @@ public:
 private slots:
     void slotUncheckAll();
     void slotCheckAll();
+    void resetProperties();
 
 private:
     QWidget *m_checkBoxWidget;
+    QStringList m_disabledProperties;
 };
 
 #endif

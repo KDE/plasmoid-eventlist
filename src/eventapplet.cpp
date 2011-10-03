@@ -452,7 +452,7 @@ void EventApplet::setShownResources()
     if (!resourceDialog) {
         resourceDialog = new CheckBoxDialog(0, disabledResources, resourcesMap);
         resourceDialog->setCaption(i18n("Select Resources"));
-        resourceDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel);
+        resourceDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Reset);
         resourceDialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
         resourceDialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
         resourceDialog->setButtonText(KDialog::User2, i18n("Check all"));
@@ -491,7 +491,7 @@ void EventApplet::setShownCategories()
     if (!categoriesDialog) {
         categoriesDialog = new CheckBoxDialog(0, disabledCategories, categoriesMap);
         categoriesDialog->setCaption(i18n("Select Categories"));
-        categoriesDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel);
+        categoriesDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Reset);
         categoriesDialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
         categoriesDialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
         categoriesDialog->setButtonText(KDialog::User2, i18n("Check all"));

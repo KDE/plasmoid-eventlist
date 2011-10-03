@@ -34,6 +34,7 @@ CheckBoxDialog::CheckBoxDialog(QWidget *parent, QStringList disabledProperties, 
 
     connect(this, SIGNAL(user1Clicked()), this, SLOT(slotUncheckAll()));
     connect(this, SIGNAL(user2Clicked()), this, SLOT(slotCheckAll()));
+    connect(this, SIGNAL(resetClicked()), this, SLOT(resetProperties()));
 }
 
 CheckBoxDialog::~CheckBoxDialog()
@@ -42,6 +43,8 @@ CheckBoxDialog::~CheckBoxDialog()
 
 void CheckBoxDialog::setupCheckBoxWidget(QStringList disabledProperties, QMap<QString, QString> properties)
 {
+    m_disabledProperties = disabledProperties;
+
     if (m_checkBoxWidget) {
         delete m_checkBoxWidget;
     }
@@ -77,6 +80,14 @@ void CheckBoxDialog::slotCheckAll()
     QList<QCheckBox *> boxList = m_checkBoxWidget->findChildren<QCheckBox *>();
     foreach (QCheckBox *box, boxList) {
         box->setChecked(true);
+    }
+}
+
+void CheckBoxDialog::resetProperties()
+{
+    QList<QCheckBox *> boxList = m_checkBoxWidget->findChildren<QCheckBox *>();
+    foreach (QCheckBox *box, boxList) {
+        box->setChecked(!m_disabledProperties.contains(box->property("prop").toString()));
     }
 }
 
