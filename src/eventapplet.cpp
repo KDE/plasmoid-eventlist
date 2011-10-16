@@ -135,14 +135,6 @@ void EventApplet::init()
     int opacity = cg.readEntry("KOOpacity", 10);
     setupCategoryColors(opacity);
 
-    QString koConfigPath = KStandardDirs::locateLocal("config", "korganizerrc");
-    m_categoryColorWatch = new KDirWatch(this);
-    m_categoryColorWatch->addFile(koConfigPath);
-    connect(m_categoryColorWatch, SIGNAL(created(const QString &)), this, SLOT(koConfigChanged()));
-    connect(m_categoryColorWatch, SIGNAL(dirty(const QString &)), this, SLOT(koConfigChanged()));
-
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(plasmaThemeChanged()));
-    
     QStringList keys, values;
     keys << i18n("Birthday") << i18n("Holiday");
     values << QString("%{startDate} %{yearsSince}. %{summary}") << QString("%{startDate} %{summary} to %{endDate}");
@@ -201,6 +193,14 @@ void EventApplet::setupModel()
     m_view->setModel(m_filterModel);
     m_view->expandAll();
     connect(m_model, SIGNAL(modelNeedsExpanding()), m_view, SLOT(expandAll()));
+
+    QString koConfigPath = KStandardDirs::locateLocal("config", "korganizerrc");
+    m_categoryColorWatch = new KDirWatch(this);
+    m_categoryColorWatch->addFile(koConfigPath);
+    connect(m_categoryColorWatch, SIGNAL(created(const QString &)), this, SLOT(koConfigChanged()));
+    connect(m_categoryColorWatch, SIGNAL(dirty(const QString &)), this, SLOT(koConfigChanged()));
+
+    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(plasmaThemeChanged()));
 
     m_timer->start(2 * 60 * 1000);
 
