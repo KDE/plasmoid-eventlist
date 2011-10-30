@@ -42,6 +42,7 @@ signals:
     void tooltipUpdated(QString);
 
 private:
+    QString tip;
     QModelIndex idx;
 };
 

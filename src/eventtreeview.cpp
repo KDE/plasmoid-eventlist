@@ -44,24 +44,32 @@ EventTreeView::~EventTreeView()
 
 void EventTreeView::mouseMoveEvent(QMouseEvent *event)
 {
-    QString tip;
+    QString oldTip = tip;
+
     idx = indexAt(event->pos());
     if (idx.isValid()) {
         tip = idx.data(EventModel::TooltipRole).toString();
+    } else {
+        tip.clear();
     }
     
-    emit tooltipUpdated(tip);
+    if (tip != oldTip)
+        emit tooltipUpdated(tip);
 }
 
 void EventTreeView::mousePressEvent(QMouseEvent *event)
 {
-    QString tip;
+    QString oldTip = tip;
+
     idx = indexAt(event->pos());
     if (idx.isValid()) {
         tip = idx.data(EventModel::TooltipRole).toString();
+    } else {
+        tip.clear();
     }
 
-    emit tooltipUpdated(tip);
+    if (tip != oldTip)
+        emit tooltipUpdated(tip);
 }
 
 QModelIndex EventTreeView::indexAtCursor()
