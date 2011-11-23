@@ -23,9 +23,6 @@
 #include <QMapIterator>
 #include <QCheckBox>
 
-#include <KLocale>
-
-
 CheckBoxDialog::CheckBoxDialog(QWidget *parent, QStringList disabledProperties, QMap<QString, QString> properties)
     : KDialog(parent),
     m_checkBoxWidget(0)
@@ -60,6 +57,8 @@ void CheckBoxDialog::setupCheckBoxWidget(QStringList disabledProperties, QMap<QS
         layout->addWidget(propBox);
         ++i;
     }
+
+    layout->addStretch(0);
 
     m_checkBoxWidget->setLayout(layout);
     setMainWidget(m_checkBoxWidget);
