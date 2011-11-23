@@ -300,8 +300,8 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             eventItem->setForeground(QBrush(textColor));
             data["startDate"] = eventDtTime;
 
-            int d = values["startDate"].toDateTime().daysTo(values["endDate"].toDateTime());
-            data["endDate"] = eventDtTime.toDateTime().addDays(d);
+            int d = values["startDate"].toDateTime().secsTo(values["endDate"].toDateTime());
+            data["endDate"] = eventDtTime.toDateTime().addSecs(d);
 
             QDate itemDt = eventDtTime.toDate();
             if (values["isBirthday"].toBool()) {
