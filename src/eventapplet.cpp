@@ -76,6 +76,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_colorConfigUi(),
     m_timer(0),
     m_agentManager(0),
+    incidenceTypesDialog(0),
     resourceDialog(0),
     categoriesDialog(0),
     m_openEventWatcher(0),
@@ -101,6 +102,7 @@ void EventApplet::init()
 {
     KConfigGroup cg = config();
 
+    disabledTypes = cg.readEntry("DisabledIncidenceTypes", QStringList());
     disabledResources = cg.readEntry("DisabledResources", QStringList());
     disabledCategories = cg.readEntry("DisabledCategories", QStringList());
 
@@ -185,6 +187,7 @@ void EventApplet::setupModel()
     m_filterModel = new EventFilterModel(this);
     m_filterModel->setPeriod(m_period);
     m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
+    m_filterModel->setDisabledTypes(disabledTypes);
     m_filterModel->setExcludedResources(disabledResources);
     m_filterModel->setDisabledCategories(disabledCategories);
     m_filterModel->setDynamicSortFilter(true);
@@ -436,6 +439,43 @@ void EventApplet::timerExpired()
     m_timer->start(2 * 60 * 1000);
 }
 
+void EventApplet::setIncidenceTypes()
+{
+    QMap<QString, QString> incidenceTypesMap;
+    incidenceTypesMap[i18n("Events")] = QString("events");
+    incidenceTypesMap[i18n("Todos")] = QString("todos");
+
+    if (!incidenceTypesDialog) {
+        incidenceTypesDialog = new CheckBoxDialog(0, disabledTypes, incidenceTypesMap);
+        incidenceTypesDialog->setCaption(i18n("Select Incidences"));
+        incidenceTypesDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Reset);
+        incidenceTypesDialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
+        incidenceTypesDialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
+        incidenceTypesDialog->setButtonText(KDialog::User2, i18n("Check all"));
+        incidenceTypesDialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
+        incidenceTypesDialog->setButtonsOrientation(Qt::Vertical);
+
+        connect(incidenceTypesDialog, SIGNAL(applyClicked()), this, SLOT(incidenceTypesDialogAccepted()));
+        connect(incidenceTypesDialog, SIGNAL(okClicked()), this, SLOT(incidenceTypesDialogAccepted()));
+    } else {
+        incidenceTypesDialog->setupCheckBoxWidget(disabledTypes, incidenceTypesMap);
+    }
+
+    incidenceTypesDialog->show();
+}
+
+void EventApplet::incidenceTypesDialogAccepted()
+{
+    disabledTypes = incidenceTypesDialog->disabledProperties();
+
+    KConfigGroup cg = config();
+    cg.writeEntry("DisabledIncidenceTypes", disabledTypes);
+    emit configNeedsSaving();
+
+    m_filterModel->setDisabledTypes(disabledTypes);
+    m_view->expandAll();
+}
+
 void EventApplet::setShownResources()
 {
     QMap<QString, QString> resourcesMap;
@@ -548,6 +588,11 @@ QList<QAction *> EventApplet::contextualActions()
     newTodo->setIcon(KIcon("view-task-add"));
     connect(newTodo, SIGNAL(triggered()), this, SLOT(slotAddTodo()));
     currentActions.append(newTodo);
+
+    QAction *selectIncidenceTypes = new QAction(i18n("Select shown incidences"), this);
+    selectIncidenceTypes->setIcon(KIcon("view-choose"));
+    connect(selectIncidenceTypes, SIGNAL(triggered()), this, SLOT(setIncidenceTypes()));
+    currentActions.append(selectIncidenceTypes);
 
     QAction *selectResources = new QAction(i18n("Select shown resources"), this);
     selectResources->setIcon(KIcon("view-calendar-tasks"));

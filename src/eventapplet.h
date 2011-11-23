@@ -71,6 +71,8 @@ private slots:
     void slotAddEvent();
     void slotAddTodo();
     void timerExpired();
+    void setIncidenceTypes();
+    void incidenceTypesDialogAccepted();
     void setShownResources();
     void resourceDialogAccepted();
     void setShownCategories();
@@ -120,8 +122,8 @@ private:
     QList<QColor> m_colors;
     QTimer *m_timer;
     Akonadi::AgentManager *m_agentManager;
-    QStringList disabledResources, disabledCategories, m_headerItemsList, m_categories;
-    CheckBoxDialog *resourceDialog, *categoriesDialog;
+    QStringList disabledTypes, disabledResources, disabledCategories, m_headerItemsList, m_categories;
+    CheckBoxDialog *incidenceTypesDialog, *resourceDialog, *categoriesDialog;
     QDateTime lastCheckTime;
     bool m_showFinishedTodos, m_autoGroupHeader;
     QString m_uid, m_appletTitle;

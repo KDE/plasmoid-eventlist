@@ -44,6 +44,13 @@ void EventFilterModel::setShowFinishedTodos(bool showFinishedTodos)
     invalidateFilter();
 }
 
+void EventFilterModel::setDisabledTypes(QStringList types)
+{
+    m_disabledTypes = types;
+    m_disabledTypes.sort();
+    invalidateFilter();
+}
+
 void EventFilterModel::setExcludedResources(QStringList resources)
 {
     m_excludedResources = resources;
@@ -56,6 +63,21 @@ void EventFilterModel::setDisabledCategories(QStringList categories)
     m_disabledCategories = categories;
     m_disabledCategories.sort();
     invalidateFilter();
+}
+
+bool EventFilterModel::isDisabledType(QModelIndex idx) const
+{
+    bool isDisabled = false;
+    const int type = idx.data(EventModel::ItemTypeRole).toInt();
+    if (type == EventModel::NormalItem || type == EventModel::BirthdayItem || type == EventModel::AnniversaryItem) {
+        if (m_disabledTypes.contains("events"))
+            isDisabled = true;
+    } else if (type == EventModel::TodoItem) {
+        if (m_disabledTypes.contains("todos"))
+            isDisabled = true;
+    }
+
+    return isDisabled;
 }
 
 bool EventFilterModel::isDisabledCategory(QModelIndex idx) const
@@ -89,7 +111,7 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                 for (int row = 0; row < rows; ++ row) { // if the header would be empty dont show it
                     QModelIndex childIdx = sourceModel()->index(row, 0, idx);
                     const QString cr = childIdx.data(EventModel::ResourceRole).toString();
-                    if (!m_excludedResources.contains(cr) && !isDisabledCategory(childIdx)) {
+                    if (!m_excludedResources.contains(cr) && !isDisabledType(childIdx) && !isDisabledCategory(childIdx)) {
                         const QMap<QString, QVariant> values = childIdx.data(Qt::DisplayRole).toMap();
                         if (m_showFinishedTodos || values["completed"].toBool() == false)
                             return true;
@@ -97,7 +119,7 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                 }
                 return false;
             } else {
-                if (!m_excludedResources.contains(resourceRole) && !isDisabledCategory(idx)) {
+                if (!m_excludedResources.contains(resourceRole) && !isDisabledType(idx) && !isDisabledCategory(idx)) {
                     const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
                     if (m_showFinishedTodos || values["completed"].toBool() == false) {
                         return true;
@@ -114,7 +136,7 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                     for (int row = 0; row < rows; ++row) {
                         QModelIndex childIdx = sourceModel()->index(row, 0, idx);
                         const QString cr = childIdx.data(EventModel::ResourceRole).toString();
-                        if (!m_excludedResources.contains(cr) && !isDisabledCategory(childIdx)) {
+                        if (!m_excludedResources.contains(cr) && !isDisabledType(childIdx) && !isDisabledCategory(childIdx)) {
                             const int childType = childIdx.data(EventModel::ItemTypeRole).toInt();
                             const QMap<QString, QVariant> values = childIdx.data(Qt::DisplayRole).toMap();
                             if (childType == EventModel::TodoItem) { // dont show old finished stuff
@@ -129,7 +151,7 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                 }
                 return false;
             } else {
-                if (m_excludedResources.contains(resourceRole) || isDisabledCategory(idx)) {
+                if (m_excludedResources.contains(resourceRole) || isDisabledType(idx) || isDisabledCategory(idx)) {
                     return false;
                 }
                 
@@ -149,7 +171,7 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                     QModelIndex childIdx = sourceModel()->index(row, 0, idx);
                     const QString cr = childIdx.data(EventModel::ResourceRole).toString();
                     const QDate cd = childIdx.data(EventModel::SortRole).toDate();
-                    if ((!m_excludedResources.contains(cr) && !isDisabledCategory(childIdx)) && cd <= QDate::currentDate().addDays(m_period)) {
+                    if ((!m_excludedResources.contains(cr) && !isDisabledType(childIdx) && !isDisabledCategory(childIdx)) && cd <= QDate::currentDate().addDays(m_period)) {
                         const int childType = childIdx.data(EventModel::ItemTypeRole).toInt();
                         const QMap<QString, QVariant> values = childIdx.data(Qt::DisplayRole).toMap();
                         if (childType != EventModel::TodoItem) {
@@ -160,7 +182,7 @@ bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourc
                     }
                 }
                 return false;
-            } else if (m_excludedResources.contains(resourceRole) || isDisabledCategory(idx)) {
+            } else if (m_excludedResources.contains(resourceRole) || isDisabledType(idx) || isDisabledCategory(idx)) {
                 return false;
             } else if (itemType == EventModel::TodoItem) {
                 const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
