@@ -167,11 +167,13 @@ void EventApplet::init()
     lastCheckTime = QDateTime::currentDateTime();
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
-    QTimer::singleShot(0, this, SLOT(setupModel()));
+    QTimer::singleShot(5000, this, SLOT(setupModel()));
+    setBusy(true);
 }
 
 void EventApplet::setupModel()
 {
+    setBusy(false);
     Akonadi::Control::widgetNeedsAkonadi(m_view);
 
     m_agentManager = Akonadi::AgentManager::self();
