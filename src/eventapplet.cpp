@@ -150,7 +150,7 @@ void EventApplet::init()
     QStringList headerList;
     headerList << i18n("Today") << i18n("Events of today") << QString::number(0);
     headerList << i18n("Tomorrow") << i18n("Events for tomorrow") << QString::number(1);
-    headerList << i18n("Week") << i18n("Events of the next week") << QString::number(2);
+    headerList << i18n("Next 7 days") << i18n("Events of the next 7 days") << QString::number(2);
     headerList << i18n("Next 4 weeks") << i18n("Events for the next 4 weeks") << QString::number(8);
     headerList << i18n("Later") << i18n("Events later than 4 weeks") << QString::number(29);
     m_headerItemsList = cg.readEntry("HeaderItems", headerList);
