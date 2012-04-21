@@ -1,3 +1,7 @@
+0.5.96 (0.6 rc)
+- add 5s delay to model init to workaround problem with 4.8.2
+- clarify title and tooltip for next 7 days
+
 0.5.95 (0.6 rc)
 - option to filter only events/todos
 - reset button in filter dialogs
