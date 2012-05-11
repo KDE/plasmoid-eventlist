@@ -144,7 +144,7 @@ QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> dat
     dataHash.insert("yearsSince", data["yearsSince"].toString());
     dataHash.insert("resourceName", data["resourceName"].toString());
     dataHash.insert("mainCategory", data["mainCategory"].toString());
-    dataHash.insert("categories", data["categories"].toString());
+    dataHash.insert("categories", data["categories"].toStringList().join(", "));
     dataHash.insert("tab", "\t");
 
     return dataHash;
@@ -162,7 +162,7 @@ QHash<QString, QString> EventItemDelegate::todoHash(QMap<QString, QVariant> data
     dataHash.insert("location", data["location"].toString());
     dataHash.insert("resourceName", data["resourceName"].toString());
     dataHash.insert("mainCategory", data["mainCategory"].toString());
-    dataHash.insert("categories", data["categories"].toString());
+    dataHash.insert("categories", data["categories"].toStringList().join(", "));
     dataHash.insert("percent", QString::number(data["percent"].toInt()));
     dataHash.insert("tab", "\t");
 

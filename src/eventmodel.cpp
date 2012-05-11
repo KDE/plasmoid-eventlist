@@ -496,7 +496,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
         values["categories"] = i18n("Unspecified");
         values["mainCategory"] = i18n("Unspecified");
     } else {
-        values["categories"] = event->categoriesStr();
+        values["categories"] = categories;
         values["mainCategory"] = categories.first();
     }
 
@@ -546,7 +546,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
         values["categories"] = i18n("Unspecified");
         values["mainCategory"] = i18n("Unspecified");
     } else {
-        values["categories"] = todo->categoriesStr();
+        values["categories"] = categories;
         values["mainCategory"] = categories.first();
     }
 

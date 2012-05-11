@@ -82,16 +82,12 @@ bool EventFilterModel::isDisabledType(QModelIndex idx) const
 
 bool EventFilterModel::isDisabledCategory(QModelIndex idx) const
 {
-    bool isDisabled = false;
     const QMap<QString, QVariant> values = idx.data(Qt::DisplayRole).toMap();
-    foreach (const QString &disabledCategory, m_disabledCategories) {
-        if (values["categories"].toStringList().contains(disabledCategory)) {
-            isDisabled = true;
-            break;
-        }
-    }
+    QStringList itemCategories = values["categories"].toStringList();
+    QStringList allCategories = m_disabledCategories + itemCategories;
 
-    return isDisabled;
+    bool allItemCategoriesDisabled = allCategories.removeDuplicates() == itemCategories.count();
+    return allItemCategoriesDisabled;
 }
 
 bool EventFilterModel::filterAcceptsRow( int sourceRow, const QModelIndex &sourceParent ) const
