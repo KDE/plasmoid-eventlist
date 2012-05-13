@@ -174,7 +174,7 @@ void EventApplet::init()
 void EventApplet::setupModel()
 {
     setBusy(false);
-    Akonadi::Control::widgetNeedsAkonadi(m_view);
+//     Akonadi::Control::widgetNeedsAkonadi(m_view);
 
     m_agentManager = Akonadi::AgentManager::self();
 
