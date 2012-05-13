@@ -1,3 +1,7 @@
+next
+- comment out the widgetNeedsAkonadi Overlay
+- fix wrong filtering with items with more than one category
+
 0.5.96 (0.6 rc)
 - add 5s delay to model init to workaround problem with 4.8.2
 - clarify title and tooltip for next 7 days
