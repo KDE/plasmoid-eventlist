@@ -65,8 +65,10 @@ public:
     virtual QList<QAction *> contextualActions();
 
 private slots:
-    void slotOpenEvent(const QModelIndex &index);
     void slotUpdateTooltip(QString);
+    void kieOpenEventFromMenu();
+    void slotKieAddEvent();
+    void slotKieAddTodo();
     void openEventFromMenu();
     void slotAddEvent();
     void slotAddTodo();
@@ -127,6 +129,7 @@ private:
     QDateTime lastCheckTime;
     bool m_showFinishedTodos, m_autoGroupHeader;
     QString m_uid, m_appletTitle;
+    QModelIndex m_indexAtCursor;
     QDBusServiceWatcher *m_openEventWatcher, *m_addEventWatcher, *m_addTodoWatcher;
 };
 

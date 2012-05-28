@@ -13,11 +13,6 @@ include(FindKdepimLibs)
 set(CMAKE_REQUIRED_DEFINITIONS ${_KDE4_PLATFORM_DEFINITIONS})
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
-if(HAS_OLD_PIM)
-    add_definitions(-DHAS_OLD_PIM)
-    message("-- Compiling for older KDE PIM 4.4")
-endif(HAS_OLD_PIM)
-
 include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     ${KDE4_INCLUDES}

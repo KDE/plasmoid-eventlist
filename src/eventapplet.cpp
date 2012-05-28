@@ -53,6 +53,7 @@
 #include <KDirWatch>
 #include <KTabWidget>
 #include <KToolInvocation>
+#include <KProcess>
 
 // plasma headers
 #include <Plasma/Theme>
@@ -322,15 +323,30 @@ QGraphicsWidget *EventApplet::graphicsWidget()
     return m_graphicsWidget;
 }
 
-void EventApplet::slotOpenEvent(const QModelIndex &index)
+void EventApplet::kieOpenEventFromMenu()
 {
-    m_uid.clear();
-#ifdef HAS_OLD_PIM
-    m_uid = m_filterModel->data(index, EventModel::UIDRole).toString();
-#else
-    m_uid = m_filterModel->data(index, EventModel::ItemIDRole).toString();
-#endif
+    if (m_indexAtCursor.isValid()) {
+        const QStringList args(m_filterModel->data(m_indexAtCursor, EventModel::ItemIDRole).toString());
+        KProcess::startDetached(KStandardDirs::findExe("kincidenceeditor"), args);
+    }
+}
 
+void EventApplet::slotKieAddEvent()
+{
+    const QStringList args("--new-event");
+    KProcess::startDetached(KStandardDirs::findExe("kincidenceeditor"), args);
+}
+
+void EventApplet::slotKieAddTodo()
+{
+    const QStringList args("--new-todo");
+    KProcess::startDetached(KStandardDirs::findExe("kincidenceeditor"), args);
+}
+
+void EventApplet::openEventFromMenu()
+{
+    m_uid = m_filterModel->data(m_indexAtCursor, EventModel::ItemIDRole).toString();
+    
     if (!m_openEventWatcher) {
         m_openEventWatcher = new QDBusServiceWatcher("org.kde.korganizer",
                                                      QDBusConnection::sessionBus(),
@@ -360,11 +376,6 @@ void EventApplet::korganizerStartedOpenEvent(const QString &)
 void EventApplet::timedOpenEvent()
 {
     KOrganizerAppletUtil::showEvent(m_uid);    
-}
-
-void EventApplet::openEventFromMenu()
-{
-    slotOpenEvent(m_view->indexAtCursor());
 }
 
 void EventApplet::slotAddEvent()
@@ -565,31 +576,63 @@ QList<QAction *> EventApplet::contextualActions()
 {
     QList<QAction *> currentActions;
 
-    QModelIndex idx = m_view->indexAtCursor();
-    if (idx.isValid()) {
-        QVariant type = idx.data(EventModel::ItemTypeRole);
+    QVariant type;
+    QString actionTitle;
+    m_indexAtCursor = m_view->indexAtCursor();
+    if (m_indexAtCursor.isValid()) {
+        type = m_indexAtCursor.data(EventModel::ItemTypeRole);
         if (type.toInt() == EventModel::NormalItem || type.toInt() == EventModel::TodoItem) {
-            QString actionTitle = m_view->summaryAtCursor();
+            actionTitle = m_view->summaryAtCursor();
             if (actionTitle.length() > 24) {
                 actionTitle.truncate(24);
                 actionTitle.append("...");
             }
-            QAction *openEvent = new QAction(i18nc("Open incidence", "Open \"%1\"", actionTitle), this);
-            openEvent->setIcon(KIcon("document-edit"));
-            connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
-            currentActions.append(openEvent);
         }
     }
 
-    QAction *newEvent = new QAction(i18n("Add new event"), this);
+    if (KStandardDirs::findExe("kincidenceeditor") != QString()) {
+        if (!actionTitle.isEmpty()) {
+            QAction *kieOpenEvent = new QAction(i18nc("Open incidence", "Open \"%1\"", actionTitle), this);
+            kieOpenEvent->setIcon(KIcon("document-edit"));
+            connect(kieOpenEvent, SIGNAL(triggered()), this, SLOT(kieOpenEventFromMenu()));
+            currentActions.append(kieOpenEvent);
+        }
+
+        QAction *newKieEvent = new QAction(i18n("Add new event"), this);
+        newKieEvent->setIcon(KIcon("appointment-new"));
+        connect(newKieEvent, SIGNAL(triggered()), this, SLOT(slotKieAddEvent()));
+        currentActions.append(newKieEvent);
+
+        QAction *newKieTodo = new QAction(i18n("Add new todo"), this);
+        newKieTodo->setIcon(KIcon("view-task-add"));
+        connect(newKieTodo, SIGNAL(triggered()), this, SLOT(slotKieAddTodo()));
+        currentActions.append(newKieTodo);
+
+        QAction *kieSeparator = new QAction(this);
+        kieSeparator->setSeparator(true);
+        currentActions.append(kieSeparator);
+    }
+
+    if (!actionTitle.isEmpty()) {
+        QAction *openEvent = new QAction(i18nc("Open incidence", "Open \"%1\" with KOrganizer", actionTitle), this);
+        openEvent->setIcon(KIcon("document-edit"));
+        connect(openEvent, SIGNAL(triggered()), this, SLOT(openEventFromMenu()));
+        currentActions.append(openEvent);
+    }
+
+    QAction *newEvent = new QAction(i18n("Add new event with KOrganizer"), this);
     newEvent->setIcon(KIcon("appointment-new"));
     connect(newEvent, SIGNAL(triggered()), this, SLOT(slotAddEvent()));
     currentActions.append(newEvent);
 
-    QAction *newTodo = new QAction(i18n("Add new todo"), this);
+    QAction *newTodo = new QAction(i18n("Add new todo with KOrganizer"), this);
     newTodo->setIcon(KIcon("view-task-add"));
     connect(newTodo, SIGNAL(triggered()), this, SLOT(slotAddTodo()));
     currentActions.append(newTodo);
+
+    QAction *koSeparator = new QAction(this);
+    koSeparator->setSeparator(true);
+    currentActions.append(koSeparator);
 
     QAction *selectIncidenceTypes = new QAction(i18n("Select shown incidences"), this);
     selectIncidenceTypes->setIcon(KIcon("view-choose"));
@@ -605,6 +648,10 @@ QList<QAction *> EventApplet::contextualActions()
     selectCategories->setIcon(KIcon("checkbox"));
     connect(selectCategories, SIGNAL(triggered()), this, SLOT(setShownCategories()));
     currentActions.append(selectCategories);
+
+    QAction *filterSeparator = new QAction(this);
+    filterSeparator->setSeparator(true);
+    currentActions.append(filterSeparator);
 
     return currentActions;
 }
