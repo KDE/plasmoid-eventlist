@@ -72,6 +72,7 @@ private slots:
     void openEventFromMenu();
     void slotAddEvent();
     void slotAddTodo();
+    void slotDeleteEvent();
     void timerExpired();
     void setIncidenceTypes();
     void incidenceTypesDialogAccepted();

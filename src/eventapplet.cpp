@@ -54,6 +54,7 @@
 #include <KTabWidget>
 #include <KToolInvocation>
 #include <KProcess>
+#include <KMessageBox>
 
 // plasma headers
 #include <Plasma/Theme>
@@ -61,6 +62,7 @@
 #include <akonadi/control.h>
 #include <akonadi/agentinstance.h>
 #include <akonadi/servermanager.h>
+#include <akonadi/itemdeletejob.h>
 
 K_EXPORT_PLASMA_APPLET(events, EventApplet)
 
@@ -440,6 +442,19 @@ void EventApplet::timedAddTodo()
     KOrganizerAppletUtil::showAddTodo();    
 }
 
+void EventApplet::slotDeleteEvent()
+{
+    const QVariant v = m_filterModel->data(m_indexAtCursor, Qt::DisplayRole);
+    QMap<QString, QVariant> values = v.toMap();
+    QString summary = values["summary"].toString();
+    if (KMessageBox::questionYesNo(0, i18n("Really delete \"%1\"?", summary), i18n("Delete Incidence")) == KMessageBox::Yes) {
+        Akonadi::Item item;
+        qint64 id = m_filterModel->data(m_indexAtCursor, EventModel::ItemIDRole).toLongLong();
+        item.setId(id);
+        new Akonadi::ItemDeleteJob(item);
+    }
+}
+
 void EventApplet::timerExpired()
 {
     if (lastCheckTime.date() != QDate::currentDate()) {
@@ -633,6 +648,17 @@ QList<QAction *> EventApplet::contextualActions()
     QAction *koSeparator = new QAction(this);
     koSeparator->setSeparator(true);
     currentActions.append(koSeparator);
+
+    if (!actionTitle.isEmpty()) {
+        QAction *deleteEvent = new QAction(i18nc("Delete incidence", "Delete \"%1\"", actionTitle), this);
+        deleteEvent->setIcon(KIcon("edit-delete"));
+        connect(deleteEvent, SIGNAL(triggered()), this, SLOT(slotDeleteEvent()));
+        currentActions.append(deleteEvent);
+
+        QAction *modSeparator = new QAction(this);
+        modSeparator->setSeparator(true);
+        currentActions.append(modSeparator);
+    }
 
     QAction *selectIncidenceTypes = new QAction(i18n("Select shown incidences"), this);
     selectIncidenceTypes->setIcon(KIcon("view-choose"));
