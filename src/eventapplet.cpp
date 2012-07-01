@@ -446,6 +446,13 @@ void EventApplet::slotDeleteEvent()
 {
     const QVariant v = m_filterModel->data(m_indexAtCursor, Qt::DisplayRole);
     QMap<QString, QVariant> values = v.toMap();
+
+    bool recurs = values["recurs"].toBool();
+    if (recurs) {
+        KMessageBox::information(0, i18n("Deleting recurring incidences is not supported."), i18n("Not supported"));
+        return;
+    }
+
     QString summary = values["summary"].toString();
     if (KMessageBox::questionYesNo(0, i18n("Really delete \"%1\"?", summary), i18n("Delete Incidence")) == KMessageBox::Yes) {
         Akonadi::Item item;
