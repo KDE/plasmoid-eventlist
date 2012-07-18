@@ -1,3 +1,8 @@
+0.6.90 (0.7 rc)
+- use kincindenceeditor if available
+- delete incidences via menu
+- fix bug with wrong pointer position (wrong incidence selected)
+
 0.6
 - comment out the widgetNeedsAkonadi Overlay
 - fix wrong filtering with items with more than one category
