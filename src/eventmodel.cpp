@@ -524,6 +524,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     }
 
     event->customProperty("KABC", "ANNIVERSARY") == QString("YES") ? values ["isAnniversary"] = QVariant(true) : QVariant(false);
+    values["contactName"] = event->customProperty("KABC", "NAME-1");
     values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), event, event->dtStart().date(), true, KDateTime::Spec::LocalZone());
 
     return values;

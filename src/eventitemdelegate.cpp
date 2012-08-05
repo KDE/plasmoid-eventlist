@@ -145,6 +145,7 @@ QHash<QString, QString> EventItemDelegate::eventHash(QMap<QString, QVariant> dat
     dataHash.insert("resourceName", data["resourceName"].toString());
     dataHash.insert("mainCategory", data["mainCategory"].toString());
     dataHash.insert("categories", data["categories"].toStringList().join(", "));
+    dataHash.insert("contactName", data["contactName"].toString());
     dataHash.insert("tab", "\t");
 
     return dataHash;

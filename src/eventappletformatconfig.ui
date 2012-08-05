@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
-    <height>380</height>
+    <width>664</width>
+    <height>525</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -25,6 +25,7 @@ Substitutions (mostly self-explanatory) are:
 %{startDate}, %{endDate} - start and end date, %{startTime}, %{endTime} - start and end time,
 %{summary} - summary, %{description} - description, %{location} - location, %{duration} - duration,
 %{yearsSince} - years since the first time (useful for birthdays),
+%{contactName} - name of the address book entry (if any, else empty),
 %{resourceName} - the i18n name of the Akonadi resource,
 %{mainCategory}, %{categories} - the first or all categories,
 %{tab} - a tabulator</string>
@@ -115,6 +116,9 @@ Substitutions (mostly self-explanatory) are:
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::MinimumExpanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
