@@ -487,7 +487,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
     m_usedCollections.insert(itemCollection.name(), QString::number(itemCollection.id()));
     values["resource"] = itemCollection.resource();
-    values["resourceName"] = itemCollection.name();
+    values["collectionName"] = itemCollection.name();
     values["collectionId"] = QString::number(itemCollection.id());
     values["uid"] = event->uid();
     values["itemid"] = item.id();
@@ -540,7 +540,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
     Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
     m_usedCollections.insert(itemCollection.name(), QString::number(itemCollection.id()));
     values["resource"] = itemCollection.resource();
-    values["resourceName"] = itemCollection.name();
+    values["collectionName"] = itemCollection.name();
     values["collectionId"] = QString::number(itemCollection.id());
     values["uid"] = todo->uid();
     values["itemid"] = item.id();

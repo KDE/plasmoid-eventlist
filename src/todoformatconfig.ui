@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>599</width>
+    <width>709</width>
     <height>508</height>
    </rect>
   </property>
@@ -24,7 +24,7 @@
 Substitutions (again mostly self-explanatory) are:
 %{dueDate}, %{dueTime} - due date and time, %{startDate}, %{startTime} - start date and time,
 %{summary} - summary, %{description} - description, %{percent} - finished percent, %{location} - location,
-%{resourceName} - the i18n name of the Akonadi resource,
+%{collectionName} - the i18n name of the Akonadi collection (e.g. calendar),
 %{mainCategory}, %{categories} - the first or all categories,
 %{tab} - a tabulator</string>
         </property>

@@ -26,7 +26,7 @@ Substitutions (mostly self-explanatory) are:
 %{summary} - summary, %{description} - description, %{location} - location, %{duration} - duration,
 %{yearsSince} - years since the first time (useful for birthdays),
 %{contactName} - name of the address book entry (if any, else empty),
-%{resourceName} - the i18n name of the Akonadi resource,
+%{collectionName} - the i18n name of the Akonadi collection (e.g. calendar),
 %{mainCategory}, %{categories} - the first or all categories,
 %{tab} - a tabulator</string>
         </property>
