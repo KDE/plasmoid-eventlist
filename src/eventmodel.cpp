@@ -157,7 +157,7 @@ void EventModel::initHeaderItem(QStandardItem *item, QString title, QString tool
     item->setForeground(QBrush(textColor));
     item->setData(QVariant(date), SortRole);
     item->setData(QVariant(HeaderItem), ItemTypeRole);
-    item->setData(QVariant(QString()), ResourceRole);
+    item->setData(QVariant(QString()), CollectionRole);
     item->setData(QVariant(QString()), UIDRole);
     item->setData(QVariant("<qt><b>" + toolTip + "</b></qt>"), TooltipRole);
 }
@@ -166,6 +166,8 @@ void EventModel::resetModel()
 {
     clear();
     m_sectionItemsMap.clear();
+    m_collections.clear();
+    m_usedCollections.clear();
     parentItem = invisibleRootItem();
     delete m_monitor;
     m_monitor = 0;
@@ -349,7 +351,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
             eventItem->setData(eventDtTime, SortRole);
             eventItem->setData(values["uid"], UIDRole);
             eventItem->setData(values["itemid"], ItemIDRole);
-            eventItem->setData(values["resource"], ResourceRole);
+            eventItem->setData(values["collectionId"], CollectionRole);
             eventItem->setData(values["tooltip"], TooltipRole);
 
             addItemRow(eventDtTime.toDate(), eventItem);
@@ -366,7 +368,7 @@ void EventModel::addEventItem(const QMap<QString, QVariant> &values)
         eventItem->setData(values["startDate"], SortRole);
         eventItem->setData(values["uid"], EventModel::UIDRole);
         eventItem->setData(values["itemid"], ItemIDRole);
-        eventItem->setData(values["resource"], ResourceRole);
+        eventItem->setData(values["collectionId"], CollectionRole);
         eventItem->setData(values["tooltip"], TooltipRole);
         QDateTime itemDtTime = values["startDate"].toDateTime();
         if (itemDtTime > QDateTime::currentDateTime() && QDateTime::currentDateTime().secsTo(itemDtTime) < urgency * 60) {
@@ -408,7 +410,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
             todoItem->setData(eventDtTime, SortRole);
             todoItem->setData(values["uid"], EventModel::UIDRole);
             todoItem->setData(values["itemid"], ItemIDRole);
-            todoItem->setData(values["resource"], ResourceRole);
+            todoItem->setData(values["collectionId"], CollectionRole);
             todoItem->setData(values["tooltip"], TooltipRole);
             if (values["completed"].toBool() == true) {
                 todoItem->setBackground(QBrush(finishedTodoBg));
@@ -431,7 +433,7 @@ void EventModel::addTodoItem(const QMap <QString, QVariant> &values)
         todoItem->setData(values["dueDate"], SortRole);
         todoItem->setData(values["uid"], EventModel::UIDRole);
         todoItem->setData(values["itemid"], ItemIDRole);
-        todoItem->setData(values["resource"], ResourceRole);
+        todoItem->setData(values["collectionId"], CollectionRole);
         todoItem->setData(values["tooltip"], TooltipRole);
         if (values["completed"].toBool() == true) {
             todoItem->setBackground(QBrush(finishedTodoBg));
@@ -483,8 +485,10 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
 {
     QMap <QString, QVariant> values;
     Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
+    m_usedCollections.insert(itemCollection.name(), QString::number(itemCollection.id()));
     values["resource"] = itemCollection.resource();
     values["resourceName"] = itemCollection.name();
+    values["collectionId"] = QString::number(itemCollection.id());
     values["uid"] = event->uid();
     values["itemid"] = item.id();
     values["remoteid"] = item.remoteId();
@@ -534,8 +538,10 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
 {
     QMap <QString, QVariant> values;
     Akonadi::Collection itemCollection = m_collections.value(item.storageCollectionId());
+    m_usedCollections.insert(itemCollection.name(), QString::number(itemCollection.id()));
     values["resource"] = itemCollection.resource();
     values["resourceName"] = itemCollection.name();
+    values["collectionId"] = QString::number(itemCollection.id());
     values["uid"] = todo->uid();
     values["itemid"] = item.id();
     values["remoteid"] = item.remoteId();
@@ -587,6 +593,11 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
     values["tooltip"] = KCalUtils::IncidenceFormatter::toolTipStr(itemCollection.name(), todo, todo->dtStart().date(), true, KDateTime::Spec::LocalZone());
 
     return values;
+}
+
+QMap<QString, QString> EventModel::usedCollections()
+{
+    return m_usedCollections;
 }
 
 #include "eventmodel.moc"

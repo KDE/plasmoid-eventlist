@@ -59,7 +59,7 @@ public:
         ItemTypeRole,
         TooltipRole,
         ItemIDRole,
-        ResourceRole
+        CollectionRole
     };
 
     enum ItemType {
@@ -81,6 +81,7 @@ public:
     void initMonitor();
     void resetModel();
     void settingsChanged(int urgencyTime, int birthdayTime, QList<QColor> itemColors, int count, bool autoGroupHeader);
+    QMap<QString, QString> usedCollections();
 
 private slots:
     void initialCollectionFetchFinished(KJob *);
@@ -104,6 +105,7 @@ private:
     QStandardItem *parentItem;
     QStringList m_headerPartsList;
     QMap<QDate, QStandardItem *> m_sectionItemsMap;
+    QMap<QString, QString> m_usedCollections;
     int urgency, birthdayUrgency, recurringCount;
     QColor urgentBg, passedFg, todoBg, finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;

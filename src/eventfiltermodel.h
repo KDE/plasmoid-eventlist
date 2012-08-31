@@ -32,7 +32,7 @@ public:
     void setPeriod(int period);
     void setShowFinishedTodos(bool showFinishedTodos);
     void setDisabledTypes(QStringList types);
-    void setExcludedResources(QStringList resources);
+    void setExcludedCollections(QStringList collections);
     void setDisabledCategories(QStringList categories);
     
 protected:
@@ -45,7 +45,7 @@ private:
 private:
     int m_period;
     bool m_showFinishedTodos;
-    QStringList m_disabledTypes, m_excludedResources, m_disabledCategories;
+    QStringList m_disabledTypes, m_excludedCollections, m_disabledCategories;
 };
 
 #endif

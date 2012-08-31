@@ -80,7 +80,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
     m_timer(0),
     m_agentManager(0),
     incidenceTypesDialog(0),
-    resourceDialog(0),
+    collectionDialog(0),
     categoriesDialog(0),
     m_openEventWatcher(0),
     m_addEventWatcher(0),
@@ -106,7 +106,7 @@ void EventApplet::init()
     KConfigGroup cg = config();
 
     disabledTypes = cg.readEntry("DisabledIncidenceTypes", QStringList());
-    disabledResources = cg.readEntry("DisabledResources", QStringList());
+    disabledCollections = cg.readEntry("DisabledCollections", QStringList());
     disabledCategories = cg.readEntry("DisabledCategories", QStringList());
 
     QString normalEventFormat = cg.readEntry("NormalEventFormat", QString("%{startDate} %{startTime} %{summary}"));
@@ -193,7 +193,7 @@ void EventApplet::setupModel()
     m_filterModel->setPeriod(m_period);
     m_filterModel->setShowFinishedTodos(m_showFinishedTodos);
     m_filterModel->setDisabledTypes(disabledTypes);
-    m_filterModel->setExcludedResources(disabledResources);
+    m_filterModel->setExcludedCollections(disabledCollections);
     m_filterModel->setDisabledCategories(disabledCategories);
     m_filterModel->setDynamicSortFilter(true);
     m_filterModel->setSourceModel(m_model);
@@ -511,47 +511,35 @@ void EventApplet::incidenceTypesDialogAccepted()
     m_view->expandAll();
 }
 
-void EventApplet::setShownResources()
+void EventApplet::setShownCollections()
 {
-    QMap<QString, QString> resourcesMap;
-    Akonadi::AgentInstance::List instList = m_agentManager->instances();
-    foreach (const Akonadi::AgentInstance &inst, instList) {
-        QStringList agentMimeTypes = inst.type().mimeTypes();
-        if (agentMimeTypes.contains(KCalCore::Event::eventMimeType()) ||
-            agentMimeTypes.contains(KCalCore::Todo::todoMimeType()) ||
-            agentMimeTypes.contains("text/calendar")) {
-            resourcesMap[inst.name()] = inst.identifier();
-        }
-    }
+    if (!collectionDialog) {
+        collectionDialog = new CheckBoxDialog(0, disabledCollections, m_model->usedCollections());
+        collectionDialog->setCaption(i18n("Select Collections"));
+        collectionDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Reset);
+        collectionDialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
+        collectionDialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
+        collectionDialog->setButtonText(KDialog::User2, i18n("Check all"));
+        collectionDialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
+        collectionDialog->setButtonsOrientation(Qt::Vertical);
 
-    if (!resourceDialog) {
-        resourceDialog = new CheckBoxDialog(0, disabledResources, resourcesMap);
-        resourceDialog->setCaption(i18n("Select Resources"));
-        resourceDialog->setButtons(KDialog::User1 | KDialog::User2 | KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Reset);
-        resourceDialog->setButtonText(KDialog::User1, i18n("Uncheck all"));
-        resourceDialog->setButtonIcon(KDialog::User1, KIcon("edit-clear-list"));
-        resourceDialog->setButtonText(KDialog::User2, i18n("Check all"));
-        resourceDialog->setButtonIcon(KDialog::User2, KIcon("checkbox"));
-        resourceDialog->setButtonsOrientation(Qt::Vertical);
-
-        connect(resourceDialog, SIGNAL(applyClicked()), this, SLOT(resourceDialogAccepted()));
-        connect(resourceDialog, SIGNAL(okClicked()), this, SLOT(resourceDialogAccepted()));
+        connect(collectionDialog, SIGNAL(applyClicked()), this, SLOT(collectionDialogAccepted()));
+        connect(collectionDialog, SIGNAL(okClicked()), this, SLOT(collectionDialogAccepted()));
     } else {
-        resourceDialog->setupCheckBoxWidget(disabledResources, resourcesMap);
+        collectionDialog->setupCheckBoxWidget(disabledCollections, m_model->usedCollections());
     }
 
-    resourceDialog->show();
+    collectionDialog->show();
 }
 
-void EventApplet::resourceDialogAccepted()
+void EventApplet::collectionDialogAccepted()
 {
-    disabledResources = resourceDialog->disabledProperties();
-
+    disabledCollections = collectionDialog->disabledProperties();
     KConfigGroup cg = config();
-    cg.writeEntry("DisabledResources", disabledResources);
+    cg.writeEntry("DisabledCollections", disabledCollections);
     emit configNeedsSaving();
 
-    m_filterModel->setExcludedResources(disabledResources);
+    m_filterModel->setExcludedCollections(disabledCollections);
     m_view->expandAll();
 }
 
@@ -672,10 +660,10 @@ QList<QAction *> EventApplet::contextualActions()
     connect(selectIncidenceTypes, SIGNAL(triggered()), this, SLOT(setIncidenceTypes()));
     currentActions.append(selectIncidenceTypes);
 
-    QAction *selectResources = new QAction(i18n("Select shown resources"), this);
-    selectResources->setIcon(KIcon("view-calendar-tasks"));
-    connect(selectResources, SIGNAL(triggered()), this, SLOT(setShownResources()));
-    currentActions.append(selectResources);
+    QAction *selectCollections = new QAction(i18n("Select shown collections"), this);
+    selectCollections->setIcon(KIcon("view-calendar-tasks"));
+    connect(selectCollections, SIGNAL(triggered()), this, SLOT(setShownCollections()));
+    currentActions.append(selectCollections);
 
     QAction *selectCategories = new QAction(i18n("Select shown categories"), this);
     selectCategories->setIcon(KIcon("checkbox"));
