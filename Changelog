@@ -1,3 +1,7 @@
+0.6.95
+- add contact name to possible substitutions
+- filter for collections instead of resources
+
 0.6.90 (0.7 rc)
 - use kincindenceeditor if available
 - delete incidences via menu
