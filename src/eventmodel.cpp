@@ -505,8 +505,8 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
     }
 
     values["status"] = event->status();
-    values["startDate"] = event->dtStart().dateTime().toLocalTime();
-    values["endDate"] = event->dtEnd().dateTime().toLocalTime();
+    values["startDate"] = event->dtStart().toLocalZone().dateTime();
+    values["endDate"] = event->dtEnd().toLocalZone().dateTime();
 
     bool recurs = event->recurs();
     values["recurs"] = recurs;
@@ -516,7 +516,7 @@ QMap<QString, QVariant> EventModel::eventDetails(const Akonadi::Item &item, KCal
         KCalCore::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
         dtTimes.sortUnique();
         foreach (const KDateTime &t, dtTimes) {
-            recurDates << QVariant(t.dateTime().toLocalTime());
+            recurDates << QVariant(t.toLocalZone().dateTime());
         }
     }
     values["recurDates"] = recurDates;
@@ -560,17 +560,17 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
     values["completed"] = todo->isCompleted();
     values["percent"] = todo->percentComplete();
     if (todo->hasStartDate()) {
-        values["startDate"] = todo->dtStart(false).dateTime().toLocalTime();
+        values["startDate"] = todo->dtStart(false).toLocalZone().dateTime();
         values["hasStartDate"] = true;
     } else {
         values["startDate"] = QDateTime();
         values["hasStartDate"] = false;
     }
-    values["completedDate"] = todo->completed().dateTime().toLocalTime();
+    values["completedDate"] = todo->completed().toLocalZone().dateTime();
     values["inProgress"] = todo->isInProgress(false);
     values["isOverdue"] = todo->isOverdue();
     if (todo->hasDueDate()) {
-        values["dueDate"] = todo->dtDue().dateTime().toLocalTime();
+        values["dueDate"] = todo->dtDue().toLocalZone().dateTime();
         values["hasDueDate"] = true;
     } else {
         values["dueDate"] = QDateTime::currentDateTime().addDays(366);
@@ -585,7 +585,7 @@ QMap<QString, QVariant> EventModel::todoDetails(const Akonadi::Item &item, KCalC
         KCalCore::DateTimeList dtTimes = r->timesInInterval(KDateTime(QDate::currentDate()), KDateTime(QDate::currentDate()).addDays(365));
         dtTimes.sortUnique();
         foreach (const KDateTime &t, dtTimes) {
-            recurDates << QVariant(t.dateTime().toLocalTime());
+            recurDates << QVariant(t.toLocalZone().dateTime());
         }
     }
     values["recurDates"] = recurDates;
