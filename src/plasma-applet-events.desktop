@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Event List
 Name[bg]=Списък със събития
+Name[bs]=Lista događaja
 Name[cs]=Seznam událostí
 Name[da]=Begivenhedsliste:
 Name[de]=Terminliste
@@ -25,6 +26,7 @@ Name[uk]=Список подій
 Name[x-test]=xxEvent Listxx
 Comment=Shows a list with the events from Akonadi resources
 Comment[bg]=Показване на списък със събития от ресурси Akonadi
+Comment[bs]=Prikazuje listu događaja s Akonadi resursa
 Comment[cs]=Zobrazí seznam událostí ze zdrojů Akonadi
 Comment[da]=Viser en liste med begivenheder fra Akonadi-ressourcer
 Comment[de]=Zeigt eine Liste mit Terminen aus Akonadi-Ressourcen an
