@@ -25,6 +25,8 @@
 #include <kcalcore/event.h>
 #include <kcalcore/todo.h>
 
+#include <KUrl>
+
 // qt headers
 #include <QStandardItemModel>
 #include <QColor>
@@ -110,6 +112,7 @@ private:
     QColor urgentBg, passedFg, todoBg, finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;
     QHash<Akonadi::Entity::Id, Akonadi::Collection> m_collections;
+    KUrl::List itemURLs;
     Akonadi::Monitor *m_monitor;
     bool useAutoGroupHeader;
 
