@@ -1,3 +1,6 @@
+0.6.96
+- check for already existing items to avoid doubled entries
+
 0.6.95
 - add contact name to possible substitutions
 - filter for collections instead of resources
