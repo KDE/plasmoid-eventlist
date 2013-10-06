@@ -104,7 +104,7 @@ void EventModel::initialItemFetchFinished(KJob *job)
         Akonadi::ItemFetchJob *iJob = qobject_cast<Akonadi::ItemFetchJob *>(job);
         Akonadi::Item::List items = iJob->items();
         foreach (const Akonadi::Item &item, items) {
-            if (itemURLs.contains(item.url())) {
+            if (itemIds.contains(item.id())) {
                 removeItem(item);
             }
 
@@ -112,13 +112,13 @@ void EventModel::initialItemFetchFinished(KJob *job)
                 KCalCore::Event::Ptr event = item.payload <KCalCore::Event::Ptr>();
                 if (event) {
                     addEventItem(eventDetails(item, event));
-                    itemURLs.append(item.url());
+                    itemIds.append(item.id());
                 } // if event
             } else if (item.hasPayload <KCalCore::Todo::Ptr>()) {
                 KCalCore::Todo::Ptr todo = item.payload<KCalCore::Todo::Ptr>();
                 if (todo) {
                     addTodoItem(todoDetails(item, todo));
-                    itemURLs.append(item.url());
+                    itemIds.append(item.id());
                 }
             } // if hasPayload
         } // foreach
@@ -174,7 +174,7 @@ void EventModel::resetModel()
     m_sectionItemsMap.clear();
     m_collections.clear();
     m_usedCollections.clear();
-    itemURLs.clear();
+    itemIds.clear();
     parentItem = invisibleRootItem();
     delete m_monitor;
     m_monitor = 0;
@@ -251,7 +251,7 @@ void EventModel::removeItem(const Akonadi::Item &item)
         if (r != -1 && !i->hasChildren()) {
             takeItem(r);
             removeRow(r);
-            itemURLs.removeAll(item.url());
+            itemIds.removeAll(item.id());
             emit modelNeedsExpanding();
         }
     }
@@ -275,7 +275,7 @@ void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &c
 {
     Q_UNUSED(collection);
     
-    if (itemURLs.contains(item.url())) {
+    if (itemIds.contains(item.id())) {
         removeItem(item);
     }
 
@@ -283,13 +283,13 @@ void EventModel::addItem(const Akonadi::Item &item, const Akonadi::Collection &c
         KCalCore::Event::Ptr event = item.payload <KCalCore::Event::Ptr>();
         if (event) {
             addEventItem(eventDetails(item, event));
-            itemURLs.append(item.url());
+            itemIds.append(item.id());
         } // if event
     } else if (item.hasPayload <KCalCore::Todo::Ptr>()) {
         KCalCore::Todo::Ptr todo = item.payload<KCalCore::Todo::Ptr>();
         if (todo) {
             addTodoItem(todoDetails(item, todo));
-            itemURLs.append(item.url());
+            itemIds.append(item.id());
         }
     }
 }

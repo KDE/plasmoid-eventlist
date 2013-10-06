@@ -112,7 +112,7 @@ private:
     QColor urgentBg, passedFg, todoBg, finishedTodoBg;
     QHash<QString, QColor> m_categoryColors;
     QHash<Akonadi::Entity::Id, Akonadi::Collection> m_collections;
-    KUrl::List itemURLs;
+    QList<Akonadi::Entity::Id> itemIds;
     Akonadi::Monitor *m_monitor;
     bool useAutoGroupHeader;
 
