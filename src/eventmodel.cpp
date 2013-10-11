@@ -241,20 +241,19 @@ void EventModel::removeItem(const Akonadi::Item &item)
     foreach (QStandardItem *i, m_sectionItemsMap) {
         QModelIndexList l;
         if (i->hasChildren())
-            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.id());
+            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.id(), -1);
         while (!l.isEmpty()) {
-            i->removeRow(l[0].row());
-            if (!i->hasChildren()) break;
-            l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.id());
+            i->removeRow(l.at(0).row());
+            l.removeFirst();
         }
         int r = i->row();
         if (r != -1 && !i->hasChildren()) {
-            takeItem(r);
-            removeRow(r);
-            itemIds.removeAll(item.id());
+            takeRow(r);
             emit modelNeedsExpanding();
         }
     }
+
+    itemIds.removeAll(item.id());
 }
 
 void EventModel::itemChanged(const Akonadi::Item &item, const QSet<QByteArray> &)
