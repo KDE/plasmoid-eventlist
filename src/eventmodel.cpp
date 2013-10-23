@@ -244,12 +244,16 @@ void EventModel::removeItem(const Akonadi::Item &item)
             l = match(i->child(0, 0)->index(), EventModel::ItemIDRole, item.id(), -1);
 
         for (int c = l.count(); c > 0; --c) {
+            emit layoutAboutToBeChanged();
             i->removeRow(l.at(c - 1).row());
+            emit layoutChanged();
         }
 
         int r = i->row();
         if (r != -1 && !i->hasChildren()) {
+            emit layoutAboutToBeChanged();
             takeRow(r);
+            emit layoutChanged();
             emit modelNeedsExpanding();
         }
     }
