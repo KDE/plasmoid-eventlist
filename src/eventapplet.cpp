@@ -93,7 +93,7 @@ EventApplet::EventApplet(QObject *parent, const QVariantList &args) :
 
     setPopupIcon("view-pim-tasks");
 
-    Akonadi::ServerManager::start();
+//     Akonadi::ServerManager::start();
 }
 
 EventApplet::~EventApplet()
@@ -170,8 +170,14 @@ void EventApplet::init()
     lastCheckTime = QDateTime::currentDateTime();
     m_timer = new QTimer();
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timerExpired()));
+    QTimer::singleShot(1500, this, SLOT(slotStartServer()));
     QTimer::singleShot(5000, this, SLOT(setupModel()));
     setBusy(true);
+}
+
+void EventApplet::slotStartServer()
+{
+    Akonadi::ServerManager::start();
 }
 
 void EventApplet::setupModel()

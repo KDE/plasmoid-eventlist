@@ -90,6 +90,7 @@ private slots:
     void timedOpenEvent();
     void timedAddEvent();
     void timedAddTodo();
+    void slotStartServer();
 
 protected slots:
     void configAccepted();
