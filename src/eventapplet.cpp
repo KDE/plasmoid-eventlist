@@ -321,7 +321,9 @@ QGraphicsWidget *EventApplet::graphicsWidget()
         title->setText("<qt><b>" + m_appletTitle + "</b></qt>");
 
         layout = new QGraphicsLinearLayout(Qt::Vertical);
-        layout->addItem(title);
+        if (!m_appletTitle.isEmpty()) {
+            layout->addItem(title);
+        }
         layout->addItem(proxyWidget);
 
         m_graphicsWidget->setLayout(layout);
@@ -825,6 +827,7 @@ void EventApplet::configAccepted()
     bool oldAutoGroup = m_autoGroupHeader;
     m_autoGroupHeader = m_generalConfig.autoGroupBox->isChecked();
     cg.writeEntry("AutoGroupHeader", m_autoGroupHeader);
+    QString oldAppletTitle = cg.readEntry("AppletTitle", i18n("Upcoming Events"));
     m_appletTitle = m_generalConfig.appletTitleEdit->text();
     cg.writeEntry("AppletTitle", m_appletTitle);
     title->setText("<qt><b>" + m_appletTitle + "</b></qt>");
@@ -926,6 +929,14 @@ void EventApplet::configAccepted()
     } else if (oldUrgency != m_urgency || oldBirthdayUrgency != m_birthdayUrgency || oldColors != m_colors ||
         oldColorHash != m_categoryColors) {
         colorizeModel(false);
+    }
+
+    if (oldAppletTitle != m_appletTitle) {
+        if (oldAppletTitle.isEmpty()) {
+            layout->insertItem(0,title);
+        } else if (m_appletTitle.isEmpty()) {
+            layout->removeItem(title);
+        }
     }
 
     m_view->expandAll();
