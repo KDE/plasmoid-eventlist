@@ -1,3 +1,7 @@
+0.7
+remove title item if empty - patch by causa-prima
+extra slot for startServer for delayed start - helps to prevent hangs on session startup
+
 0.6.97
 - previous version was buggy in removing items - fixed (I hope)
 
